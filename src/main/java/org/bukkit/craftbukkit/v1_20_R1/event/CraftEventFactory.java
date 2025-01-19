@@ -4,7 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.mohistmc.MohistMC;
 import com.mohistmc.bukkit.inventory.MohistModsInventory;
+import com.mohistmc.dynamicenum.MohistDynamEnum;
 import com.mohistmc.forge.ForgeInjectBukkit;
 import com.mojang.datafixers.util.Either;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -1860,7 +1862,14 @@ public class CraftEventFactory {
     }
 
     public static boolean handleEntitySpellCastEvent(SpellcasterIllager caster, SpellcasterIllager.IllagerSpell spell) {
-        EntitySpellCastEvent event = new EntitySpellCastEvent((Spellcaster) caster.getBukkitEntity(), CraftSpellcaster.toBukkitSpell(spell));
+        Spellcaster.Spell bukkit_spell;
+        try {
+            bukkit_spell = CraftSpellcaster.toBukkitSpell(spell);
+        } catch (Exception e) {
+            bukkit_spell = MohistDynamEnum.addEnum(Spellcaster.Spell.class, spell.name());
+            MohistMC.LOGGER.debug("Registered forge Spellcaster.Spell as Spellcaster.Spell(Bukkit) {}", bukkit_spell);
+        }
+        EntitySpellCastEvent event = new EntitySpellCastEvent((Spellcaster) caster.getBukkitEntity(), bukkit_spell);
         Bukkit.getPluginManager().callEvent(event);
         return !event.isCancelled();
     }
