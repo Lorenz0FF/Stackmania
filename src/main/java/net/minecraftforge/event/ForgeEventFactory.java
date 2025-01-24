@@ -304,10 +304,10 @@ public class ForgeEventFactory
 
         if (!cancel)
         {
-            mob.finalizeSpawn(level, event.getDifficulty(), event.getSpawnType(), event.getSpawnData(), event.getSpawnTag());
+            return mob.finalizeSpawn(level, event.getDifficulty(), event.getSpawnType(), event.getSpawnData(), event.getSpawnTag());
         }
 
-        return cancel ? null : event.getSpawnData();
+        return null;
     }
 
     /**
