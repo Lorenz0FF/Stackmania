@@ -1181,7 +1181,7 @@
        }
  
     }
-@@ -1441,7 +_,37 @@
+@@ -1441,7 +_,42 @@
        return this.f_8937_;
     }
  
@@ -1196,6 +1196,11 @@
     public void m_9158_(ResourceKey<Level> p_9159_, @Nullable BlockPos p_9160_, float p_9161_, boolean p_9162_, boolean p_9163_) {
 +      if (net.minecraftforge.event.ForgeEventFactory.onPlayerSpawnSet(this, p_9160_ == null ? Level.f_46428_ : p_9159_, p_9160_, p_9162_)) return;
 +      ServerLevel newWorld = this.f_8924_.m_129880_(p_9160_ == null ? Level.f_46428_ : p_9159_);
++      // Mohist start
++      if (newWorld == null) {
++         newWorld = this.f_8924_.m_129783_();
++      }
++      // Mohist end
 +      Location newSpawn = (p_9160_ != null) ? CraftLocation.toBukkit(p_9160_, newWorld.getWorld(), p_9161_, 0) : null;
 +
 +      PlayerSpawnChangeEvent event = new PlayerSpawnChangeEvent(this.getBukkitEntity(), newSpawn, p_9162_, cause);
