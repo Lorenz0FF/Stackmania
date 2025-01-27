@@ -33,12 +33,10 @@
     private static final ExecutorService f_137445_ = m_137586_();
     private static final DateTimeFormatter f_241646_ = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH.mm.ss", Locale.ROOT);
     public static TimeSource.NanoTimeSource f_137440_ = System::nanoTime;
-@@ -127,27 +_,26 @@
-       return f_241646_.format(ZonedDateTime.now());
+@@ -153,6 +_,31 @@
+       return executorservice;
     }
  
--   private static ExecutorService m_137477_(String p_137478_) {
--      int i = Mth.m_14045_(Runtime.getRuntime().availableProcessors() - 1, 1, m_183993_());
 +   private static ExecutorService makeExecutor(String p_137478_, int priorityModifier) { // Paper - add priority
 +      int cpus = Runtime.getRuntime().availableProcessors() / 2;
 +      int i;
@@ -53,30 +51,20 @@
 +      i = Math.min(8, i);
 +      // Paper end - also try to avoid suffocating the system with the worldgen workers
 +      i = Integer.getInteger("Paper.WorkerThreadCount", i);
-       ExecutorService executorservice;
++      ExecutorService executorservice;
 +
-       if (i <= 0) {
-          executorservice = MoreExecutors.newDirectExecutorService();
-       } else {
--         executorservice = new ForkJoinPool(i, (p_201863_) -> {
--            ForkJoinWorkerThread forkjoinworkerthread = new ForkJoinWorkerThread(p_201863_) {
--               protected void onTermination(Throwable p_211561_) {
--                  if (p_211561_ != null) {
--                     Util.f_137446_.warn("{} died", this.getName(), p_211561_);
--                  } else {
--                     Util.f_137446_.debug("{} shutdown", (Object)this.getName());
--                  }
--
--                  super.onTermination(p_211561_);
--               }
--            };
--            forkjoinworkerthread.setName("Worker-" + p_137478_ + "-" + f_137442_.getAndIncrement());
--            return forkjoinworkerthread;
--         }, Util::m_137495_, true);
-+         executorservice = new java.util.concurrent.ThreadPoolExecutor(i, i,0L, TimeUnit.MILLISECONDS, new java.util.concurrent.LinkedBlockingQueue<Runnable>(), target -> new ServerWorkerThread(target, p_137478_, priorityModifier));
-       }
- 
-       return executorservice;
++      if (i <= 0) {
++         executorservice = MoreExecutors.newDirectExecutorService();
++      } else {
++         executorservice = new java.util.concurrent.ThreadPoolExecutor(i, i,0L, TimeUnit.MILLISECONDS, new java.util.concurrent.LinkedBlockingQueue<>(), target -> new ServerWorkerThread(target, p_137478_, priorityModifier));
++      }
++
++      return executorservice;
++   }
++
+    private static int m_183993_() {
+       String s = System.getProperty("max.bg.threads");
+       if (s != null) {
 @@ -171,6 +_,11 @@
        return 255;
     }
@@ -143,3 +131,40 @@
        boolean flag = Duration.between(instant, Instant.now()).toMillis() > 500L;
        if (!flag) {
           f_183937_.accept(p_183985_);
+@@ -695,30 +_,30 @@
+ 
+    public static <T, R> Function<T, R> m_143827_(final Function<T, R> p_143828_) {
+       return new Function<T, R>() {
+-         private final Map<T, R> f_211548_ = new ConcurrentHashMap<>();
++         private final Map<T, R> f_214693_ = new ConcurrentHashMap<>();
+ 
+          public R apply(T p_214691_) {
+-            return this.f_211548_.computeIfAbsent(p_214691_, p_143828_);
++            return this.f_214693_.computeIfAbsent(p_214691_, p_143828_);
+          }
+ 
+          public String toString() {
+-            return "memoize/1[function=" + p_143828_ + ", size=" + this.f_211548_.size() + "]";
++            return "memoize/1[function=" + p_143828_ + ", size=" + this.f_214693_.size() + "]";
+          }
+       };
+    }
+ 
+    public static <T, U, R> BiFunction<T, U, R> m_143821_(final BiFunction<T, U, R> p_143822_) {
+       return new BiFunction<T, U, R>() {
+-         private final Map<Pair<T, U>, R> f_214693_ = new ConcurrentHashMap<>();
++         private final Map<Pair<T, U>, R> cache = new ConcurrentHashMap<>();
+ 
+          public R apply(T p_214700_, U p_214701_) {
+-            return this.f_214693_.computeIfAbsent(Pair.of(p_214700_, p_214701_), (p_214698_) -> {
++            return this.cache.computeIfAbsent(Pair.of(p_214700_, p_214701_), (p_214698_) -> {
+                return p_143822_.apply(p_214698_.getFirst(), p_214698_.getSecond());
+             });
+          }
+ 
+          public String toString() {
+-            return "memoize/2[function=" + p_143822_ + ", size=" + this.f_214693_.size() + "]";
++            return "memoize/2[function=" + p_143822_ + ", size=" + this.cache.size() + "]";
+          }
+       };
+    }

@@ -25,6 +25,9 @@ public class AutoDeleteMods {
             "com.nekotune.battlemusic.BattleMusic" /*BattleMusic*/,
             "com.zergatul.freecam.ModMain" /*freecam*/,
             "io.github.reserveword.imblocker.IMBlocker" /*IMBlocker*/,
+            "me.towdium.jecharacters.JustEnoughCharacters" /*JustEnoughCharacters*/,
+            "com.lootbeams.LootBeams" /*LootBeams*/,
+            "icyllis.modernui.ModernUI" /*ModernUI*/,
             "optifine.Differ" /*OptiFine*/));
 
     public static void jar() throws Exception {
