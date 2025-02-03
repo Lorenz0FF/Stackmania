@@ -19,8 +19,6 @@
 package com.mohistmc.libraries;
 
 import com.mohistmc.MohistMCStart;
-import com.mohistmc.tools.ConnectionUtil;
-import com.mohistmc.tools.FileUtils;
 import com.mohistmc.tools.MD5Util;
 import java.io.BufferedReader;
 import java.io.File;

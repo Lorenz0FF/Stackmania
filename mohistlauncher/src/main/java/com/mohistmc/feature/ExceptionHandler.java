@@ -4,7 +4,6 @@ import java.net.BindException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class ExceptionHandler implements Thread.UncaughtExceptionHandler {

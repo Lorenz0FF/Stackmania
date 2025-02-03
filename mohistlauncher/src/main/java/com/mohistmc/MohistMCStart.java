@@ -31,7 +31,6 @@ import com.mohistmc.tools.Logo;
 import com.mohistmc.util.DataParser;
 import com.mohistmc.util.EulaUtil;
 import com.mohistmc.util.MohistModuleManager;
-import com.mohistmc.util.UpdateUtils;
 import cpw.mods.bootstraplauncher.BootstrapLauncher;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
