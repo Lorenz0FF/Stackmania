@@ -514,7 +514,7 @@
           } else {
 -            this.f_8924_.m_6846_().m_240416_(component, false);
 +            this.f_8924_.m_6846_().m_240416_(ichatbasecomponent, false);
-+            KouKou.sendToGroup(ichatbasecomponent.getString());
++            KouKou.death(ichatbasecomponent.getString());
           }
        } else {
           this.f_8906_.m_9829_(new ClientboundPlayerCombatKillPacket(this.m_19879_(), CommonComponents.f_237098_));

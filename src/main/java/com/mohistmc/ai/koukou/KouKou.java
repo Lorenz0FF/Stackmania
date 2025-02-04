@@ -16,8 +16,21 @@ public class KouKou {
     }
 
     public static void sendToGroup(String groupId, String message) {
-        if (!AIConfig.INSTANCE.enable()) return;
-        send_group_msg(String.valueOf(groupId), message);
+        if (AIConfig.INSTANCE.enable()) {
+            send_group_msg(String.valueOf(groupId), message);
+        }
+    }
+
+    public static void chat(String message) {
+        if (AIConfig.INSTANCE.server_to_group()) {
+            sendToGroup(message);
+        }
+    }
+
+    public static void death(String message) {
+        if (AIConfig.INSTANCE.death()) {
+            sendToGroup(message);
+        }
     }
 
     @SneakyThrows

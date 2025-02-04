@@ -24,6 +24,9 @@ public class AIConfig extends MohistPluginConfig {
         INSTANCE.yaml.addDefault("command.enable", false);
         INSTANCE.yaml.addDefault("command.owners", List.of("123456789"));
         INSTANCE.yaml.addDefault("command.name", "执行");
+        INSTANCE.yaml.addDefault("message.group_to_server.enable", false);
+        INSTANCE.yaml.addDefault("message.server_to_group.enable", false);
+        INSTANCE.yaml.addDefault("message.death.enable", false);
         INSTANCE.save();
     }
 
@@ -65,6 +68,18 @@ public class AIConfig extends MohistPluginConfig {
 
     public String server_name() {
         return yaml.getString("server_name", "群消息");
+    }
+
+    public boolean group_to_server() {
+        return yaml.getBoolean("message.group_to_server.enable");
+    }
+
+    public boolean server_to_group() {
+        return yaml.getBoolean("message.server_to_group.enable");
+    }
+
+    public boolean death() {
+        return yaml.getBoolean("message.death.enable");
     }
 
 }

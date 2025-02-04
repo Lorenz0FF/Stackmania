@@ -36,7 +36,7 @@ public class KouKouPostListener implements BaseListener {
                     String pattern = "\\[CQ:.*?]";
                     Pattern r = Pattern.compile(pattern);
                     Matcher m = r.matcher(msg);
-                    if (!m.find()) {
+                    if (!m.find() && AIConfig.INSTANCE.group_to_server()) {
                         Bukkit.broadcastMessage("[%s] <%s>: %s".formatted(AIConfig.INSTANCE.server_name(), sender_nickname, msg));
                     }
 
