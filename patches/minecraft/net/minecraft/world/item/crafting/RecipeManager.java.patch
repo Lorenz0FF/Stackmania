@@ -128,7 +128,7 @@
     }
  
     public void m_44024_(Iterable<Recipe<?>> p_44025_) {
-@@ -189,4 +_,58 @@
+@@ -189,4 +_,60 @@
     public interface CachedCheck<C extends Container, T extends Recipe<C>> {
        Optional<T> m_213657_(C p_220280_, Level p_220281_);
     }
@@ -158,7 +158,9 @@
 +            this.f_199900_ = new HashMap<>(f_199900_);
 +         }
 +         map0.putAndMoveToFirst(irecipe.m_6423_(), irecipe);
-+         craftbukkit.putAndMoveToFirst(irecipe.m_6423_(), irecipe); // CraftBukkit - SPIGOT-4638: last recipe gets priority
++         if (craftbukkit != null) {
++            craftbukkit.putAndMoveToFirst(irecipe.m_6423_(), irecipe); // CraftBukkit - SPIGOT-4638: last recipe gets priority
++         }
 +         this.f_199900_.put(irecipe.m_6423_(), irecipe);
 +      }
 +   }
