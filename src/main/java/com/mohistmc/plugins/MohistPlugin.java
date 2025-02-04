@@ -1,6 +1,8 @@
 package com.mohistmc.plugins;
 
 import com.mohistmc.MohistConfig;
+import com.mohistmc.ai.koukou.AIConfig;
+import com.mohistmc.ai.koukou.ApiController;
 import com.mohistmc.plugins.back.BackCommands;
 import com.mohistmc.plugins.back.BackConfig;
 import com.mohistmc.plugins.ban.BanConfig;
@@ -48,6 +50,7 @@ public class MohistPlugin {
         BackConfig.init();
         WarpsConfig.init();
         BanConfig.init();
+        AIConfig.init();
         File out = new File("libraries/com/mohistmc/cache", "libPath.txt");
         if (out.exists()) {
             String data = null;
@@ -67,6 +70,7 @@ public class MohistPlugin {
             }
         }
         EntityClear.start();
+        ApiController.init();
     }
 
     public static void registerCommands(Map<String, Command> map) {
