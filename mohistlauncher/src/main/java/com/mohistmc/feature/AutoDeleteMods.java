@@ -28,6 +28,7 @@ public class AutoDeleteMods {
             "me.towdium.jecharacters.JustEnoughCharacters" /*JustEnoughCharacters*/,
             "com.lootbeams.LootBeams" /*LootBeams*/,
             "icyllis.modernui.ModernUI" /*ModernUI*/,
+            "net.darkhax.maxhealthfix.MaxHealthFixForge " /*Max-Health-Fix*/,
             "optifine.Differ" /*OptiFine*/));
 
     public static void jar() throws Exception {
