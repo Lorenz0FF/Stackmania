@@ -214,9 +214,12 @@
     }
  
     public boolean m_5776_() {
-@@ -191,6 +_,28 @@
+@@ -190,7 +_,31 @@
+       return this.m_6933_(p_46601_, p_46602_, p_46603_, 512);
     }
  
++   public AtomicBoolean setBlock$captured = new AtomicBoolean(false);
++
     public boolean m_6933_(BlockPos p_46605_, BlockState p_46606_, int p_46607_, int p_46608_) {
 +      {
 +         if (this.getWorld() != null) {
@@ -243,17 +246,16 @@
        if (this.m_151570_(p_46605_)) {
           return false;
        } else if (!this.f_46443_ && this.m_46659_()) {
-@@ -198,11 +_,60 @@
+@@ -198,11 +_,59 @@
        } else {
           LevelChunk levelchunk = this.m_46745_(p_46605_);
           Block block = p_46606_.m_60734_();
 +
 +         // CraftBukkit start - capture blockstates
-+         boolean captured = false;
 +         if (this.captureBlockStates && !this.capturedBlockStates.containsKey(p_46605_)) {
 +            CapturedBlockState blockstate = CapturedBlockState.getBlockState(this, p_46605_, p_46607_);
 +            this.capturedBlockStates.put(p_46605_.m_7949_(), blockstate);
-+            captured = true;
++            setBlock$captured.set(true);
 +         }
 +         // CraftBukkit end
 +
@@ -272,7 +274,7 @@
 +
           if (blockstate == null) {
 +            // CraftBukkit start - remove blockstate if failed (or the same)
-+            if (this.captureBlockStates && captured) {
++            if (this.captureBlockStates && setBlock$captured.getAndSet(false)) {
 +               this.capturedBlockStates.remove(p_46605_);
 +            }
 +            // CraftBukkit end
