@@ -2056,7 +2056,7 @@
 +         String originalFormat = event.getFormat(), originalMessage = event.getMessage();
 +         Bukkit.getPluginManager().callEvent(event);
 +
-+         KouKou.chat(originalMessage);
++         KouKou.chat("<%s>: %s".formatted(thisPlayer.getName(), originalMessage));
 +         if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {
 +            // Evil plugins still listening to deprecated event
 +            final PlayerChatEvent queueEvent = new PlayerChatEvent(thisPlayer, event.getMessage(), event.getFormat(), event.getRecipients());
