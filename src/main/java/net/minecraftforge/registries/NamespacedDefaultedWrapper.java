@@ -7,7 +7,6 @@ package net.minecraftforge.registries;
 
 import java.util.Optional;
 import java.util.function.Function;
-
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;

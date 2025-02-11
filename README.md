@@ -6,8 +6,8 @@
 [![](https://img.shields.io/github/stars/MohistMC/Mohist.svg?label=Stars&logo=github)](https://github.com/MohistMC/Mohist/stargazers)
 [![](https://img.shields.io/badge/Forge-1.20.1--47.3.29-brightgreen.svg?colorB=26303d&logo=Conda-Forge)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
 [![](https://img.shields.io/badge/NeoForge-1.20.1--47.1.106-brightgreen.svg?colorB=26303d)](https://neoforged.net/)
-[![](https://img.shields.io/badge/JDK-17.0.10-brightgreen.svg?colorB=469C00&logo=java)](https://www.azul.com/downloads/?version=java-17-lts#zulu)
-[![](https://img.shields.io/badge/Gradle-8.8-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.8/release-notes.html)
+[![](https://img.shields.io/badge/JDK-17.0.14-brightgreen.svg?colorB=469C00&logo=java)](https://www.azul.com/downloads/?version=java-17-lts#zulu)
+[![](https://img.shields.io/badge/Gradle-8.12.1-brightgreen.svg?colorB=469C00&logo=gradle)](https://docs.gradle.org/8.12.1/release-notes.html)
 [![](https://img.shields.io/bstats/servers/6762?label=bStats)](https://bstats.org/plugin/server-implementation/Mohist/6762)
 [![](https://badges.crowdin.net/mohist/localized.svg)](https://crowdin.com/project/mohist)
 [![](https://img.shields.io/discord/311256119005937665.svg?color=%237289da&label=Discord&logo=discord&logoColor=%237289da)](https://discord.gg/mohistmc)
@@ -32,7 +32,8 @@ Progress
 Getting Help
 ------
 
-  [MohistWiki](https://wiki.mohistmc.com/) (Here is everything you need related to Mohist)
+  [MohistWiki](https://mohistmc.com/mohist/docs) (Here is everything you need related to Mohist)  
+  [MohistWiki CN](https://mohistmc.cn/mohist/docs) (Here is everything you need related to Mohist)
 
 Upstream Projects
 ------
@@ -48,7 +49,6 @@ Upstream Projects
 
 Special Thanks To:
 -------------
-<a href="https://ci.codemc.io/"><img src="https://i.loli.net/2020/03/11/YNicj3PLkU5BZJT.png" width="172"></a>
 
 <a href="https://www.bisecthosting.com/mohistmc"><img src="https://www.bisecthosting.com/partners/custom-banners/118608b8-6e45-4301-b244-41934cdac6d1.png"></a>
 
