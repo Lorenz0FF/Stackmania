@@ -79,21 +79,18 @@ public class MohistMCStart {
             System.setProperty("log4j.configurationFile", "log4j2_mohist.xml");
         }
 
-        // if (MohistConfigUtil.INSTALLATIONFINISHED() && MohistConfigUtil.CHECK_UPDATE()) new UpdateUtils().init();
-
         ZipTree.init();
-
         if (MohistConfigUtil.INSTALLATIONFINISHED() && MohistConfigUtil.CHECK_LIBRARIES()) {
             DefaultLibraries.run();
         }
 
+        CustomLibraries.loadCustomLibs();
         if (MohistConfigUtil.INSTALLATIONFINISHED()) {
             v_1_20_1.run();
         }
 
         AutoDeleteMods.jar();
 
-        CustomLibraries.loadCustomLibs();
         List<String> forgeArgs = new ArrayList<>();
         for (String arg : DataParser.launchArgs.stream().filter(s ->
                         s.startsWith("--launchTarget")
