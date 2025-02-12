@@ -33,15 +33,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.spigotmc.SpigotConfig;
 
 public class MohistCommand extends Command {
 
@@ -111,10 +115,17 @@ public class MohistCommand extends Command {
                 return true;
             }
             case "reload" -> {
+                MinecraftServer console = MinecraftServer.getServer();
                 com.mohistmc.MohistConfig.init((File) MinecraftServer.options.valueOf("mohist-settings"));
+                ((CraftServer)Bukkit.getServer()).initConfig();
+                ((CraftServer)Bukkit.getServer()).loadCustomPermissions();
+                SpigotConfig.init((File) MinecraftServer.options.valueOf("spigot-settings"));
+                for (ServerLevel world : console.getAllLevels()) {
+                    world.spigotConfig.init();
+                }
                 MohistPlugin.initConfig();
 
-                MinecraftServer.getServer().server.reloadCount++;
+                console.server.reloadCount++;
                 sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.reload.complete"));
                 if (AIConfig.INSTANCE.enable()) {
                     sender.sendMessage(ChatColor.GREEN + "QQ 机器人模块已启用！");
@@ -191,7 +202,6 @@ public class MohistCommand extends Command {
                 return false;
             }
         }
-
 
         return true;
     }

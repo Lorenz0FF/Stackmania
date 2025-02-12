@@ -338,6 +338,25 @@ public final class CraftServer implements Server {
         MobEffects.BLINDNESS.getClass();
         // Ugly hack :(
 
+        initConfig();
+        overrideAllCommandBlockCommands = commandsConfiguration.getStringList("command-block-overrides").contains("*");
+        ignoreVanillaPermissions = commandsConfiguration.getBoolean("ignore-vanilla-permissions");
+        pluginManager.useTimings(configuration.getBoolean("settings.plugin-profiling"));
+        overrideSpawnLimits();
+        console.autosavePeriod = configuration.getInt("ticks-per.autosave");
+        warningState = WarningState.value(configuration.getString("settings.deprecated-verbose"));
+        TicketType.PLUGIN.timeout = configuration.getInt("chunk-gc.period-in-ticks");
+        minimumAPI = configuration.getString("settings.minimum-api");
+        loadIcon();
+
+        // Set map color cache
+        if (configuration.getBoolean("settings.use-map-color-cache")) {
+            MapPalette.setMapColorCache(new org.bukkit.craftbukkit.v1_20_R1.map.CraftMapColorCache(logger));
+        }
+    }
+
+    // Mohist start
+    public void initConfig() {
         configuration = YamlConfiguration.loadConfiguration(getConfigFile());
         configuration.options().copyDefaults(true);
         configuration.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("configurations/bukkit.yml"), Charsets.UTF_8)));
@@ -374,31 +393,18 @@ public final class CraftServer implements Server {
         }
 
         saveCommandsConfig();
-        overrideAllCommandBlockCommands = commandsConfiguration.getStringList("command-block-overrides").contains("*");
-        ignoreVanillaPermissions = commandsConfiguration.getBoolean("ignore-vanilla-permissions");
-        pluginManager.useTimings(configuration.getBoolean("settings.plugin-profiling"));
-        overrideSpawnLimits();
-        console.autosavePeriod = configuration.getInt("ticks-per.autosave");
-        warningState = WarningState.value(configuration.getString("settings.deprecated-verbose"));
-        TicketType.PLUGIN.timeout = configuration.getInt("chunk-gc.period-in-ticks");
-        minimumAPI = configuration.getString("settings.minimum-api");
-        loadIcon();
-
-        // Set map color cache
-        if (configuration.getBoolean("settings.use-map-color-cache")) {
-            MapPalette.setMapColorCache(new org.bukkit.craftbukkit.v1_20_R1.map.CraftMapColorCache(logger));
-        }
     }
+    // Mohist end
 
     public boolean getCommandBlockOverride(String command) {
         return overrideAllCommandBlockCommands || commandsConfiguration.getStringList("command-block-overrides").contains(command);
     }
 
-    private File getConfigFile() {
+    public File getConfigFile() {
         return (File) console.options.valueOf("bukkit-settings");
     }
 
-    private File getCommandsConfigFile() {
+    public File getCommandsConfigFile() {
         return (File) console.options.valueOf("commands-settings");
     }
 
@@ -950,7 +956,7 @@ public final class CraftServer implements Server {
     }
 
     @SuppressWarnings({ "unchecked", "finally" })
-    private void loadCustomPermissions() {
+    public void loadCustomPermissions() {
         File file = new File(configuration.getString("settings.permissions-file"));
         FileInputStream stream;
 
