@@ -19,7 +19,7 @@
 package com.mohistmc.libraries;
 
 import com.mohistmc.MohistMCStart;
-import com.mohistmc.tools.MD5Util;
+import com.mohistmc.tools.SHA256;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -128,7 +128,7 @@ public class LibrariesDownloadQueue {
     protected boolean copyFileFromJar(File file, String pathInJar, Libraries lib) {
         InputStream is = MohistMCStart.class.getClassLoader().getResourceAsStream(pathInJar);
 
-        if (!file.exists() || !MD5Util.get(file).equals(lib.getMd5()) || file.length() <= 1) {
+        if (!file.exists() || !SHA256.is(is, lib.getSha256()) || file.length() <= 1) {
             file.getParentFile().mkdirs();
             if (is != null) {
                 try {
@@ -148,7 +148,7 @@ public class LibrariesDownloadQueue {
     public boolean needDownload() {
         for (Libraries libraries : allLibraries) {
             File lib = new File(parentDirectory, libraries.path);
-            if (lib.exists() && Objects.equals(MD5Util.get(lib), libraries.md5)) {
+            if (lib.exists() && SHA256.is(lib, libraries.sha256)) {
                 continue;
             }
             need_download.add(libraries);

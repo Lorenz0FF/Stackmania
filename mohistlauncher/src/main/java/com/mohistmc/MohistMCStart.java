@@ -18,7 +18,6 @@
 
 package com.mohistmc;
 
-import com.mohistmc.action.ZipTree;
 import com.mohistmc.action.v_1_20_1;
 import com.mohistmc.config.MohistConfigUtil;
 import com.mohistmc.feature.AutoDeleteMods;
@@ -28,12 +27,15 @@ import com.mohistmc.feature.ExceptionHandler;
 import com.mohistmc.i18n.i18n;
 import com.mohistmc.tools.JarTool;
 import com.mohistmc.tools.Logo;
+import com.mohistmc.tools.MojangEulaUtil;
+import com.mohistmc.tools.ZipUtil;
 import com.mohistmc.util.DataParser;
-import com.mohistmc.util.EulaUtil;
 import com.mohistmc.util.MohistModuleManager;
 import cpw.mods.bootstraplauncher.BootstrapLauncher;
 import java.lang.management.ManagementFactory;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -69,9 +71,13 @@ public class MohistMCStart {
                     ManagementFactory.getRuntimeMXBean().getName().split("@")[0]
             );
             if (i18n.isCN()) {
-                System.out.printf("官方交流QQ群: 570870451%n");
-                System.out.printf("官网(中国)已开放: https://www.mohistmc.cn/%n");
-                System.out.printf("爱发电: https://afdian.com/a/MohistMC%n");
+                System.out.println("+------------------------------------------------------+");
+                System.out.println("|                                                      |");
+                System.out.println("| 官方交流QQ群: 570870451                              |");
+                System.out.println("| 官网(中国): https://www.mohistmc.cn/                 |");
+                System.out.println("| 爱发电: https://afdian.com/a/MohistMC                |");
+                System.out.println("|                                                      |");
+                System.out.println("+------------------------------------------------------+");
             }
         }
 
@@ -79,7 +85,7 @@ public class MohistMCStart {
             System.setProperty("log4j.configurationFile", "log4j2_mohist.xml");
         }
 
-        ZipTree.init();
+        ZipUtil.getFileContent(MohistMCStart.class.getClassLoader().getResourceAsStream("META-INF/libraries"));
         if (MohistConfigUtil.INSTALLATIONFINISHED() && MohistConfigUtil.CHECK_LIBRARIES()) {
             DefaultLibraries.run();
         }
@@ -104,12 +110,12 @@ public class MohistMCStart {
         }
         new MohistModuleManager(DataParser.launchArgs);
 
-        if (!EulaUtil.hasAcceptedEULA()) {
+        if (!MojangEulaUtil.hasAcceptedEULA()) {
             System.out.println(i18n.as("eula"));
             while (!"true".equals(new Scanner(System.in).nextLine().trim())) {
                 System.out.println(i18n.as("eula_notrue"));
             }
-            EulaUtil.writeInfos();
+            MojangEulaUtil.writeInfos(i18n.as("eula.text", "https://account.mojang.com/documents/minecraft_eula") + "\n" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + "\neula=true");
         }
         String[] args_ = Stream.concat(forgeArgs.stream(), mainArgs.stream()).toArray(String[]::new);
         BootstrapLauncher.main(args_);
