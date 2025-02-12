@@ -46,14 +46,10 @@ public class MohistPlugin {
 
     public static void init(Server server) {
         if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable();
-        ItemsConfig.init();
-        BackConfig.init();
-        WarpsConfig.init();
-        BanConfig.init();
-        AIConfig.init();
+        initConfig();
         File out = new File("libraries/com/mohistmc/cache", "libPath.txt");
         if (out.exists()) {
-            String data = null;
+            String data;
             try {
                 data = Files.readString(out.toPath());
             } catch (IOException e) {
@@ -73,17 +69,25 @@ public class MohistPlugin {
         ApiController.init();
     }
 
+    public static void initConfig() {
+        ItemsConfig.init();
+        BackConfig.init();
+        WarpsConfig.init();
+        BanConfig.init();
+        AIConfig.init();
+    }
+
     public static void registerCommands(Map<String, Command> map) {
-        if (MohistConfig.yml.getBoolean("worldmanage", true)) {
+        if (MohistConfig.worldmanage) {
             map.put("worlds", new WorldsCommands("worlds"));
         }
         map.put("warps", new WarpsCommands("warps"));
-        if (MohistConfig.yml.getBoolean("tpa.enable", false)) {
+        if (MohistConfig.tpa_enable) {
             map.put("tpa", new TpaComamands("tpa"));
             map.put("tpadeny", new TpadenyCommands("tpadeny"));
             map.put("tpaccept", new TpacceptCommands("tpaccept"));
         }
-        if (MohistConfig.yml.getBoolean("back.enable", false)) {
+        if (MohistConfig.back_enable) {
             map.put("back", new BackCommands("back"));
         }
     }

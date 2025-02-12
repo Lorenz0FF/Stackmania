@@ -19,8 +19,11 @@
 package com.mohistmc.commands;
 
 import com.mohistmc.MohistMC;
+import com.mohistmc.ai.koukou.AIConfig;
 import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.api.ServerAPI;
+import com.mohistmc.plugins.MohistPlugin;
+import com.mohistmc.plugins.item.ItemsConfig;
 import com.mohistmc.util.I18n;
 import com.mohistmc.util.MohistThreadCost;
 import java.io.File;
@@ -108,13 +111,14 @@ public class MohistCommand extends Command {
                 return true;
             }
             case "reload" -> {
-                Command.broadcastCommandMessage(sender, ChatColor.RED + I18n.as("mohistcmd.reload.line1"));
-                Command.broadcastCommandMessage(sender, ChatColor.RED + I18n.as("mohistcmd.reload.line2"));
-
                 com.mohistmc.MohistConfig.init((File) MinecraftServer.options.valueOf("mohist-settings"));
+                MohistPlugin.initConfig();
 
                 MinecraftServer.getServer().server.reloadCount++;
-                sender.sendMessage(ChatColor.GREEN + "mohist-config/mohist.yml directory reload complete.");
+                sender.sendMessage(ChatColor.GREEN + I18n.as("mohistcmd.reload.complete"));
+                if (AIConfig.INSTANCE.enable()) {
+                    sender.sendMessage(ChatColor.GREEN + "QQ 机器人模块已启用！");
+                }
                 return true;
             }
             case "version" -> {
