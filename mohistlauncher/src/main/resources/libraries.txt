@@ -3,8 +3,8 @@ com/electronwill/night-config/toml/3.6.4/toml-3.6.4.jar|3cb3d0ef3352e204cda68215
 com/github/jponge/lzma-java/1.3/lzma-java-1.3.jar|75ccc0e24d37ed5b8916e1bcffad1e067c2b1cfa21b635287f968db5c3c1963a|51041|true
 com/github/oshi/oshi-core/6.4.0/oshi-core-6.4.0.jar|59c4bde18e4c19a29d2b996cb7a018da2f8d2b1f39cb0d73a78855c0673cc94f|966042|false
 com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar|766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7|19936|true
-com/google/code/gson/gson/2.10/gson-2.10.jar|0cdd163ce3598a20fc04eee71b140b24f6f2a3b35f0a499dbbdd9852e83fbfaf|286235|true
-com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar|03d0329547c13da9e17c634d1049ea2ead093925e290567e1a364fd6b1fc7ff8|13704|true
+com/google/code/gson/gson/2.10/gson-2.10.jar|cdd163ce3598a20fc04eee71b140b24f6f2a3b35f0a499dbbdd9852e83fbfaf|286235|true
+com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar|3d0329547c13da9e17c634d1049ea2ead093925e290567e1a364fd6b1fc7ff8|13704|true
 com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar|a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26|4617|false
 com/google/guava/guava/31.1-jre/guava-31.1-jre.jar|a42edc9cab792e39fe39bb94f3fca655ed157ff87a8af78e1d6ba5b07c4a00ab|2959479|true
 com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar|2994a7eb78f2710bd3d3bfb639b2c94e219cedac0d4d084d516e78c16dddecf6|8782|true
@@ -14,7 +14,7 @@ com/konghq/unirest-java-core/4.4.5/unirest-java-core-4.4.5.jar|c183beaf11243f5c0
 com/mohistmc/brigadier/1.20.1/brigadier-1.20.1.jar|70dae94f871e888941f97178c0f355c918fcaf89d8a2140ddc964cf6299d3c0d|79473|false
 com/mohistmc/dynamicenum/0.3/dynamicenum-0.3.jar|8d5aa77fc5f872d0f65e0b19205e4e3d4065a432dbe8fd8f53efd0d420353c57|3750|false
 com/mohistmc/eventbus/6.0.5/eventbus-6.0.5.jar|54a535012a949d481eb3aa9ac85fa1faab0141e7ff1c4efe46d1271a46cf9049|54306|false
-com/mohistmc/i18n/0.6/i18n-0.6.jar|0177ca0e5fe4a8ede74cb7b3a604319239d9d8a74bfecc4248bcba24d6343ae2|3186|false
+com/mohistmc/i18n/0.6/i18n-0.6.jar|177ca0e5fe4a8ede74cb7b3a604319239d9d8a74bfecc4248bcba24d6343ae2|3186|false
 com/mohistmc/json/0.5/json-0.5.jar|aa9592249977e46bf59e04b669669b947616dceeca2f7a09b0f88f901a2a12e6|76190|false
 com/mohistmc/librariesvault/1.20.1/librariesvault-1.20.1.jar|2f5be204480661277db4a75b248becdc341747b5044d0bb7cb59573f2cccbbcf|344470|false
 com/mohistmc/tools/0.6/tools-0.6.jar|c69ea3332457bfee241a55cfeea8ed440e7bfcf00b58c6dbd16d3dc9cccb3874|34319|false
@@ -53,7 +53,7 @@ net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar|66d4f819a062a51a1d5627bffc23fac55d167
 net/java/dev/jna/jna-platform/5.13.0/jna-platform-5.13.0.jar|474d7b88f6e97009b6ec1d98c3024dd95c23187c65dabfbc35331bcac3d173dd|1363209|false
 net/jodah/typetools/0.6.3/typetools-0.6.3.jar|408300867804be05d1083cc0287dd3a21295a9e76090e288013ba5a4182dc96d|18281|false
 net/kyori/adventure-api/4.14.0/adventure-api-4.14.0.jar|1d4cc85babc49917469362fdb4bcd28efbc81c86e52bf473d167ee97c0ec5c76|346214|false
-net/kyori/adventure-key/4.14.0/adventure-key-4.14.0.jar|0b2bd74353932595c857af7d637210fb7819dfb1fc5b52a04eefb938ea847972|11070|false
+net/kyori/adventure-key/4.14.0/adventure-key-4.14.0.jar|b2bd74353932595c857af7d637210fb7819dfb1fc5b52a04eefb938ea847972|11070|false
 net/kyori/adventure-text-logger-slf4j/4.14.0/adventure-text-logger-slf4j-4.14.0.jar|fedde3ed2151d2b5d25e77cbe16333f69f615daa49a2b0c6d5e09d6e24ba140d|19845|false
 net/kyori/adventure-text-minimessage/4.14.0/adventure-text-minimessage-4.14.0.jar|b51364a8d0613331d488c8055491ea180f4d84b60401fd348deeda1a4ff6f8c8|158732|false
 net/kyori/adventure-text-serializer-ansi/4.14.0/adventure-text-serializer-ansi-4.14.0.jar|71ea80a792c5cd51d3478a28a67c2acb65476448fd04490a68e5d514a2ffb339|11089|false
@@ -99,7 +99,7 @@ org/apache/maven/maven-model/3.8.5/maven-model-3.8.5.jar|7c9eeb30ac1941ea9bdf76c
 org/apache/maven/maven-model-builder/3.8.5/maven-model-builder-3.8.5.jar|6bcd688b4700bc0d9046c531c316e75674f53b345d4432d6a7f62812b2424bef|195825|false
 org/apache/maven/maven-repository-metadata/3.8.5/maven-repository-metadata-3.8.5.jar|24d89a1b23dc0427ac67895a741802fd23897bdf135d87fe586d718b38a3e924|28416|false
 org/apache/maven/maven-resolver-provider/3.8.5/maven-resolver-provider-3.8.5.jar|4b9f827efb393696431978dc0354651f1a95d4c52ba07c92d830efe5dc9b1012|67173|false
-org/apache/maven/resolver/maven-resolver-api/1.7.3/maven-resolver-api-1.7.3.jar|068bdab0cb4534cf8fa5e8b26e23898f26393e0e20c97c3a1a6b59ce86a9acdb|149908|false
+org/apache/maven/resolver/maven-resolver-api/1.7.3/maven-resolver-api-1.7.3.jar|68bdab0cb4534cf8fa5e8b26e23898f26393e0e20c97c3a1a6b59ce86a9acdb|149908|false
 org/apache/maven/resolver/maven-resolver-connector-basic/1.7.3/maven-resolver-connector-basic-1.7.3.jar|29beb02541adb82873d7bdeed2aaea03eaf3123720dbd1b5d96d058849364c66|45777|false
 org/apache/maven/resolver/maven-resolver-impl/1.7.3/maven-resolver-impl-1.7.3.jar|d49ad3a980a8a5ea3761fb312a784673806eecdeb380c1a8b97d55786c8ac625|200145|false
 org/apache/maven/resolver/maven-resolver-spi/1.7.3/maven-resolver-spi-1.7.3.jar|26df4115fb0a33770ca00166a197ba95d378296a5ac86d2a4253747498f7a1a9|39312|false
