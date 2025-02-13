@@ -249,6 +249,8 @@ public class MohistConfig {
     //Messaes
     public static String message_require_forge;
 
+    public static String server_mod_name;
+
     private static void mohist() {
         show_logo = getBoolean("mohist.show_logo", true);
         mohist_lang = getString("mohist.lang", Locale.getDefault().toString());
@@ -314,5 +316,6 @@ public class MohistConfig {
         async_save_world = getBoolean("world.async_save", false);
 
         message_require_forge = getString("message.require_forge", "This server has mods that require Forge to be installed on the client. Contact your server admin for more details.");
+        server_mod_name = getString("server_mod_name", "mohist");
     }
 }
