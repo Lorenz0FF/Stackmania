@@ -67,6 +67,7 @@ public class BanItem {
     }
 
     public static boolean checkMoShou(ItemStack itemStack) {
+        if (itemStack.isEmpty()) return false;
         if (!MohistConfig.ban_item_enable) return false;
         return BanConfig.MOSHOU.getMoShouList().contains(CraftItemStack.asCraftMirror(itemStack).getType().name());
     }
