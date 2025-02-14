@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Thrown whenever a LivingEntity dies
  */
-public class EntityDeathEvent extends EntityEvent {
+public class EntityDeathEvent extends EntityEvent implements org.bukkit.event.Cancellable { // Paper
     private static final HandlerList handlers = new HandlerList();
     private final List<ItemStack> drops;
     private int dropExp = 0;
@@ -74,5 +74,15 @@ public class EntityDeathEvent extends EntityEvent {
     @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
+    }
+
+    // Paper start - make cancellable
+    @Override
+    public boolean isCancelled() {
+        return false;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
     }
 }
