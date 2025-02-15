@@ -27,7 +27,6 @@ public class AutoDeleteMods {
             "io.github.reserveword.imblocker.IMBlocker" /*IMBlocker*/,
             "me.towdium.jecharacters.JustEnoughCharacters" /*JustEnoughCharacters*/,
             "com.lootbeams.LootBeams" /*LootBeams*/,
-            "icyllis.modernui.ModernUI" /*ModernUI*/,
             "net.darkhax.maxhealthfix.MaxHealthFixForge " /*Max-Health-Fix*/,
             "optifine.Differ" /*OptiFine*/));
 
