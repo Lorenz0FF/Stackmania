@@ -809,11 +809,9 @@
                 this.m_9236_().m_7967_(itementity);
              }
           }
-@@ -1334,13 +_,11 @@
-    }
+@@ -1335,12 +_,9 @@
  
     protected void m_6668_(DamageSource p_21192_) {
-+      // Paper end
        Entity entity = p_21192_.m_7639_();
 -      int i;
 -      if (entity instanceof Player) {
@@ -827,7 +825,7 @@
  
        boolean flag = this.f_20889_ > 0;
        if (this.m_6125_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_)) {
-@@ -1350,14 +_,32 @@
+@@ -1350,6 +_,10 @@
  
        this.m_5907_();
        this.m_21226_();
@@ -838,21 +836,8 @@
     }
  
     protected void m_5907_() {
-    }
+@@ -1357,7 +_,8 @@
  
-+   protected void postDeathDropItems(org.bukkit.event.entity.EntityDeathEvent event) {} // Paper - method for post death logic that cannot be ran before the event is potentially cancelled
-+
-+   // CraftBukkit start
-+   public int getExpReward() {
-+      if (this.m_9236_() instanceof ServerLevel && !this.m_217046_() && (this.m_6124_() || this.f_20889_ > 0 && this.m_6149_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_))) {
-+         int i = this.m_213860_();
-+         return i;
-+      } else {
-+         return 0;
-+      }
-+   }
-+   // CraftBukkit end
-+
     protected void m_21226_() {
        if (this.m_9236_() instanceof ServerLevel && !this.m_217046_() && (this.m_6124_() || this.f_20889_ > 0 && this.m_6149_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_))) {
 -         ExperienceOrb.m_147082_((ServerLevel)this.m_9236_(), this.m_20182_(), this.m_213860_());

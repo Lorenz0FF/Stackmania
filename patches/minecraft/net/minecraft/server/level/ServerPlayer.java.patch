@@ -421,7 +421,7 @@
        } catch (Throwable throwable) {
           CrashReport crashreport = CrashReport.m_127521_(throwable, "Ticking player");
           CrashReportCategory crashreportcategory = crashreport.m_127514_("Player being ticked");
-@@ -563,16 +_,39 @@
+@@ -563,16 +_,53 @@
     }
  
     private void m_9104_(ObjectiveCriteria p_9105_, int p_9106_) {
@@ -442,9 +442,23 @@
 +         return;
 +      }
 +
++      List<org.bukkit.inventory.ItemStack> loot = new ArrayList<org.bukkit.inventory.ItemStack>(this.m_150109_().m_6643_());
++      boolean keepInventory = this.f_19853_.m_46469_().m_46207_(GameRules.f_46133_) || this.m_5833_();
++
++      if (!keepInventory) {
++         Collection<ItemEntity> drops = this.captureDrops(null);
++         if (drops != null) {
++            for (ItemEntity entity : drops) {
++               CraftItemStack craftItemStack = CraftItemStack.asCraftMirror(entity.m_32055_());
++               loot.add(craftItemStack);
++            }
++         }
++      }
++
 +      Component defaultMessage = this.m_21231_().m_19293_();
 +      String deathmessage = defaultMessage.getString();
 +
++      keepLevel = keepInventory; // SPIGOT-2222: pre-set keepLevel
 +      org.bukkit.event.entity.PlayerDeathEvent event = CraftEventFactory.callPlayerDeathEvent(this, List.of(), deathmessage, true);
 +
 +      // SPIGOT-943 - only call if they have an inventory open
