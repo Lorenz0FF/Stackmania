@@ -33,9 +33,11 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.DecoratedPotBlock;
 import net.minecraft.world.level.block.SignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.TrappedChestBlockEntity;
@@ -53,6 +55,7 @@ import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlockStates;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftChest;
+import org.bukkit.craftbukkit.v1_20_R1.block.CraftDecoratedPot;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftHangingSign;
 import org.bukkit.craftbukkit.v1_20_R1.block.CraftSign;
 import org.bukkit.craftbukkit.v1_20_R1.enchantments.CraftEnchantment;
@@ -159,8 +162,10 @@ public class ForgeInjectBukkit {
                         } else if (blockEntity instanceof ChestBlockEntity) {
                             CraftBlockStates.register(material, CraftChest.class, CraftChest::new, ChestBlockEntity::new);
                         }
+                    } else if (block instanceof DecoratedPotBlock) {
+                        CraftBlockStates.register(material, CraftDecoratedPot.class, CraftDecoratedPot::new, DecoratedPotBlockEntity::new);
                     }
-                    MohistMC.LOGGER.debug("Save-BLOCK:" + material.name() + " - " + material.key);
+                    MohistMC.LOGGER.debug("Save-BLOCK:{} - {}", material.name(), material.key);
                 }
             }
         }
