@@ -46,7 +46,6 @@ public class MohistPlugin {
 
     public static void init(Server server) {
         if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable();
-        initConfig();
         File out = new File("libraries/com/mohistmc/cache", "libPath.txt");
         if (out.exists()) {
             String data;
@@ -78,16 +77,16 @@ public class MohistPlugin {
     }
 
     public static void registerCommands(Map<String, Command> map) {
-        if (MohistConfig.worldmanage) {
+        if (MohistConfig.yml.getBoolean("worldmanage", true)) {
             map.put("worlds", new WorldsCommands("worlds"));
         }
         map.put("warps", new WarpsCommands("warps"));
-        if (MohistConfig.tpa_enable) {
+        if (MohistConfig.yml.getBoolean("tpa.enable", false)) {
             map.put("tpa", new TpaComamands("tpa"));
             map.put("tpadeny", new TpadenyCommands("tpadeny"));
             map.put("tpaccept", new TpacceptCommands("tpaccept"));
         }
-        if (MohistConfig.back_enable) {
+        if (MohistConfig.yml.getBoolean("back.enable", false)) {
             map.put("back", new BackCommands("back"));
         }
     }

@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/dedicated/DedicatedServer.java
 +++ b/net/minecraft/server/dedicated/DedicatedServer.java
-@@ -1,6 +_,14 @@
+@@ -1,6 +_,15 @@
  package net.minecraft.server.dedicated;
  
  import com.google.common.collect.Lists;
@@ -11,6 +11,7 @@
 +import com.mohistmc.api.ServerAPI;
 +import com.mohistmc.api.color.ColorsAPI;
 +import com.mohistmc.paper.brigadier.PaperBrigadierProviderImpl;
++import com.mohistmc.plugins.MohistPlugin;
 +import com.mohistmc.util.I18n;
  import com.mojang.authlib.GameProfile;
  import com.mojang.datafixers.DataFixer;
@@ -173,7 +174,7 @@
        }
  
        if (this.m_139668_()) {
-@@ -153,14 +_,31 @@
+@@ -153,14 +_,32 @@
           return false;
        } else {
           this.m_129823_(new DedicatedPlayerList(this, this.m_247573_(), this.f_129745_));
@@ -183,6 +184,7 @@
 +         // Spigot end
 +         // Mohsit start
 +         MohistConfig.init((java.io.File) options.valueOf("mohist-settings"));
++         MohistPlugin.initConfig();
 +         MohistConfig.registerCommands();
 +         if (MohistConfig.motdEnable) {
 +            this.m_129989_(MohistConfig.motd());
