@@ -116,10 +116,10 @@ public class MohistCommand extends Command {
             }
             case "reload" -> {
                 MinecraftServer console = MinecraftServer.getServer();
-                com.mohistmc.MohistConfig.init((File) MinecraftServer.options.valueOf("mohist-settings"));
+                com.mohistmc.MohistConfig.init((File) console.options.valueOf("mohist-settings"));
                 ((CraftServer)Bukkit.getServer()).initConfig();
                 ((CraftServer)Bukkit.getServer()).loadCustomPermissions();
-                SpigotConfig.init((File) MinecraftServer.options.valueOf("spigot-settings"));
+                SpigotConfig.init((File) console.options.valueOf("spigot-settings"));
                 for (ServerLevel world : console.getAllLevels()) {
                     world.spigotConfig.init();
                 }

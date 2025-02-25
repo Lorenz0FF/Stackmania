@@ -79,9 +79,9 @@
     private volatile boolean f_195494_;
  
 +   // CraftBukkit start
-+   public static WorldLoader.DataLoadContext worldLoader;
++   public WorldLoader.DataLoadContext worldLoader;
 +   public CraftServer server;
-+   public static OptionSet options;
++   public OptionSet options;
 +   public org.bukkit.command.ConsoleCommandSender console;
 +   public static int currentTick = (int) (System.currentTimeMillis() / 50);
 +   public java.util.Queue<Runnable> processQueue = new java.util.concurrent.ConcurrentLinkedQueue<Runnable>();
@@ -113,7 +113,17 @@
        }
  
        S s = p_129873_.apply(thread);
-@@ -267,7 +_,7 @@
+@@ -263,11 +_,17 @@
+       return s;
+    }
+ 
++   public MinecraftServer worldLoader(WorldLoader.DataLoadContext worldLoader, OptionSet options) {
++      this.worldLoader = worldLoader;
++      this.options = options;
++      return this;
++   }
++
+    public MinecraftServer(Thread p_236723_, LevelStorageSource.LevelStorageAccess p_236724_, PackRepository p_236725_, WorldStem p_236726_, Proxy p_236727_, DataFixer p_236728_, Services p_236729_, ChunkProgressListenerFactory p_236730_) {
        super("Server");
        this.f_244176_ = p_236726_.f_244542_();
        this.f_129749_ = p_236726_.f_206895_();
