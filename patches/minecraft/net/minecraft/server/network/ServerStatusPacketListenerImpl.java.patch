@@ -66,7 +66,7 @@
 +         ServerStatus.Players playerSample = new ServerStatus.Players(event.getMaxPlayers(), (server.m_183306_()) ? 0 : profiles.size(), (server.m_183306_()) ? Collections.emptyList() : profiles);
 +
 +         ServerStatus ping = new ServerStatus(
-+                 CraftChatMessage.fromString(event.getMotd(), true)[0],
++                 Component.m_237113_(event.getMotd()),
 +                 Optional.of(playerSample),
 +                 Optional.of(new ServerStatus.Version(server.getServerModName() + " " + server.m_7630_(), SharedConstants.m_183709_().m_132495_())),
 +                 (event.icon.value != null) ? Optional.of(new ServerStatus.Favicon(event.icon.value)) : Optional.empty(),
