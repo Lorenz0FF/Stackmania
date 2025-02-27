@@ -26,7 +26,7 @@
  import net.minecraft.core.BlockPos;
  import net.minecraft.core.Direction;
  import net.minecraft.core.Holder;
-@@ -22,6 +_,7 @@
+@@ -22,10 +_,12 @@
  import net.minecraft.core.registries.Registries;
  import net.minecraft.nbt.CompoundTag;
  import net.minecraft.network.protocol.Packet;
@@ -34,7 +34,12 @@
  import net.minecraft.resources.ResourceKey;
  import net.minecraft.resources.ResourceLocation;
  import net.minecraft.server.MinecraftServer;
-@@ -38,6 +_,7 @@
+ import net.minecraft.server.level.FullChunkStatus;
++import net.minecraft.server.level.ServerLevel;
+ import net.minecraft.sounds.SoundEvent;
+ import net.minecraft.sounds.SoundSource;
+ import net.minecraft.util.AbortableIterationConsumer;
+@@ -38,26 +_,32 @@
  import net.minecraft.world.entity.Entity;
  import net.minecraft.world.entity.boss.EnderDragonPart;
  import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -42,7 +47,12 @@
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.item.ItemStack;
  import net.minecraft.world.item.crafting.RecipeManager;
-@@ -49,11 +_,13 @@
+ import net.minecraft.world.level.biome.Biome;
+ import net.minecraft.world.level.biome.BiomeManager;
++import net.minecraft.world.level.biome.BiomeSource;
+ import net.minecraft.world.level.block.BaseFireBlock;
+ import net.minecraft.world.level.block.Block;
+ import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.entity.BlockEntity;
  import net.minecraft.world.level.block.entity.TickingBlockEntity;
  import net.minecraft.world.level.block.state.BlockState;
@@ -56,7 +66,18 @@
  import net.minecraft.world.level.entity.EntityTypeTest;
  import net.minecraft.world.level.entity.LevelEntityGetter;
  import net.minecraft.world.level.gameevent.GameEvent;
-@@ -69,8 +_,19 @@
++import net.minecraft.world.level.levelgen.FlatLevelSource;
+ import net.minecraft.world.level.levelgen.Heightmap;
++import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+ import net.minecraft.world.level.lighting.LevelLightEngine;
+ import net.minecraft.world.level.material.FluidState;
+ import net.minecraft.world.level.material.Fluids;
+@@ -65,12 +_,28 @@
+ import net.minecraft.world.level.redstone.NeighborUpdater;
+ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+ import net.minecraft.world.level.storage.LevelData;
++import net.minecraft.world.level.storage.ServerLevelData;
+ import net.minecraft.world.level.storage.WritableLevelData;
  import net.minecraft.world.phys.AABB;
  import net.minecraft.world.phys.Vec3;
  import net.minecraft.world.scores.Scoreboard;
@@ -68,9 +89,13 @@
 +import org.bukkit.craftbukkit.v1_20_R1.block.CapturedBlockState;
 +import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 +import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CraftWorldInfo;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CustomChunkGenerator;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CustomWorldChunkManager;
 +import org.bukkit.craftbukkit.v1_20_R1.util.CraftSpawnCategory;
 +import org.bukkit.entity.SpawnCategory;
 +import org.bukkit.event.block.BlockPhysicsEvent;
++import org.bukkit.generator.WorldInfo;
  
 -public abstract class Level implements LevelAccessor, AutoCloseable {
 +public abstract class Level extends net.minecraftforge.common.capabilities.CapabilityProvider<Level> implements LevelAccessor, AutoCloseable, net.minecraftforge.common.extensions.IForgeLevel {
@@ -86,7 +111,7 @@
     protected final NeighborUpdater f_220350_;
     private final List<TickingBlockEntity> f_151503_ = Lists.newArrayList();
     private boolean f_151504_;
-@@ -101,19 +_,64 @@
+@@ -101,19 +_,69 @@
     private final RandomSource f_220348_ = RandomSource.m_216337_();
     private final ResourceKey<DimensionType> f_220349_;
     private final Holder<DimensionType> f_204147_;
@@ -124,10 +149,8 @@
 +   public final it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap<SpawnCategory> ticksPerSpawnCategory = new it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap<>();
 +   public boolean populating;
 +   public org.spigotmc.SpigotWorldConfig spigotConfig; // Spigot
++   public String name;
 +
-+   public CraftWorld getWorld() {
-+      return this.world;
-+   }
 +   public CraftServer getCraftServer() {
 +      return (CraftServer) Bukkit.getServer();
 +   }
@@ -135,6 +158,13 @@
 +      return Registries.m_257452_(f_46421_);
 +   }
 +   public static void craftWorldData(org.bukkit.generator.ChunkGenerator gen, org.bukkit.World.Environment env, org.bukkit.generator.BiomeProvider bp) {
++      generator = gen;
++      environment = env;
++      biomeProvider = bp;
++   }
++
++   protected Level(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider bp) {
++      this(p_270739_, p_270683_, p_270200_, p_270240_, p_270692_, p_270904_, p_270470_, p_270248_, p_270466_);
 +      generator = gen;
 +      environment = env;
 +      biomeProvider = bp;
@@ -167,14 +197,11 @@
              }
           };
        } else {
-@@ -141,6 +_,46 @@
+@@ -141,6 +_,43 @@
        this.f_220350_ = new CollectingNeighborUpdater(this, p_270466_);
        this.f_268710_ = p_270200_;
        this.f_268497_ = new DamageSources(p_270200_);
 +      // CraftBukkit start
-+      if (environment == null) {
-+         environment = ForgeInjectBukkit.environment.getOrDefault(getTypeKey(), World.Environment.CUSTOM);
-+      }
 +      m_6857_().world = this;
 +      // From PlayerList.setPlayerFileData
 +      m_6857_().m_61929_(new BorderChangeListener() {
@@ -602,7 +629,7 @@
     }
  
     public static enum ExplosionInteraction {
-@@ -880,4 +_,53 @@
+@@ -880,4 +_,83 @@
        MOB,
        TNT;
     }
@@ -653,6 +680,36 @@
 +         }
 +         // CraftBukkit end
 +      }
++   }
++
++
++   public CraftWorld getWorld() {
++      if (this.world == null) {
++         if (environment == null) {
++            environment = ForgeInjectBukkit.environment.getOrDefault(getTypeKey(), World.Environment.CUSTOM);
++         }
++         if (generator == null) {
++            generator = this.getCraftServer().getGenerator(((ServerLevelData) this.m_6106_()).m_5462_());
++
++            if (this instanceof net.minecraft.server.level.ServerLevel serverLevel && generator != null) {
++               CraftWorldInfo info = new CraftWorldInfo((ServerLevelData) m_6106_(), serverLevel.convertable, environment, m_6042_());
++
++               net.minecraft.world.level.chunk.ChunkGenerator NMSgenerator = serverLevel.m_7726_().m_8481_();
++               if (biomeProvider != null) {
++                  net.minecraft.world.level.biome.BiomeSource source = new CustomWorldChunkManager(info, biomeProvider, serverLevel.m_9598_().m_175515_(Registries.f_256952_));
++                  NMSgenerator.setBiomeSource(source);
++               } else {
++                  biomeProvider = generator.getDefaultBiomeProvider(info);
++               }
++
++               CustomChunkGenerator gen = new CustomChunkGenerator(serverLevel, NMSgenerator, generator);
++               serverLevel.m_7726_().setChunkGenerator(gen);
++            }
++         }
++         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
++         getCraftServer().addWorld(this.world);
++      }
++      return this.world;
 +   }
 +   // CraftBukkit end
  }

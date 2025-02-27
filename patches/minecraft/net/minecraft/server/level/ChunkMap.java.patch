@@ -41,6 +41,15 @@
  import org.slf4j.Logger;
  
  public class ChunkMap extends ChunkStorage implements ChunkHolder.PlayerProvider {
+@@ -122,7 +_,7 @@
+    private final ThreadedLevelLightEngine f_140134_;
+    private final BlockableEventLoop<Runnable> f_140135_;
+    public ChunkGenerator f_140136_;
+-   private final RandomState f_214834_;
++   private RandomState f_214834_;
+    private final ChunkGeneratorStructureState f_254626_;
+    private final Supplier<DimensionDataStorage> f_140137_;
+    private final PoiManager f_140138_;
 @@ -144,6 +_,10 @@
     private final Queue<Runnable> f_140125_ = Queues.newConcurrentLinkedQueue();
     int f_140126_;
@@ -285,3 +294,21 @@
              if (flag) {
                 if (this.f_140475_.add(p_140498_.f_8906_)) {
                    this.f_140471_.m_8541_(p_140498_);
+@@ -1411,6 +_,17 @@
+             this.m_140497_(serverplayer);
+          }
+ 
++      }
++   }
++
++   public void setChunkGenerator(ChunkGenerator generator) {
++      if (generator instanceof CustomChunkGenerator custom) {
++         generator = custom.getDelegate();
++      }
++      if (generator instanceof NoiseBasedChunkGenerator noisebasedchunkgenerator) {
++         this.f_214834_ = RandomState.m_255302_(noisebasedchunkgenerator.m_224341_().m_203334_(), this.f_140133_.m_9598_().m_255025_(Registries.f_256865_), this.f_140133_.m_7328_());
++      } else {
++         this.f_214834_ = RandomState.m_255302_(NoiseGeneratorSettings.m_238396_(), this.f_140133_.m_9598_().m_255025_(Registries.f_256865_), this.f_140133_.m_7328_());
+       }
+    }
+ }
