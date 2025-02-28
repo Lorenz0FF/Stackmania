@@ -438,7 +438,7 @@
  
     }
  
-@@ -624,30 +_,53 @@
+@@ -624,30 +_,54 @@
  
     }
  
@@ -465,13 +465,13 @@
 +         long curTime, tickSection = Util.m_137550_(), tickCount = 1;
           while(this.f_129764_) {
 -            long i = Util.m_137550_() - this.f_129726_;
--            if (i > 2000L && this.f_129726_ - this.f_129718_ >= 15000L) {
 +            long i = (curTime = Util.m_137550_()) - this.f_129726_;
-+            if (i > 5000L && this.f_129726_ - this.f_129718_ >= 30000L) { // CraftBukkit
+             if (i > 2000L && this.f_129726_ - this.f_129718_ >= 15000L) {
                 long j = i / 50L;
 -               f_129750_.warn("Can't keep up! Is the server overloaded? Running {}ms or {} ticks behind", i, j);
-+               if (server.getWarnOnOverload()) // CraftBukkit
-+               f_129750_.warn(I18n.as("minecraftserver.cantkeepup", i, j));
++               if (server.getWarnOnOverload()) {
++                  f_129750_.warn(I18n.as("minecraftserver.cantkeepup", i, j));
++               }
                 this.f_129726_ += j * 50L;
                 this.f_129718_ = this.f_129726_;
              }
@@ -491,7 +491,7 @@
                 this.f_177876_ = new MinecraftServer.TimeProfiler(Util.m_137569_(), this.f_129766_);
              }
  
-+            MinecraftServer.currentTick = (int) (System.currentTimeMillis() / 50); // CraftBukkit
++            currentTick = (int) (System.currentTimeMillis() / 50); // CraftBukkit
              this.f_129726_ += 50L;
              this.m_177945_();
              this.f_129754_.m_6180_("tick");
