@@ -128,7 +128,7 @@
     }
  
     public void m_44024_(Iterable<Recipe<?>> p_44025_) {
-@@ -189,4 +_,60 @@
+@@ -189,4 +_,74 @@
     public interface CachedCheck<C extends Container, T extends Recipe<C>> {
        Optional<T> m_213657_(C p_220280_, Level p_220281_);
     }
@@ -179,8 +179,22 @@
 +   }
 +
 +   public boolean removeRecipe(ResourceLocation mcKey) {
-+      for (Map<ResourceLocation, Recipe<?>> recipes : f_44007_.values()) {
-+         recipes.remove(mcKey);
++      // Create a temporary mutable map for modification
++      Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> mutableRecipes = new HashMap<>(this.f_44007_);
++      boolean removed = false;
++
++      for (Map.Entry<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> entry : mutableRecipes.entrySet()) {
++         RecipeType<?> type = entry.getKey();
++         Map<ResourceLocation, Recipe<?>> recipeMap = new HashMap<>(entry.getValue());
++
++         if (recipeMap.remove(mcKey) != null) {
++            removed = true;
++            mutableRecipes.put(type, Collections.unmodifiableMap(recipeMap));
++         }
++      }
++
++      if (removed) {
++         this.f_44007_ = ImmutableMap.copyOf(mutableRecipes);
 +      }
 +      for (Object2ObjectLinkedOpenHashMap<ResourceLocation, Recipe<?>> recipes0 : recipesCB.values()) {
 +         recipes0.remove(mcKey);
