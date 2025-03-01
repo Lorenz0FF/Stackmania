@@ -115,7 +115,7 @@
     private LivingEntity f_20951_;
     private int f_20952_;
     private float f_20953_;
-@@ -226,6 +_,31 @@
+@@ -226,10 +_,36 @@
     private float f_20932_;
     protected Brain<?> f_20939_;
     private boolean f_217034_;
@@ -147,6 +147,11 @@
  
     protected LivingEntity(EntityType<? extends LivingEntity> p_20966_, Level p_20967_) {
        super(p_20966_, p_20967_);
+       this.f_20943_ = new AttributeMap(DefaultAttributes.m_22297_(p_20966_));
++      this.fake$setHealth(true);
+       this.m_21153_(this.m_21233_());
+       this.f_19850_ = true;
+       this.f_20928_ = (float)((Math.random() + 1.0D) * (double)0.01F);
 @@ -239,7 +_,9 @@
        this.f_20885_ = this.m_146908_();
        this.m_274367_(0.6F);
@@ -533,7 +538,7 @@
     protected void m_142540_(MobEffectInstance p_147190_, @Nullable Entity p_147191_) {
        this.f_20948_ = true;
        if (!this.m_9236_().f_46443_) {
-@@ -1015,19 +_,59 @@
+@@ -1015,19 +_,63 @@
  
     }
  
@@ -568,15 +573,19 @@
     }
  
     public float m_21223_() {
-+      if (this instanceof ServerPlayer serverPlayer && serverPlayer.initialized) {
++      if (this instanceof ServerPlayer serverPlayer) {
 +         return (float) serverPlayer.getBukkitEntity().getHealth();
 +      }
        return this.f_19804_.m_135370_(f_20961_);
     }
  
++   public AtomicBoolean fake$setHealth = new AtomicBoolean(false);
++   public void fake$setHealth(boolean fake) {
++      fake$setHealth.set(fake);
++   }
     public void m_21153_(float p_21154_) {
 +      // CraftBukkit start - Handle scaled health
-+      if (this instanceof ServerPlayer serverPlayer && serverPlayer.initialized) {
++      if (this instanceof ServerPlayer serverPlayer && !fake$setHealth.getAndSet(false)) {
 +         org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer player = serverPlayer.getBukkitEntity();
 +         // Squeeze
 +         if (p_21154_ < 0.0F) {
@@ -1262,10 +1271,10 @@
     }
  
     public final void m_21317_(int p_21318_) {
-+         ArrowBodyCountChangeEvent event = CraftEventFactory.callArrowBodyCountChangeEvent( this, m_21234_(), p_21318_, false);
-+         if(event.isCancelled()){
-+            return;
-+         }
++      ArrowBodyCountChangeEvent event = CraftEventFactory.callArrowBodyCountChangeEvent(this, m_21234_(), p_21318_, false);
++      if (event.isCancelled()) {
++         return;
++      }
 +
 +      // CraftBukkit end
        this.f_19804_.m_135381_(f_20940_, p_21318_);
