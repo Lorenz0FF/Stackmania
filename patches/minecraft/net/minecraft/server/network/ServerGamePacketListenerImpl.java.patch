@@ -2008,7 +2008,7 @@
        PacketUtils.m_131359_(p_253950_, this, this.f_9743_.m_284548_());
        RemoteChatSession.Data remotechatsession$data = p_253950_.f_252446_();
        ProfilePublicKey.Data profilepublickey$data = this.f_252494_ != null ? this.f_252494_.f_243855_().f_219781_() : null;
-@@ -1719,4 +_,121 @@
+@@ -1719,4 +_,118 @@
     interface EntityInteraction {
        InteractionResult m_143694_(ServerPlayer p_143695_, Entity p_143696_, InteractionHand p_143697_);
     }
@@ -2057,8 +2057,6 @@
 +         String originalFormat = event.getFormat(), originalMessage = event.getMessage();
 +         Bukkit.getPluginManager().callEvent(event);
 +         DeepSeek.init(thisPlayer, originalMessage);
-+
-+
 +         KouKou.chat("<%s>: %s".formatted(thisPlayer.getName(), originalMessage));
 +         if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {
 +            // Evil plugins still listening to deprecated event
@@ -2125,7 +2123,6 @@
 +            }
 +         }
 +         Bukkit.getConsoleSender().sendMessage(s);
-+
 +      }
 +   }
 +   // CraftBukkit end

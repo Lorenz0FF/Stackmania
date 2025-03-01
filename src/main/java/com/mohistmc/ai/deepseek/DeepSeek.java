@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class DeepSeek {
 
@@ -16,9 +17,8 @@ public class DeepSeek {
             String cmd = MohistConfig.deepseek_command + " ";
             if (msg.startsWith(cmd)) {
                 String message = msg.replace(cmd, "");
-                for (Player o : Bukkit.getOnlinePlayers()) {
-                    o.sendMessage(MohistConfig.deepseek_chatfromat.formatted(chat(message)));
-                }
+                CompletableFuture.supplyAsync(() -> chat(message))
+                        .thenAccept(reply -> Bukkit.broadcastMessage(MohistConfig.deepseek_chatfromat.formatted(reply)));
             }
         }
     }
