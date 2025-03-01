@@ -251,6 +251,13 @@ public class MohistConfig {
 
     public static String server_mod_name;
 
+    public static boolean deepseek_enable;
+    public static String deepseek_apikey;
+    public static String deepseek_model;
+    public static String deepseek_system;
+    public static String deepseek_command;
+    public static String deepseek_chatfromat;
+
     private static void mohist() {
         show_logo = getBoolean("mohist.show_logo", true);
         mohist_lang = getString("mohist.lang", Locale.getDefault().toString());
@@ -317,5 +324,12 @@ public class MohistConfig {
 
         message_require_forge = getString("message.require_forge", "This server has mods that require Forge to be installed on the client. Contact your server admin for more details.");
         server_mod_name = getString("server_mod_name", "mohist");
+
+        deepseek_enable = getBoolean("deepseek.enable", false);
+        deepseek_apikey = getString("deepseek.apikey", "mohist");
+        deepseek_model = getString("deepseek.model", "deepseek-chat");
+        deepseek_system = getString("deepseek.system", "你的名字叫小小墨，年龄18岁，是个可爱的女孩子!");
+        deepseek_command = getString("deepseek.command", "ai");
+        deepseek_chatfromat = getString("deepseek.chatfromat", "<小小墨> %s");
     }
 }
