@@ -8,9 +8,8 @@ import com.mohistmc.api.ServerAPI;
 import com.mohistmc.plugins.ban.utils.BanSaveInventory;
 import com.mohistmc.plugins.ban.utils.BanUtils;
 import com.mohistmc.tools.ListUtils;
-import java.util.List;
-
 import com.mohistmc.util.I18n;
+import java.util.List;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;

@@ -4,9 +4,8 @@ import com.mohistmc.MohistConfig;
 import com.mohistmc.plugins.ban.BanType;
 import com.mohistmc.plugins.ban.ClickType;
 import com.mohistmc.util.I18n;
-import org.bukkit.entity.Player;
-
 import java.util.List;
+import org.bukkit.entity.Player;
 
 /**
  * @author Mgazul by MohistMC

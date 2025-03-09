@@ -2,13 +2,12 @@ package com.mohistmc.ai.deepseek;
 
 import com.mohistmc.MohistConfig;
 import com.mohistmc.mjson.Json;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import kong.unirest.core.HttpResponse;
 import kong.unirest.core.Unirest;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class DeepSeek {
 

@@ -2,10 +2,8 @@ package com.mohistmc.plugins.ban.bans;
 
 import com.mohistmc.MohistConfig;
 import com.mohistmc.api.ItemAPI;
-import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.plugins.ban.BanConfig;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;

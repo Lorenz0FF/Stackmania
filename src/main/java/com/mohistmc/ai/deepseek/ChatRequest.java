@@ -1,9 +1,8 @@
 package com.mohistmc.ai.deepseek;
 
 import com.mohistmc.mjson.ToJson;
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class ChatRequest {

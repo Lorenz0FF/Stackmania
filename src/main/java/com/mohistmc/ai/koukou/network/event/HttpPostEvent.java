@@ -3,7 +3,6 @@ package com.mohistmc.ai.koukou.network.event;
 import com.mohistmc.ai.koukou.network.RequestPath;
 import com.mohistmc.mjson.Json;
 import java.util.EventObject;
-import lombok.Getter;
 
 public class HttpPostEvent extends EventObject {
 
