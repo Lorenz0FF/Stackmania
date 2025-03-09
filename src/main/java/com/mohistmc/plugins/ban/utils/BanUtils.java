@@ -2,6 +2,10 @@ package com.mohistmc.plugins.ban.utils;
 
 import com.mohistmc.MohistConfig;
 import com.mohistmc.plugins.ban.BanType;
+import com.mohistmc.plugins.ban.ClickType;
+import com.mohistmc.util.I18n;
+import org.bukkit.entity.Player;
+
 import java.util.List;
 
 /**
@@ -10,8 +14,13 @@ import java.util.List;
  */
 public class BanUtils {
 
-    public static void saveToYaml(List<String> list, BanType banType) {
+    public static void saveToYaml(Player player, ClickType clickType, List<String> list, BanType banType) {
         MohistConfig.yml.set(banType.key, list);
         MohistConfig.save();
+        if (clickType == ClickType.ADD) {
+            player.sendMessage(I18n.as("bans.add.item"));
+        } else if (clickType == ClickType.REMOVE) {
+            player.sendMessage(I18n.as("bans.remove.item"));
+        }
     }
 }

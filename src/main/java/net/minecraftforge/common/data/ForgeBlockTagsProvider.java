@@ -24,6 +24,7 @@ import static net.minecraftforge.common.Tags.Blocks.CHESTS;
 import static net.minecraftforge.common.Tags.Blocks.CHESTS_ENDER;
 import static net.minecraftforge.common.Tags.Blocks.CHESTS_TRAPPED;
 import static net.minecraftforge.common.Tags.Blocks.CHESTS_WOODEN;
+import static net.minecraftforge.common.Tags.Blocks.CHORUS_ADDITIONALLY_GROWS_ON;
 import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE;
 import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE_DEEPSLATE;
 import static net.minecraftforge.common.Tags.Blocks.COBBLESTONE_INFESTED;
@@ -108,6 +109,7 @@ public final class ForgeBlockTagsProvider extends BlockTagsProvider
         tag(CHESTS_ENDER).add(Blocks.ENDER_CHEST);
         tag(CHESTS_TRAPPED).add(Blocks.TRAPPED_CHEST);
         tag(CHESTS_WOODEN).add(Blocks.CHEST, Blocks.TRAPPED_CHEST);
+        tag(CHORUS_ADDITIONALLY_GROWS_ON).addTags(END_STONES);
         tag(COBBLESTONE).addTags(COBBLESTONE_NORMAL, COBBLESTONE_INFESTED, COBBLESTONE_MOSSY, COBBLESTONE_DEEPSLATE);
         tag(COBBLESTONE_NORMAL).add(Blocks.COBBLESTONE);
         tag(COBBLESTONE_INFESTED).add(Blocks.INFESTED_COBBLESTONE);

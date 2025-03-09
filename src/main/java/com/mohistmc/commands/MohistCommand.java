@@ -25,6 +25,7 @@ import com.mohistmc.api.ServerAPI;
 import com.mohistmc.plugins.MohistPlugin;
 import com.mohistmc.plugins.item.ItemsConfig;
 import com.mohistmc.util.I18n;
+import com.mohistmc.util.MemoryUtils;
 import com.mohistmc.util.MohistThreadCost;
 import java.io.File;
 import java.util.ArrayList;
@@ -49,12 +50,12 @@ import org.spigotmc.SpigotConfig;
 
 public class MohistCommand extends Command {
 
-    private final List<String> params = Arrays.asList("mods", "playermods", "reload", "version", "channels_incom", "channels_outgo", "speed", "printthreadcost", "cleardropitem");
+    private final List<String> params = Arrays.asList("mods", "playermods", "reload", "version", "channels_incom", "channels_outgo", "speed", "printthreadcost", "cleardropitem", "memoryfix");
 
     public MohistCommand(String name) {
         super(name);
         this.description = "Mohist related commands";
-        this.usageMessage = "/mohist [mods|playermods|reload|version|channels_incom|channels_outgo|speed|cleardropitem]";
+        this.usageMessage = "/mohist [mods|playermods|reload|version|channels_incom|channels_outgo|speed|cleardropitem|memoryfix]";
         this.setPermission("mohist.command.mohist");
     }
 
@@ -196,6 +197,9 @@ public class MohistCommand extends Command {
                     sender.sendMessage(ChatColor.RED + "Usage: /mohist cleardropitem <worldname>");
                     return false;
                 }
+            }
+            case "memoryfix" -> {
+                sender.sendMessage(ChatColor.GREEN + MemoryUtils.setProcessWorkingSetSize(-1, -1));
             }
             default -> {
                 sender.sendMessage(ChatColor.RED + "Usage: " + usageMessage);

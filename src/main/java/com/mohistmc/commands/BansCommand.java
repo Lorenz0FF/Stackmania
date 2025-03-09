@@ -133,7 +133,7 @@ public class BansCommand extends Command {
                                     public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
                                         if (type.isRightClick()) {
                                             old.remove(s);
-                                            BanUtils.saveToYaml(old, BanType.ITEM);
+                                            BanUtils.saveToYaml(u, com.mohistmc.plugins.ban.ClickType.REMOVE, old, BanType.ITEM);
                                             wh.removeItem(this);
                                             wh.openGUI(player);
                                         }
@@ -157,7 +157,7 @@ public class BansCommand extends Command {
                                     public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
                                         if (type.isRightClick()) {
                                             old.remove(s);
-                                            BanUtils.saveToYaml(old, BanType.ITEM_MOSHOU);
+                                            BanUtils.saveToYaml(u, com.mohistmc.plugins.ban.ClickType.REMOVE, old, BanType.ITEM_MOSHOU);
                                             wh.removeItem(this);
                                             wh.openGUI(player);
                                         }
@@ -179,7 +179,7 @@ public class BansCommand extends Command {
                                 public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
                                     if (type.isRightClick()) {
                                         old.remove(s);
-                                        BanUtils.saveToYaml(old, BanType.ENTITY);
+                                        BanUtils.saveToYaml(u, com.mohistmc.plugins.ban.ClickType.REMOVE, old, BanType.ENTITY);
                                         wh.removeItem(this);
                                         wh.openGUI(player);
                                     }
@@ -201,7 +201,7 @@ public class BansCommand extends Command {
                                 public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
                                     if (type.isRightClick()) {
                                         old.remove(s);
-                                        BanUtils.saveToYaml(old, BanType.ENCHANTMENT);
+                                        BanUtils.saveToYaml(u, com.mohistmc.plugins.ban.ClickType.REMOVE, old, BanType.ENCHANTMENT);
                                         wh.removeItem(this);
                                         wh.openGUI(player);
                                     }

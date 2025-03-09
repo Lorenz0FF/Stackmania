@@ -133,13 +133,12 @@
  import net.minecraft.world.level.gameevent.GameEvent;
  import net.minecraft.world.level.portal.PortalInfo;
  import net.minecraft.world.level.storage.LevelData;
-@@ -147,10 +_,53 @@
+@@ -147,10 +_,51 @@
  import net.minecraft.world.phys.Vec3;
  import net.minecraft.world.scores.PlayerTeam;
  import net.minecraft.world.scores.Score;
 +import net.minecraft.world.scores.Scoreboard;
  import net.minecraft.world.scores.Team;
-+import net.minecraft.world.scores.Team.Visibility;
  import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 +import net.minecraftforge.common.ForgeHooks;
 +import net.minecraftforge.common.MinecraftForge;
@@ -165,7 +164,6 @@
 +import org.bukkit.craftbukkit.v1_20_R1.util.CraftChatMessage;
 +import org.bukkit.craftbukkit.v1_20_R1.util.CraftLocation;
 +import org.bukkit.event.entity.EntityPotionEffectEvent;
-+import org.bukkit.event.entity.PlayerDeathEvent;
 +import org.bukkit.event.player.PlayerBedLeaveEvent;
 +import org.bukkit.event.player.PlayerChangedMainHandEvent;
 +import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -418,7 +416,7 @@
        } catch (Throwable throwable) {
           CrashReport crashreport = CrashReport.m_127521_(throwable, "Ticking player");
           CrashReportCategory crashreportcategory = crashreport.m_127514_("Player being ticked");
-@@ -563,16 +_,53 @@
+@@ -563,16 +_,52 @@
     }
  
     private void m_9104_(ObjectiveCriteria p_9105_, int p_9106_) {
@@ -460,7 +458,6 @@
 +
 +      // SPIGOT-943 - only call if they have an inventory open
 +      if (this.f_36096_ != this.f_36095_) {
-+         useHandleContainerClose = true;
 +         this.m_6915_();
 +      }
 +
@@ -868,7 +865,7 @@
        }
  
     }
-@@ -939,16 +_,60 @@
+@@ -939,16 +_,59 @@
        this.f_8940_ = this.f_8940_ % 100 + 1;
     }
  
@@ -909,7 +906,6 @@
 +            boolean cancelled = false;
 +            // Mohist start - Moved from CraftEventFactory#callInventoryOpenEvent(...) to fix mixin issues
 +            if (this.f_36096_ != this.f_36095_) {
-+               useHandleContainerClose = true;
 +               this.m_6915_();
 +               CraftEventFactory.alreadyProcessed = true;
 +            }
@@ -976,23 +972,7 @@
     }
  
     public void m_6986_(ItemStack p_9082_, InteractionHand p_9083_) {
-@@ -994,14 +_,21 @@
-       this.f_8906_.m_9829_(ClientboundBlockEntityDataPacket.m_195642_(p_9099_, BlockEntity::m_187482_));
-    }
- 
-+   public boolean useHandleContainerClose = false; // Mohist
-    public void m_6915_() {
--      this.f_8906_.m_9829_(new ClientboundContainerClosePacket(this.f_36096_.f_38840_));
--      this.m_9230_();
-+      if (useHandleContainerClose) {
-+         this.f_8906_.m_7951_(new ServerboundContainerClosePacket(this.f_36096_.f_38840_));
-+         useHandleContainerClose = false;
-+      } else {
-+         this.f_8906_.m_9829_(new ClientboundContainerClosePacket(this.f_36096_.f_38840_));
-+         this.m_9230_();
-+      }
-    }
- 
+@@ -1002,6 +_,7 @@
     public void m_9230_() {
        this.f_36096_.m_6877_(this);
        this.f_36095_.m_150414_(this.f_36096_);
