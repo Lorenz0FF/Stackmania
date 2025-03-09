@@ -207,12 +207,14 @@ public class WorldsCommands extends Command {
                             ConfigByWorlds.setnandu(player, "HARD");
                             player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
                         }
+                        return true;
                     } else {
                         player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
                     }
                 } else {
                     player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
                 }
+                return false;
             }
 
             if (args.length == 1 && args[0].equalsIgnoreCase("cleardropitem")) {
