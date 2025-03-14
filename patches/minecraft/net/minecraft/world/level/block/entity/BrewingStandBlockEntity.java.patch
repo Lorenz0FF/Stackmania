@@ -18,11 +18,10 @@
  import net.minecraft.world.ContainerHelper;
  import net.minecraft.world.Containers;
  import net.minecraft.world.WorldlyContainer;
-@@ -23,6 +_,17 @@
+@@ -23,6 +_,16 @@
  import net.minecraft.world.level.Level;
  import net.minecraft.world.level.block.BrewingStandBlock;
  import net.minecraft.world.level.block.state.BlockState;
-+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 +import org.bukkit.Bukkit;
 +import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 +import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;
@@ -166,7 +165,7 @@
 +      List<org.bukkit.inventory.ItemStack> brewResults = new ArrayList<>(3);
 +      for (int i = 0; i < 3; ++i) {
 +         ItemStack output = result.get(i);
-+         brewResults.add(i, CraftItemStack.asCraftMirror(output));
++         brewResults.add(i, CraftItemStack.asCraftMirror(PotionBrewing.m_43529_(itemstack, output)));
 +      }
 +      BrewingStandBlockEntity brewingStandBlockEntity = brewingStandBlock;
 +      InventoryHolder owner = brewingStandBlockEntity == null ? null : brewingStandBlockEntity.getOwner();

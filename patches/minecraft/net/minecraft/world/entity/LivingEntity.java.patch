@@ -115,7 +115,7 @@
     private LivingEntity f_20951_;
     private int f_20952_;
     private float f_20953_;
-@@ -226,10 +_,36 @@
+@@ -226,10 +_,30 @@
     private float f_20932_;
     protected Brain<?> f_20939_;
     private boolean f_217034_;
@@ -135,13 +135,7 @@
 +      return m_6080_();
 +   }
 +   // CraftBukkit end
-+   // Spigot start
-+   public void inactiveTick()
-+   {
-+      super.inactiveTick();
-+      ++this.f_20891_; // Above all the floats
-+   }
-+   // Spigot end
++
 +   // Mohist start
 +   public AtomicInteger invulnerableDurationAtom = new AtomicInteger(20);
  

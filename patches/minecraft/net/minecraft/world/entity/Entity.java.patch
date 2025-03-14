@@ -122,7 +122,7 @@
     private final Set<TagKey<Fluid>> f_19801_ = new HashSet<>();
     public int f_19802_;
     protected boolean f_19803_ = true;
-@@ -236,13 +_,93 @@
+@@ -236,7 +_,73 @@
     @Nullable
     private BlockState f_185934_ = null;
  
@@ -137,13 +137,6 @@
 +   public boolean persistentInvisibility = false;
 +   public BlockPos lastLavaContact;
 +   // CraftBukkit end
-+
-+   // Spigot start
-+   public final org.spigotmc.ActivationRange.ActivationType activationType = org.spigotmc.ActivationRange.initializeEntityActivationType(this);
-+   public final boolean defaultActivationState;
-+   public long activatedTick = Integer.MIN_VALUE;
-+   public void inactiveTick() { }
-+   // Spigot end
 +
 +   public AtomicReference<CreatureSpawnEvent.SpawnReason> spawnReason = new AtomicReference<>(CreatureSpawnEvent.SpawnReason.DEFAULT);
 +
@@ -203,19 +196,6 @@
        this.f_19847_ = p_19870_;
        this.f_19853_ = p_19871_;
        this.f_19815_ = p_19870_.m_20680_();
-       this.f_19825_ = Vec3.f_82478_;
-       this.f_19826_ = BlockPos.f_121853_;
-       this.f_185933_ = ChunkPos.f_186419_;
-+      // Spigot start
-+      if (p_19871_ != null && p_19871_ instanceof ServerLevel) {
-+         this.defaultActivationState = org.spigotmc.ActivationRange.initializeEntityActivationState(this, p_19871_.spigotConfig);
-+      } else {
-+         this.defaultActivationState = false;
-+      }
-+      // Spigot end
-       this.f_19804_ = new SynchedEntityData(this);
-       this.f_19804_.m_135372_(f_19805_, (byte)0);
-       this.f_19804_.m_135372_(f_19832_, this.m_6062_());
 @@ -254,7 +_,11 @@
        this.f_19804_.m_135372_(f_146800_, 0);
        this.m_8097_();

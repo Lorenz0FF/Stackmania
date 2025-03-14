@@ -394,7 +394,7 @@
           if (this.f_36078_ != this.f_8915_) {
              this.f_8915_ = this.f_36078_;
              this.m_9104_(ObjectiveCriteria.f_83598_, Mth.m_14167_((float)this.f_8915_));
-@@ -523,6 +_,21 @@
+@@ -523,7 +_,23 @@
              CriteriaTriggers.f_10582_.m_222618_(this);
           }
  
@@ -414,8 +414,10 @@
 +         // CraftBukkit end
 +
        } catch (Throwable throwable) {
++         throwable.fillInStackTrace();
           CrashReport crashreport = CrashReport.m_127521_(throwable, "Ticking player");
           CrashReportCategory crashreportcategory = crashreport.m_127514_("Player being ticked");
+          this.m_7976_(crashreportcategory);
 @@ -563,16 +_,52 @@
     }
  
