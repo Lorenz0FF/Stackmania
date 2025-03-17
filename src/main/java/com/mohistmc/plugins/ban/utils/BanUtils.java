@@ -17,9 +17,9 @@ public class BanUtils {
         MohistConfig.yml.set(banType.key, list);
         MohistConfig.save();
         if (clickType == ClickType.ADD) {
-            player.sendMessage(I18n.as("bans.add.item"));
+            player.sendMessage(I18n.as(banType.i18n_key_add));
         } else if (clickType == ClickType.REMOVE) {
-            player.sendMessage(I18n.as("bans.remove.item"));
+            player.sendMessage(I18n.as(banType.i18n_key_remove));
         }
     }
 }

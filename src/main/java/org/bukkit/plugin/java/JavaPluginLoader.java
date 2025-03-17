@@ -369,8 +369,7 @@ public final class JavaPluginLoader implements PluginLoader {
                 server.getLogger().log(Level.SEVERE, MohistMC.i18n.as( "mohist.i18n.22", plugin.getDescription().getFullName()), ex);
             }
 
-            if (cloader instanceof PluginClassLoader) {
-                PluginClassLoader loader = (PluginClassLoader) cloader;
+            if (cloader instanceof PluginClassLoader loader) {
                 loaders.remove(loader);
 
                 Collection<Class<?>> classes = loader.getClasses();

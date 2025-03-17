@@ -229,21 +229,41 @@
           EntityType<?> entitytype = p_140200_.m_6095_();
           int i = entitytype.m_20681_() * 16;
           if (i != 0) {
-@@ -1163,8 +_,11 @@
-       if (p_140332_ instanceof ServerPlayer serverplayer) {
-          this.m_140192_(serverplayer, false);
+@@ -1160,25 +_,28 @@
+    }
  
+    protected void m_140331_(Entity p_140332_) {
+-      if (p_140332_ instanceof ServerPlayer serverplayer) {
+-         this.m_140192_(serverplayer, false);
+-
 -         for(ChunkMap.TrackedEntity chunkmap$trackedentity : this.f_140150_.values()) {
 -            chunkmap$trackedentity.m_140485_(serverplayer);
-+         try {
+-         }
+-      }
+-
+-      ChunkMap.TrackedEntity chunkmap$trackedentity1 = this.f_140150_.remove(p_140332_.m_19879_());
+-      if (chunkmap$trackedentity1 != null) {
+-         chunkmap$trackedentity1.m_140482_();
+-      }
+-
++      try {
++         if (p_140332_ instanceof ServerPlayer serverplayer) {
++            this.m_140192_(serverplayer, false);
++
 +            for (ChunkMap.TrackedEntity chunkmap$trackedentity : this.f_140150_.values()) {
 +               chunkmap$trackedentity.m_140485_(serverplayer);
 +            }
-+         } catch (NullPointerException ignored) { // Mohist TODO
-          }
-       }
++
++         }
++
++         ChunkMap.TrackedEntity chunkmap$trackedentity1 = this.f_140150_.remove(p_140332_.m_19879_());
++         if (chunkmap$trackedentity1 != null) {
++            chunkmap$trackedentity1.m_140482_();
++         }
++      } catch (Exception ignored) { // Mohist TODO
++      }
+    }
  
-@@ -1178,7 +_,7 @@
     protected void m_140421_() {
        List<ServerPlayer> list = Lists.newArrayList();
        List<ServerPlayer> list1 = this.f_140133_.m_6907_();

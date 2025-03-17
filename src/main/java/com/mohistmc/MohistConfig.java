@@ -199,9 +199,11 @@ public class MohistConfig {
     public static int server_thread;
 
     public static boolean clear_item;
+    public static boolean clear_enable;
     public static List<String> clear_item_whitelist;
     public static String clear_item_msg;
-    public static int clear_item_time;
+    public static String clear_countdown_msg;
+    public static int clear_time;
 
     public static boolean clear_monster;
     public static List<String> clear_monster_whitelist;
@@ -282,15 +284,17 @@ public class MohistConfig {
         keepinventory_exp_permission = getString("keepinventory.permission.exp", "mohist.keepinventory.exp");
         server_thread = getInt("threadpriority.server_thread", 8);
 
+        clear_enable = getBoolean("entity.clear.enable", false);
+        clear_time = getInt("entity.clear.time", 1800);
+        clear_countdown_msg = getString("entity.clear.countdown.msg", "[Server] §cItems will be cleared after %seconds% seconds！");
+
         clear_item = getBoolean("entity.clear.item.enable", false);
         clear_item_whitelist = getStringList("entity.clear.item.whitelist", new ArrayList<>());
         clear_item_msg = getString("entity.clear.item.msg", "[Server] Cleaned up %size% drop item");
-        clear_item_time = getInt("entity.clear.item.time", 1800);
 
         clear_monster = getBoolean("entity.clear.monster.enable", false);
         clear_monster_whitelist = getStringList("entity.clear.monster.whitelist", new ArrayList<>());
         clear_monster_msg = getString("entity.clear.monster.msg", "[Server] Cleaned up %size% monster");
-        clear_monster_time = getInt("entity.clear.monster.time", 1800);
 
         ban_item_enable = getBoolean("ban.item.enable" , false);
         ban_item_materials = getStringList("ban.item.list", new ArrayList<>());

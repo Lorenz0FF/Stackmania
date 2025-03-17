@@ -91,7 +91,7 @@ public class BansCommand extends Command {
                             sender.sendMessage(ChatColor.RED + check);
                             return false;
                         }
-                        BanSaveInventory banSaveInventory = new BanSaveInventory(BanType.ITEM, "§4Add bans entity");
+                        BanSaveInventory banSaveInventory = new BanSaveInventory(BanType.ENTITY, "§4Add bans entity");
                         Inventory inventory = banSaveInventory.getInventory();
                         player.openInventory(inventory);
                         BanListener.openInventory = banSaveInventory;
@@ -102,7 +102,7 @@ public class BansCommand extends Command {
                             sender.sendMessage(ChatColor.RED + check);
                             return false;
                         }
-                        BanSaveInventory banSaveInventory = new BanSaveInventory(BanType.ITEM, "§4Add bans enchantment");
+                        BanSaveInventory banSaveInventory = new BanSaveInventory(BanType.ENCHANTMENT, "§4Add bans enchantment");
                         Inventory inventory = banSaveInventory.getInventory();
                         player.openInventory(inventory);
                         BanListener.openInventory = banSaveInventory;

@@ -243,7 +243,7 @@
 +
     public boolean m_6933_(BlockPos p_46605_, BlockState p_46606_, int p_46607_, int p_46608_) {
 +      {
-+         if (this.getWorld() != null) {
++         if (SetBlockEvent.getHandlerList().getRegisteredListeners().length > 0 && this.getWorld() != null) {
 +            SetBlockEvent event = new SetBlockEvent(new Location(this.getWorld(), p_46605_.m_123341_(), p_46605_.m_123342_(), p_46605_.m_123343_()));
 +            Bukkit.getPluginManager().callEvent(event);
 +            if (event.isCancelled()) {
@@ -348,7 +348,7 @@
 +         bukkit = WorldAPI.destroyBlockProgress.get(p_46626_).getBukkitEntity();
 +         WorldAPI.destroyBlockProgress.remove(p_46626_);
 +      }
-+      if (bukkit != null) {
++      if (ModsEntityDestroyBlockEvent.getHandlerList().getRegisteredListeners().length > 0 && bukkit != null) {
 +         ModsEntityDestroyBlockEvent event = new ModsEntityDestroyBlockEvent(new Location(this.getWorld(), p_46626_.m_123341_(), p_46626_.m_123342_(), p_46626_.m_123343_()), bukkit);
 +         Bukkit.getPluginManager().callEvent(event);
 +         if (event.isCancelled()) {

@@ -65,7 +65,7 @@ public class InvWrapper implements IItemHandlerModifiable
             return ItemStack.EMPTY;
 
         ItemStack stackInSlot = getInv().getItem(slot);
-        if (InventoryOwner.inventoryFromForge(this) != null) {
+        if (InvWrapperMoveItemEvent.Insert.getHandlerList().getRegisteredListeners().length > 0 && InventoryOwner.inventoryFromForge(this) != null) {
             var event = new InvWrapperMoveItemEvent.Insert(InventoryOwner.inventoryFromForge(this), CraftItemStack.asCraftMirror(stackInSlot));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
@@ -165,7 +165,7 @@ public class InvWrapper implements IItemHandlerModifiable
         if (stackInSlot.isEmpty())
             return ItemStack.EMPTY;
 
-        if (InventoryOwner.inventoryFromForge(this) != null) {
+        if (InvWrapperMoveItemEvent.Extract.getHandlerList().getRegisteredListeners().length > 0 && InventoryOwner.inventoryFromForge(this) != null) {
             var event = new InvWrapperMoveItemEvent.Extract(InventoryOwner.inventoryFromForge(this), CraftItemStack.asCraftMirror(stackInSlot));
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
