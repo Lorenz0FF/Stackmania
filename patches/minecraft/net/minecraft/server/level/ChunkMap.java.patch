@@ -220,7 +220,7 @@
  
     private boolean m_140329_(ServerPlayer p_140330_) {
        return p_140330_.m_5833_() && !this.f_140133_.m_46469_().m_46207_(GameRules.f_46146_);
-@@ -1132,7 +_,7 @@
+@@ -1132,9 +_,10 @@
     }
  
     protected void m_140199_(Entity p_140200_) {
@@ -228,7 +228,10 @@
 +      if (!(p_140200_ instanceof net.minecraftforge.entity.PartEntity)) {
           EntityType<?> entitytype = p_140200_.m_6095_();
           int i = entitytype.m_20681_() * 16;
++         i = org.spigotmc.TrackingRange.getEntityTrackingRange(p_140200_, i); // Spigot
           if (i != 0) {
+             int j = entitytype.m_20682_();
+             if (this.f_140150_.containsKey(p_140200_.m_19879_())) {
 @@ -1160,25 +_,28 @@
     }
  

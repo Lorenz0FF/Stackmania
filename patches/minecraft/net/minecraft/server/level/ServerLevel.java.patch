@@ -92,7 +92,7 @@
  import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
  import net.minecraft.world.entity.npc.Npc;
  import net.minecraft.world.entity.player.Player;
-@@ -110,13 +_,15 @@
+@@ -110,13 +_,16 @@
  import net.minecraft.world.level.ForcedChunksSavedData;
  import net.minecraft.world.level.GameRules;
  import net.minecraft.world.level.Level;
@@ -102,6 +102,7 @@
  import net.minecraft.world.level.WorldGenLevel;
  import net.minecraft.world.level.biome.Biome;
 +import net.minecraft.world.level.biome.Biome.Precipitation;
++import net.minecraft.world.level.biome.BiomeSource;
  import net.minecraft.world.level.block.Block;
  import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.SnowLayerBlock;
@@ -117,14 +118,16 @@
  import net.minecraft.world.level.dimension.LevelStem;
  import net.minecraft.world.level.dimension.end.EndDragonFight;
  import net.minecraft.world.level.entity.EntityPersistentStorage;
-@@ -135,8 +_,9 @@
+@@ -135,8 +_,11 @@
  import net.minecraft.world.level.entity.PersistentEntitySectionManager;
  import net.minecraft.world.level.gameevent.DynamicGameEventListener;
  import net.minecraft.world.level.gameevent.GameEvent;
 +import net.minecraft.world.level.gameevent.GameEvent.Context;
  import net.minecraft.world.level.gameevent.GameEventDispatcher;
 -import net.minecraft.world.level.levelgen.Heightmap;
++import net.minecraft.world.level.levelgen.FlatLevelSource;
 +import net.minecraft.world.level.levelgen.Heightmap.Types;
++import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
  import net.minecraft.world.level.levelgen.structure.BoundingBox;
  import net.minecraft.world.level.levelgen.structure.Structure;
  import net.minecraft.world.level.levelgen.structure.StructureCheck;
@@ -141,7 +144,7 @@
  import net.minecraft.world.level.storage.ServerLevelData;
  import net.minecraft.world.phys.AABB;
  import net.minecraft.world.phys.Vec3;
-@@ -155,7 +_,38 @@
+@@ -155,7 +_,44 @@
  import net.minecraft.world.phys.shapes.Shapes;
  import net.minecraft.world.phys.shapes.VoxelShape;
  import net.minecraft.world.ticks.LevelTicks;
@@ -158,7 +161,11 @@
 +import net.minecraftforge.event.level.LevelEvent.Save;
 +import org.bukkit.Bukkit;
 +import org.bukkit.World;
++import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 +import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CraftWorldInfo;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CustomChunkGenerator;
++import org.bukkit.craftbukkit.v1_20_R1.generator.CustomWorldChunkManager;
 +import org.bukkit.craftbukkit.v1_20_R1.util.BlockStateListPopulator;
 +import org.bukkit.craftbukkit.v1_20_R1.util.WorldUUID;
 +import org.bukkit.entity.HumanEntity;
@@ -172,7 +179,9 @@
 +import org.bukkit.event.world.TimeSkipEvent;
 +import org.bukkit.event.world.TimeSkipEvent.SkipReason;
 +import org.bukkit.event.world.WorldSaveEvent;
++import org.bukkit.generator.WorldInfo;
  import org.slf4j.Logger;
++import org.spigotmc.ActivationRange;
 +import org.spigotmc.AsyncCatcher;
 +import org.spigotmc.SpigotWorldConfig;
 +
@@ -313,6 +322,14 @@
        if (flag) {
           this.m_8886_();
        }
+@@ -318,6 +_,7 @@
+             profilerfiller.m_7238_();
+          }
+ 
++         ActivationRange.activateEntities(this); // Spigot
+          this.f_143243_.m_156910_((p_184065_) -> {
+             if (!p_184065_.m_213877_()) {
+                if (this.m_143342_(p_184065_)) {
 @@ -337,7 +_,9 @@
                       }
  
@@ -462,6 +479,22 @@
     }
  
     public void m_8886_() {
+@@ -674,6 +_,15 @@
+    }
+ 
+    public void m_8647_(Entity p_8648_) {
++      // Spigot start
++      if (!ActivationRange.checkIfActive(p_8648_)) {
++         p_8648_.f_19797_++;
++         if (p_8648_.canUpdate()) {
++            p_8648_.inactiveTick();
++         }
++         return;
++      }
++      // Spigot end
+       p_8648_.m_146867_();
+       ProfilerFiller profilerfiller = this.m_46473_();
+       ++p_8648_.f_19797_;
 @@ -681,7 +_,9 @@
           return BuiltInRegistries.f_256780_.m_7981_(p_8648_.m_6095_()).toString();
        });
