@@ -92,7 +92,7 @@
  import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
  import net.minecraft.world.entity.npc.Npc;
  import net.minecraft.world.entity.player.Player;
-@@ -110,13 +_,16 @@
+@@ -110,13 +_,15 @@
  import net.minecraft.world.level.ForcedChunksSavedData;
  import net.minecraft.world.level.GameRules;
  import net.minecraft.world.level.Level;
@@ -102,7 +102,6 @@
  import net.minecraft.world.level.WorldGenLevel;
  import net.minecraft.world.level.biome.Biome;
 +import net.minecraft.world.level.biome.Biome.Precipitation;
-+import net.minecraft.world.level.biome.BiomeSource;
  import net.minecraft.world.level.block.Block;
  import net.minecraft.world.level.block.Blocks;
  import net.minecraft.world.level.block.SnowLayerBlock;
@@ -118,16 +117,14 @@
  import net.minecraft.world.level.dimension.LevelStem;
  import net.minecraft.world.level.dimension.end.EndDragonFight;
  import net.minecraft.world.level.entity.EntityPersistentStorage;
-@@ -135,8 +_,11 @@
+@@ -135,8 +_,9 @@
  import net.minecraft.world.level.entity.PersistentEntitySectionManager;
  import net.minecraft.world.level.gameevent.DynamicGameEventListener;
  import net.minecraft.world.level.gameevent.GameEvent;
 +import net.minecraft.world.level.gameevent.GameEvent.Context;
  import net.minecraft.world.level.gameevent.GameEventDispatcher;
 -import net.minecraft.world.level.levelgen.Heightmap;
-+import net.minecraft.world.level.levelgen.FlatLevelSource;
 +import net.minecraft.world.level.levelgen.Heightmap.Types;
-+import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
  import net.minecraft.world.level.levelgen.structure.BoundingBox;
  import net.minecraft.world.level.levelgen.structure.Structure;
  import net.minecraft.world.level.levelgen.structure.StructureCheck;
@@ -144,7 +141,7 @@
  import net.minecraft.world.level.storage.ServerLevelData;
  import net.minecraft.world.phys.AABB;
  import net.minecraft.world.phys.Vec3;
-@@ -155,7 +_,44 @@
+@@ -155,7 +_,39 @@
  import net.minecraft.world.phys.shapes.Shapes;
  import net.minecraft.world.phys.shapes.VoxelShape;
  import net.minecraft.world.ticks.LevelTicks;
@@ -161,11 +158,7 @@
 +import net.minecraftforge.event.level.LevelEvent.Save;
 +import org.bukkit.Bukkit;
 +import org.bukkit.World;
-+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 +import org.bukkit.craftbukkit.v1_20_R1.event.CraftEventFactory;
-+import org.bukkit.craftbukkit.v1_20_R1.generator.CraftWorldInfo;
-+import org.bukkit.craftbukkit.v1_20_R1.generator.CustomChunkGenerator;
-+import org.bukkit.craftbukkit.v1_20_R1.generator.CustomWorldChunkManager;
 +import org.bukkit.craftbukkit.v1_20_R1.util.BlockStateListPopulator;
 +import org.bukkit.craftbukkit.v1_20_R1.util.WorldUUID;
 +import org.bukkit.entity.HumanEntity;
@@ -179,7 +172,6 @@
 +import org.bukkit.event.world.TimeSkipEvent;
 +import org.bukkit.event.world.TimeSkipEvent.SkipReason;
 +import org.bukkit.event.world.WorldSaveEvent;
-+import org.bukkit.generator.WorldInfo;
  import org.slf4j.Logger;
 +import org.spigotmc.ActivationRange;
 +import org.spigotmc.AsyncCatcher;
@@ -189,7 +181,7 @@
  
  public class ServerLevel extends Level implements WorldGenLevel {
     public static final BlockPos f_8562_ = new BlockPos(100, 50, 0);
-@@ -188,24 +_,74 @@
+@@ -188,24 +_,83 @@
     private final List<CustomSpawner> f_8558_;
     @Nullable
     private EndDragonFight f_8559_;
@@ -222,6 +214,15 @@
 +   public ServerLevel craftWorldData(org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator generator, org.bukkit.generator.BiomeProvider bp) {
 +      return (ServerLevel) super.craftWorldData(env, generator, bp);
 +   }
++
++   /*
++   public ServerLevel(MinecraftServer p_214999_, Executor p_215000_, LevelStorageAccess p_215001_, PrimaryLevelData p_215002_, ResourceKey<Level> p_215003_, LevelStem p_215004_, ChunkProgressListener p_215005_, boolean p_215006_, long p_215007_, List<CustomSpawner> p_215008_, boolean p_215009_, @Nullable RandomSequences p_288977_, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider bp) {
++      this(p_214999_, p_215000_, p_215001_, p_215002_, p_215003_, p_215004_, p_215005_, p_215006_, p_215007_, p_215008_, p_215009_, p_288977_);
++      generator = gen;
++      environment = env;
++      biomeProvider = bp;
++   }
++    */
 +
 +   public ServerLevel(MinecraftServer p_214999_, Executor p_215000_, LevelStorageAccess p_215001_, ServerLevelData p_215002_, ResourceKey<Level> p_215003_, LevelStem p_215004_, ChunkProgressListener p_215005_, boolean p_215006_, long p_215007_, List<CustomSpawner> p_215008_, boolean p_215009_, @Nullable RandomSequences p_288977_) {
        super(p_215002_, p_215003_, p_214999_.m_206579_(), p_215004_.f_63975_(), p_214999_::m_129905_, false, p_215006_, p_215007_, p_214999_.m_213994_());
@@ -744,6 +745,25 @@
        this.f_243695_.m_245905_(p_215041_, p_215042_, p_215043_);
     }
  
+@@ -920,11 +_,14 @@
+       if (Shapes.m_83157_(voxelshape1, voxelshape, BooleanOp.f_82687_)) {
+          List<PathNavigation> list = new ObjectArrayList<>();
+ 
+-         for(Mob mob : this.f_143246_) {
+-            PathNavigation pathnavigation = mob.m_21573_();
+-            if (pathnavigation.m_200903_(p_8755_)) {
+-               list.add(pathnavigation);
++         try {
++            for (Mob mob : this.f_143246_) {
++               PathNavigation pathnavigation = mob.m_21573_();
++               if (pathnavigation.m_200903_(p_8755_)) {
++                  list.add(pathnavigation);
++               }
+             }
++         } catch (Exception ignored) {
+          }
+ 
+          try {
 @@ -941,10 +_,15 @@
     }
  

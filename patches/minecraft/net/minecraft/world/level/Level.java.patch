@@ -111,7 +111,7 @@
     protected final NeighborUpdater f_220350_;
     private final List<TickingBlockEntity> f_151503_ = Lists.newArrayList();
     private boolean f_151504_;
-@@ -101,19 +_,63 @@
+@@ -101,19 +_,72 @@
     private final RandomSource f_220348_ = RandomSource.m_216337_();
     private final ResourceKey<DimensionType> f_220349_;
     private final Holder<DimensionType> f_204147_;
@@ -163,6 +163,15 @@
 +      this.generator = generator;
 +      return this;
 +   }
++
++   /*
++   protected Level(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_, org.bukkit.World.Environment env, org.bukkit.generator.ChunkGenerator gen, org.bukkit.generator.BiomeProvider bp) {
++      this(p_270739_, p_270683_, p_270200_, p_270240_, p_270692_, p_270904_, p_270470_, p_270248_, p_270466_);
++      generator = gen;
++      environment = env;
++      biomeProvider = bp;
++   }
++    */
  
     protected Level(WritableLevelData p_270739_, ResourceKey<Level> p_270683_, RegistryAccess p_270200_, Holder<DimensionType> p_270240_, Supplier<ProfilerFiller> p_270692_, boolean p_270904_, boolean p_270470_, long p_270248_, int p_270466_) {
 +      super(Level.class);
