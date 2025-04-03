@@ -609,7 +609,7 @@
     public void m_8622_(ServerPlayer p_8623_) {
        this.m_8853_(p_8623_);
     }
-@@ -828,25 +_,45 @@
+@@ -828,25 +_,46 @@
     }
  
     private void m_8853_(ServerPlayer p_8854_) {
@@ -633,6 +633,7 @@
 +      }
        if (p_8873_.m_213877_()) {
 -         f_8566_.warn("Tried to add entity {} but it was marked as removed already", (Object)EntityType.m_20613_(p_8873_.m_6095_()));
++         if (false) f_8566_.warn("Tried to add entity {} but it was marked as removed already", (Object)EntityType.m_20613_(p_8873_.m_6095_()));
           return false;
        } else {
 -         return this.f_143244_.m_157533_(p_8873_);
