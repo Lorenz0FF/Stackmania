@@ -1,12 +1,16 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -1,5 +_,6 @@
+@@ -1,8 +_,10 @@
  package net.minecraft.world.entity.player;
  
 +import com.google.common.base.Function;
  import com.google.common.collect.ImmutableList;
  import com.google.common.collect.ImmutableMap;
  import com.google.common.collect.Lists;
++import com.mohistmc.plugins.KeepInventory;
+ import com.mojang.authlib.GameProfile;
+ import com.mojang.datafixers.util.Either;
+ import com.mojang.logging.LogUtils;
 @@ -11,6 +_,8 @@
  import java.util.Map;
  import java.util.Optional;
@@ -195,6 +199,14 @@
        super.m_6667_(p_36152_);
        this.m_20090_();
        if (!this.m_5833_()) {
+@@ -594,6 +_,7 @@
+    }
+ 
+    protected void m_5907_() {
++      if (KeepInventory.inventory(this)) return;
+       super.m_5907_();
+       if (!this.m_9236_().m_46469_().m_46207_(GameRules.f_46133_)) {
+          this.m_36345_();
 @@ -622,8 +_,17 @@
  
     @Nullable
@@ -906,6 +918,14 @@
  
     public Optional<WardenSpawnTracker> m_245217_() {
        return Optional.empty();
+@@ -1658,6 +_,7 @@
+    }
+ 
+    public int m_213860_() {
++      if (KeepInventory.exp(this)) return 0;
+       if (!this.m_9236_().m_46469_().m_46207_(GameRules.f_46133_) && !this.m_5833_()) {
+          int i = this.f_36078_ * 7;
+          return i > 100 ? 100 : i;
 @@ -1715,6 +_,16 @@
  
     }

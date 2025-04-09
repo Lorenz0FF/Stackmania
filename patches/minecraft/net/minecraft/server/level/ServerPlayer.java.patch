@@ -436,7 +436,7 @@
 +      }
 +
 +      List<org.bukkit.inventory.ItemStack> loot = new ArrayList<org.bukkit.inventory.ItemStack>(this.m_150109_().m_6643_());
-+      boolean keepInventory = this.f_19853_.m_46469_().m_46207_(GameRules.f_46133_) || this.m_5833_();
++      boolean keepInventory = KeepInventory.inventory(this) || this.f_19853_.m_46469_().m_46207_(GameRules.f_46133_) || this.m_5833_();
 +
 +      if (!keepInventory) {
 +         Collection<ItemEntity> drops = this.captureDrops(null);

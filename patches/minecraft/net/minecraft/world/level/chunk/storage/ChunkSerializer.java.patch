@@ -48,7 +48,7 @@
           return new ImposterProtoChunk((LevelChunk)chunkaccess, false);
        } else {
           ProtoChunk protochunk1 = (ProtoChunk)chunkaccess;
-@@ -235,6 +_,7 @@
+@@ -235,11 +_,13 @@
              protochunk1.m_188186_(generationstep$carving, new CarvingMask(compoundtag4.m_128467_(s1), chunkaccess.m_141937_()));
           }
  
@@ -56,6 +56,12 @@
           return protochunk1;
        }
     }
+ 
+    private static void m_188239_(ChunkPos p_188240_, int p_188241_, String p_188242_) {
++      if (true) return;
+       f_63449_.error("Recoverable errors when loading section [" + p_188240_.f_45578_ + ", " + p_188241_ + ", " + p_188240_.f_45579_ + "]: " + p_188242_);
+    }
+ 
 @@ -247,6 +_,12 @@
        return PalettedContainer.m_238418_(p_188261_.m_206115_(), p_188261_.m_206110_(), PalettedContainer.Strategy.f_188138_, p_188261_.m_246971_(Biomes.f_48202_));
     }

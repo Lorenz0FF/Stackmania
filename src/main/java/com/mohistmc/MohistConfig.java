@@ -208,7 +208,6 @@ public class MohistConfig {
     public static boolean clear_monster;
     public static List<String> clear_monster_whitelist;
     public static String clear_monster_msg;
-    public static int clear_monster_time;
 
     // Ban
     public static boolean ban_item_enable;
@@ -260,6 +259,13 @@ public class MohistConfig {
     public static String deepseek_command;
     public static String deepseek_chatfromat;
 
+    public static boolean custom_no_villager;
+    public static boolean custom_entity_tp_end;
+    public static boolean custom_entity_tp_nether;
+    public static boolean custom_raid_no_emerald;
+    public static int custom_lava_speed_normal;
+    public static int custom_lava_speed_nether;
+
     private static void mohist() {
         show_logo = getBoolean("mohist.show_logo", true);
         mohist_lang = getString("mohist.lang", Locale.getDefault().toString());
@@ -273,7 +279,7 @@ public class MohistConfig {
         player_modlist_blacklist = getStringList("player_modlist_blacklist.list", new ArrayList<>());
         server_modlist_whitelist_enable = getBoolean("server_modlist_whitelist.enable", false);
         server_modlist_whitelist = getString("server_modlist_whitelist.list", ServerAPI.modlists_All.toString().replace(", mohist", ""));
-        maxBees = getInt("max-bees-in-hive", 3);
+        maxBees = getInt("custom.max-bees-in-hive", 3);
         bookAnimationTick = getBoolean("enchantment-table-book-animation-tick", false);
         networkmanager_debug = getBoolean("networkmanager.debug", false);
         networkmanager_intercept = getStringList("networkmanager.intercept", new ArrayList<>());
@@ -335,5 +341,12 @@ public class MohistConfig {
         deepseek_system = getString("deepseek.system", "你的名字叫小小墨，年龄18岁，是个可爱的女孩子!");
         deepseek_command = getString("deepseek.command", "ai");
         deepseek_chatfromat = getString("deepseek.chatfromat", "<小小墨> %s");
+
+        custom_no_villager = getBoolean("custom.no_villager", false);
+        custom_entity_tp_end = getBoolean("custom.entity_tp_end", true);
+        custom_entity_tp_nether = getBoolean("custom.entity_tp_nether", true);
+        custom_raid_no_emerald = getBoolean("custom.raid_no_emerald", false);
+        custom_lava_speed_normal = getInt("custom.lava_speed.normal", 30);
+        custom_lava_speed_nether = getInt("custom.lava_speed.nether", 10);
     }
 }
