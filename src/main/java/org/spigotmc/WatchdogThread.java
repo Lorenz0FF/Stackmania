@@ -44,7 +44,6 @@ public class WatchdogThread extends Thread {
         if (MohistConfig.watchdog_spigot) {
             instance.lastTick = monotonicMillis();
         }
-        instance.lastTick = monotonicMillis();
     }
 
     public static void doStop() {
