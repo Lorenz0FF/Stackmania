@@ -18,10 +18,11 @@
  import net.minecraft.world.ContainerHelper;
  import net.minecraft.world.Containers;
  import net.minecraft.world.WorldlyContainer;
-@@ -23,6 +_,16 @@
+@@ -23,6 +_,17 @@
  import net.minecraft.world.level.Level;
  import net.minecraft.world.level.block.BrewingStandBlock;
  import net.minecraft.world.level.block.state.BlockState;
++import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 +import org.bukkit.Bukkit;
 +import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlock;
 +import org.bukkit.craftbukkit.v1_20_R1.entity.CraftHumanEntity;
@@ -135,7 +136,7 @@
        if (itemstack.m_41619_()) {
           return false;
        } else if (!PotionBrewing.m_43506_(itemstack)) {
-@@ -164,22 +_,56 @@
+@@ -164,22 +_,49 @@
        }
     }
  
@@ -147,24 +148,11 @@
 -      for(int i = 0; i < 3; ++i) {
 -         p_155293_.set(i, PotionBrewing.m_43529_(itemstack, p_155293_.get(i)));
 -      }
--
--      itemstack.m_41774_(1);
--      if (itemstack.m_41720_().m_41470_()) {
--         ItemStack itemstack1 = new ItemStack(itemstack.m_41720_().m_41469_());
-+      // Mohist By l89669
-+      // copy inventory to temp, if bukkit cancel the brew event we can rollback
-+      NonNullList<ItemStack> result = NonNullList.m_122780_(p_155293_.size(), ItemStack.f_41583_);
-+      for (int i = 0; i < p_155293_.size(); ++i) {
-+         result.set(i, p_155293_.get(i).m_41777_());
-+      }
-+
-+      net.minecraftforge.common.brewing.BrewingRecipeRegistry.brewPotions(p_155293_, itemstack, f_58974_);
-+      net.minecraftforge.event.ForgeEventFactory.onPotionBrewed(p_155293_);
-+
 +      // CraftBukkit start
 +      List<org.bukkit.inventory.ItemStack> brewResults = new ArrayList<>(3);
 +      for (int i = 0; i < 3; ++i) {
-+         ItemStack output = result.get(i);
++         var input = p_155293_.get(i);
++         var output = BrewingRecipeRegistry.getOutput(input, itemstack);
 +         brewResults.add(i, CraftItemStack.asCraftMirror(PotionBrewing.m_43529_(itemstack, output)));
 +      }
 +      BrewingStandBlockEntity brewingStandBlockEntity = brewingStandBlock;
@@ -185,7 +173,12 @@
 +         }
 +      }
 +      // CraftBukkit end
-+
+ 
+-      itemstack.m_41774_(1);
+-      if (itemstack.m_41720_().m_41470_()) {
+-         ItemStack itemstack1 = new ItemStack(itemstack.m_41720_().m_41469_());
++      // net.minecraftforge.common.brewing.BrewingRecipeRegistry.brewPotions(p_155293_, itemstack, SLOTS_FOR_SIDES); // Mohist remove it
++      net.minecraftforge.event.ForgeEventFactory.onPotionBrewed(p_155293_);
 +      if (itemstack.hasCraftingRemainingItem()) {
 +         ItemStack itemstack1 = itemstack.getCraftingRemainingItem();
 +         itemstack.m_41774_(1);
