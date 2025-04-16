@@ -786,11 +786,15 @@
        this.f_220350_.m_214152_(p_215052_, p_215053_, p_215054_);
     }
  
-@@ -968,7 +_,7 @@
+@@ -968,7 +_,11 @@
        return this.f_8547_;
     }
  
 -   public Explosion m_254877_(@Nullable Entity p_256039_, @Nullable DamageSource p_255778_, @Nullable ExplosionDamageCalculator p_256002_, double p_256067_, double p_256370_, double p_256153_, float p_256045_, boolean p_255686_, Level.ExplosionInteraction p_255827_) {
++   public ServerChunkCache J() {
++      return this.m_7726_();
++   }
++
 +   public Explosion m_254877_(@Nullable Entity p_256039_, @Nullable DamageSource p_255778_, @Nullable ExplosionDamageCalculator p_256002_, double p_256067_, double p_256370_, double p_256153_, float p_256045_, boolean p_255686_, ExplosionInteraction p_255827_) {
        Explosion explosion = this.m_255278_(p_256039_, p_255778_, p_256002_, p_256067_, p_256370_, p_256153_, p_256045_, p_255686_, p_255827_, false);
        if (!explosion.m_254884_()) {
