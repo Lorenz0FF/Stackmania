@@ -8,6 +8,7 @@ import com.mohistmc.plugins.world.utils.ConfigByWorlds;
 import com.mohistmc.plugins.world.utils.WorldInventory;
 import com.mohistmc.plugins.world.utils.WorldInventoryType;
 import com.mohistmc.plugins.world.utils.WorldsGUI;
+import com.mohistmc.tools.NumberUtil;
 import com.mohistmc.util.I18n;
 import java.io.File;
 import java.util.ArrayList;
@@ -15,13 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Difficulty;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -188,7 +183,7 @@ public class WorldsCommands extends Command {
                 return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("difficulty")) {
-                if (WorldManage.isInteger(args[1])) {
+                if (NumberUtil.toInt(args[1]) != null) {
                     int nandu = Integer.parseInt(args[1]);
                     if (nandu >= 0 && nandu < 4) {
                         if (nandu == 0) {
@@ -206,6 +201,32 @@ public class WorldsCommands extends Command {
                         } else if (nandu == 3) {
                             player.getWorld().setDifficulty(Difficulty.HARD);
                             ConfigByWorlds.setnandu(player, "HARD");
+                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                        }
+                        return true;
+                    } else {
+                        player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
+                    }
+                } else {
+                    player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.setDifFailure"));
+                }
+                return false;
+            }
+            if (args.length == 2 && args[0].equalsIgnoreCase("gamemode")) {
+                if (NumberUtil.toInt(args[1]) != null) {
+                    int nandu = Integer.parseInt(args[1]);
+                    if (nandu >= 0 && nandu < 4) {
+                        if (nandu == 0) {
+                            WorldManage.changeGameMode(player.getWorld(), GameMode.SURVIVAL);
+                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                        } else if (nandu == 1) {
+                            WorldManage.changeGameMode(player.getWorld(), GameMode.CREATIVE);
+                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                        } else if (nandu == 2) {
+                            WorldManage.changeGameMode(player.getWorld(), GameMode.ADVENTURE);
+                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                        } else if (nandu == 3) {
+                            WorldManage.changeGameMode(player.getWorld(), GameMode.SPECTATOR);
                             player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
                         }
                         return true;
@@ -288,7 +309,7 @@ public class WorldsCommands extends Command {
         return list;
     }
 
-    private final List<String> params = Arrays.asList("create", "delete", "tp", "import", "unload", "info", "addinfo", "setname", "setspawn", "gui", "difficulty", "cleardropitem");
+    private final List<String> params = Arrays.asList("create", "delete", "tp", "import", "unload", "info", "addinfo", "setname", "setspawn", "gui", "difficulty", "cleardropitem", "gamemode");
 
 
     private void sendHelp(CommandSender player) {
@@ -305,5 +326,6 @@ public class WorldsCommands extends Command {
         player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds gui " + I18n.as("worldmanage.command.gui"));
         player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds difficulty <0-3> " + I18n.as("worldmanage.command.difficulty"));
         player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds cleardropitem " + I18n.as("worldmanage.command.cleardropitem"));
+        player.sendMessage(I18n.as("worldmanage.prefix") + "/worlds gamemode <0-3>" + I18n.as("worldmanage.command.gamemode"));
     }
 }
