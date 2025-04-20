@@ -1,17 +1,15 @@
 package com.mohistmc.plugins.world;
 
+import com.mohistmc.api.PlayerAPI;
 import com.mohistmc.api.ServerAPI;
 import com.mohistmc.plugins.world.utils.ConfigByWorlds;
-import com.mohistmc.util.I18n;
-import net.minecraft.server.level.ServerLevel;
+import java.io.File;
+import java.util.Objects;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.io.File;
-import java.util.Objects;
 
 public class WorldManage {
 
@@ -37,12 +35,15 @@ public class WorldManage {
 
     public static void changeGameMode(World world, GameMode gameMode) {
         for (Player player : world.getPlayers()) {
-            player.setGameMode(gameMode);
+           if (!player.isOp()) {
+               player.setGameMode(gameMode);
+           }
         }
         ConfigByWorlds.setGameMode(world, gameMode.name());
     }
 
     public static void changeGameMode(ServerPlayer serverPlayer, World world) {
+        if (PlayerAPI.isOp(serverPlayer)) return;
         Player player = serverPlayer.getBukkitEntity();
         GameMode gameMode = ConfigByWorlds.getGameMode(world);
         player.setGameMode(Objects.requireNonNullElseGet(gameMode, Bukkit::getDefaultGameMode));

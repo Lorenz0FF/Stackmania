@@ -8,7 +8,6 @@ import com.mohistmc.plugins.world.utils.ConfigByWorlds;
 import com.mohistmc.plugins.world.utils.WorldInventory;
 import com.mohistmc.plugins.world.utils.WorldInventoryType;
 import com.mohistmc.plugins.world.utils.WorldsGUI;
-import com.mohistmc.tools.NumberUtil;
 import com.mohistmc.util.I18n;
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +15,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Difficulty;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -183,25 +189,30 @@ public class WorldsCommands extends Command {
                 return true;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("difficulty")) {
-                if (NumberUtil.toInt(args[1]) != null) {
-                    int nandu = Integer.parseInt(args[1]);
-                    if (nandu >= 0 && nandu < 4) {
-                        if (nandu == 0) {
-                            player.getWorld().setDifficulty(Difficulty.PEACEFUL);
-                            ConfigByWorlds.setnandu(player, "PEACEFUL");
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
-                        } else if (nandu == 1) {
-                            player.getWorld().setDifficulty(Difficulty.EASY);
-                            ConfigByWorlds.setnandu(player, "EASY");
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
-                        } else if (nandu == 2) {
-                            player.getWorld().setDifficulty(Difficulty.NORMAL);
-                            ConfigByWorlds.setnandu(player, "NORMAL");
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
-                        } else if (nandu == 3) {
-                            player.getWorld().setDifficulty(Difficulty.HARD);
-                            ConfigByWorlds.setnandu(player, "HARD");
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                Integer difficulty = Integer.valueOf(args[1]);
+                if (difficulty != null) {
+                    if (difficulty >= 0 && difficulty < 4) {
+                        switch (difficulty) {
+                            case 0 -> {
+                                player.getWorld().setDifficulty(Difficulty.PEACEFUL);
+                                ConfigByWorlds.setnandu(player, "PEACEFUL");
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
+                            case 1 -> {
+                                player.getWorld().setDifficulty(Difficulty.EASY);
+                                ConfigByWorlds.setnandu(player, "EASY");
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
+                            case 2 -> {
+                                player.getWorld().setDifficulty(Difficulty.NORMAL);
+                                ConfigByWorlds.setnandu(player, "NORMAL");
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
+                            case 3 -> {
+                                player.getWorld().setDifficulty(Difficulty.HARD);
+                                ConfigByWorlds.setnandu(player, "HARD");
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
                         }
                         return true;
                     } else {
@@ -213,21 +224,26 @@ public class WorldsCommands extends Command {
                 return false;
             }
             if (args.length == 2 && args[0].equalsIgnoreCase("gamemode")) {
-                if (NumberUtil.toInt(args[1]) != null) {
-                    int nandu = Integer.parseInt(args[1]);
-                    if (nandu >= 0 && nandu < 4) {
-                        if (nandu == 0) {
-                            WorldManage.changeGameMode(player.getWorld(), GameMode.SURVIVAL);
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
-                        } else if (nandu == 1) {
-                            WorldManage.changeGameMode(player.getWorld(), GameMode.CREATIVE);
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
-                        } else if (nandu == 2) {
-                            WorldManage.changeGameMode(player.getWorld(), GameMode.ADVENTURE);
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
-                        } else if (nandu == 3) {
-                            WorldManage.changeGameMode(player.getWorld(), GameMode.SPECTATOR);
-                            player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                Integer gamemode = Integer.valueOf(args[1]);
+                if (gamemode != null) {
+                    if (gamemode >= 0 && gamemode < 4) {
+                        switch (gamemode) {
+                            case 0 -> {
+                                WorldManage.changeGameMode(player.getWorld(), GameMode.SURVIVAL);
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
+                            case 1 -> {
+                                WorldManage.changeGameMode(player.getWorld(), GameMode.CREATIVE);
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
+                            case 2 -> {
+                                WorldManage.changeGameMode(player.getWorld(), GameMode.ADVENTURE);
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
+                            case 3 -> {
+                                WorldManage.changeGameMode(player.getWorld(), GameMode.SPECTATOR);
+                                player.sendMessage(I18n.as("worldmanage.prefix") + I18n.as("worldcommands.world.worldSetupSuccess"));
+                            }
                         }
                         return true;
                     } else {
