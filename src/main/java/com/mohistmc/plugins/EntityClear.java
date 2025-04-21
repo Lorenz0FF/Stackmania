@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.thread.NamedThreadFactory;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -86,7 +87,7 @@ public class EntityClear {
                     String entityName = entity.getType().name();
                     String entityRegName = entity.getType().name().split("_")[0].toLowerCase() + ":*";
                     if (!MohistConfig.clear_noitem_whitelist.contains(entityName) && !MohistConfig.clear_noitem_whitelist.contains(entityRegName)&& entity.getCustomName() == null) {
-                        if (entity instanceof TamableAnimal tamable && tamable.isTame()) {
+                        if (entity instanceof TamableAnimal tamable && tamable.isTame() || entity instanceof Player) {
                            continue;
                         }
                         entity.remove();
