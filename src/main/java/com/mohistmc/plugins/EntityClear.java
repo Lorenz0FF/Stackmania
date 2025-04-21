@@ -86,10 +86,11 @@ public class EntityClear {
                     String entityName = entity.getType().name();
                     String entityRegName = entity.getType().name().split("_")[0].toLowerCase() + ":*";
                     if (!MohistConfig.clear_noitem_whitelist.contains(entityName) && !MohistConfig.clear_noitem_whitelist.contains(entityRegName)&& entity.getCustomName() == null) {
-                        if (entity instanceof TamableAnimal tamable && !tamable.isTame()) {
-                            entity.remove();
-                            size_noitem.addAndGet(1);
+                        if (entity instanceof TamableAnimal tamable && tamable.isTame()) {
+                           continue;
                         }
+                        entity.remove();
+                        size_noitem.addAndGet(1);
                     }
                 }
             }
