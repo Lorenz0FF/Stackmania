@@ -3,7 +3,7 @@ package com.mohistmc.commands;
 import com.mohistmc.api.ItemAPI;
 import com.mohistmc.api.gui.GUIItem;
 import com.mohistmc.api.gui.ItemStackFactory;
-import com.mohistmc.api.gui.Warehouse;
+import com.mohistmc.api.gui.DemoGUI;
 import com.mohistmc.util.I18n;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,9 +76,9 @@ public class ShowsCommand extends Command {
 
         switch (args[0].toLowerCase(Locale.ENGLISH)) {
             case "sound" -> {
-                Warehouse wh = new Warehouse("Sounds");
+                DemoGUI wh = new DemoGUI("Sounds");
                 wh.getGUI().setItem(47, new GUIItem(new ItemStackFactory(Material.REDSTONE)
-                        .setDisplayName("§cStop all sounds")
+                        .setDisplayName(I18n.as("showscommand.sound.stopall"))
                         .toItemStack()) {
                     @Override
                     public void ClickAction(ClickType type, Player u, ItemStack itemStack) {
@@ -116,7 +116,7 @@ public class ShowsCommand extends Command {
                     allSize.addAndGet(entity.getValue());
                 }
 
-                Warehouse wh = new Warehouse("Entitys: " + allSize.getAndSet(0));
+                DemoGUI wh = new DemoGUI("Entitys: " + allSize.getAndSet(0));
                 for (Map.Entry<EntityType, Integer> s : newMap.entrySet()) {
                     wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(s.getKey()))
                             .setDisplayName("§6Size: §4" + s.getValue())
@@ -145,7 +145,7 @@ public class ShowsCommand extends Command {
                     allSize.addAndGet(entity.getValue());
                 }
 
-                Warehouse wh = new Warehouse("BlockEntitys: " + allSize.getAndSet(0));
+                DemoGUI wh = new DemoGUI("BlockEntitys: " + allSize.getAndSet(0));
                 for (Map.Entry<Material, Integer> s : newMap.entrySet()) {
                     Material material = s.getKey().name().contains("_WALL") ? Material.getMaterial(s.getKey().name().replace("_WALL", "")) : s.getKey();
                     wh.addItem(new GUIItem(new ItemStackFactory(material)

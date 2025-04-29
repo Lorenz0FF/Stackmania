@@ -24,7 +24,7 @@ public class EntityClear {
     public static final ScheduledExecutorService ENTITYCLEAR_ITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - Item"));
     public static final ScheduledExecutorService ENTITYCLEAR_NOITEM = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear - NoItem"));
     private static final ScheduledExecutorService COUNTDOWN_SERVICE = new ScheduledThreadPoolExecutor(1, new NamedThreadFactory("EntityClear-Countdown"));
-    private static final AtomicInteger countdownSeconds = new AtomicInteger(15);
+    private static final AtomicInteger countdownSeconds = new AtomicInteger(31);
     private static ScheduledFuture<?> countdownFuture;
 
     public static void start() {
@@ -45,9 +45,9 @@ public class EntityClear {
                 String msg = MohistConfig.clear_countdown_msg
                         .replace("&", "§")
                         .replace("%seconds%", String.valueOf(remaining));
-                if (remaining == 14 || remaining == 10 || remaining < 4) Bukkit.broadcastMessage(msg);
+                if (remaining == 30 || remaining == 14 || remaining == 10 || remaining < 4) Bukkit.broadcastMessage(msg);
             } else {
-                countdownSeconds.set(15);
+                countdownSeconds.set(31);
                 if (MohistConfig.clear_item)run_item();
                 if (MohistConfig.clear_noitem)run_entity();
                 countdownFuture.cancel(false);
