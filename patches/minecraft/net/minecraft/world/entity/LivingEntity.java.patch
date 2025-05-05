@@ -573,7 +573,7 @@
     }
  
     public float m_21223_() {
-+      if (this instanceof ServerPlayer serverPlayer) {
++      if (this instanceof ServerPlayer serverPlayer && serverPlayer.initialized) {
 +         return (float) serverPlayer.getBukkitEntity().getHealth();
 +      }
        return this.f_19804_.m_135370_(f_20961_);
@@ -585,7 +585,7 @@
 +   }
     public void m_21153_(float p_21154_) {
 +      // CraftBukkit start - Handle scaled health
-+      if (this instanceof ServerPlayer serverPlayer && !fake$setHealth.getAndSet(false)) {
++      if (this instanceof ServerPlayer serverPlayer && !fake$setHealth.getAndSet(false) && serverPlayer.initialized) {
 +         org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer player = serverPlayer.getBukkitEntity();
 +         // Squeeze
 +         if (p_21154_ < 0.0F) {
