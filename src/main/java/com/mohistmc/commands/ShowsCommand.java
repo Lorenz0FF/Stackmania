@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import net.minecraft.network.chat.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -116,11 +117,15 @@ public class ShowsCommand extends Command {
                     allSize.addAndGet(entity.getValue());
                 }
 
-                DemoGUI wh = new DemoGUI("Entitys: " + allSize.getAndSet(0));
+                DemoGUI wh = new DemoGUI(I18n.as("showscommand.entitys.title", allSize.getAndSet(0)));
                 for (Map.Entry<EntityType, Integer> s : newMap.entrySet()) {
                     wh.addItem(new GUIItem(new ItemStackFactory(ItemAPI.getEggMaterial(s.getKey()))
-                            .setDisplayName("§6Size: §4" + s.getValue())
-                            .setLore(List.of("§7EntityType: §2" + s.getKey().name()))
+                            .setDisplayName(I18n.as("showscommand.entitys.itemname", s.getValue()))
+                            .setLore(List.of(
+                                            I18n.as("showscommand.entitys.lore", s.getKey().name()),
+                                            I18n.as("showscommand.entitys.lore2", Component.translatable(s.getKey().translationKey()).getString())
+                                    )
+                            )
                             .toItemStack())
                     );
                 }

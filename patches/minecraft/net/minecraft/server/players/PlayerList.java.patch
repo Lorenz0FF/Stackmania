@@ -440,7 +440,7 @@
        UUID uuid = UUIDUtil.m_235875_(p_215625_);
        List<ServerPlayer> list = Lists.newArrayList();
  
-@@ -415,76 +_,169 @@
+@@ -415,76 +_,170 @@
        return new ServerPlayer(this.f_11195_, this.f_11195_.m_129783_(), p_215625_);
     }
  
@@ -449,6 +449,7 @@
 +   public PlayerRespawnEvent.RespawnReason mohist$reason = null;
 +   public ServerLevel mohist$worldserver = null;
 +   public AtomicBoolean avoidSuffocation = new AtomicBoolean(true);
++   public World fromWorld = null;
 +
     public ServerPlayer m_11236_(ServerPlayer p_11237_, boolean p_11238_) {
 +      p_11237_.m_8127_(); // CraftBukkit
@@ -459,19 +460,18 @@
        float f = p_11237_.m_8962_();
        boolean flag = p_11237_.m_8964_();
 -      ServerLevel serverlevel = this.f_11195_.m_129880_(p_11237_.m_8963_());
--      Optional<Vec3> optional;
--      if (serverlevel != null && blockpos != null) {
--         optional = Player.m_36130_(serverlevel, blockpos, f, flag, p_11238_);
 +
-+      World fromWorld = p_11237_.getBukkitEntity().getWorld();
++      fromWorld = p_11237_.getBukkitEntity().getWorld();
 +      p_11237_.f_8944_ = false;
 +
 +      boolean flag2 = false;
 +      ServerLevel worldserver1 = this.f_11195_.m_129880_(p_11237_.m_8963_());
+       Optional<Vec3> optional;
+-      if (serverlevel != null && blockpos != null) {
+-         optional = Player.m_36130_(serverlevel, blockpos, f, flag, p_11238_);
 +      if (mohist$location == null) {
 +         boolean isBedSpawn = false;
 +         if (worldserver1 != null) {
-+            Optional<Vec3> optional;
 +            if (blockpos != null) {
 +               optional = Player.m_36130_(worldserver1, blockpos, f, flag, p_11238_);
 +            } else {
@@ -716,6 +716,14 @@
  
 +      p_11227_.getBukkitEntity().recalculatePermissions(); // CraftBukkit
        this.f_11195_.m_129892_().m_82095_(p_11227_);
+    }
+ 
+@@ -601,6 +_,7 @@
+    }
+ 
+    public boolean m_11303_(GameProfile p_11304_) {
++      if (p_11304_ == null) return false;
+       return this.f_11200_.m_11396_(p_11304_) || this.f_11195_.m_7779_(p_11304_) && this.f_11195_.m_129910_().m_5468_() || this.f_11209_;
     }
  
 @@ -618,6 +_,13 @@
