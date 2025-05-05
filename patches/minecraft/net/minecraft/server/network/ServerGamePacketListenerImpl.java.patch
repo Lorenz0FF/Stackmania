@@ -31,11 +31,12 @@
  import java.util.Collections;
  import java.util.EnumSet;
  import java.util.List;
-@@ -21,6 +_,8 @@
+@@ -21,6 +_,9 @@
  import java.util.Set;
  import java.util.concurrent.CancellationException;
  import java.util.concurrent.CompletableFuture;
 +import java.util.concurrent.ExecutionException;
++import java.util.concurrent.atomic.AtomicBoolean;
 +import java.util.concurrent.atomic.AtomicInteger;
  import java.util.concurrent.atomic.AtomicReference;
  import java.util.function.BiFunction;
@@ -761,7 +762,7 @@
                          this.f_9743_.m_289599_(this.f_9743_.m_20185_() - d3, this.f_9743_.m_20186_() - d4, this.f_9743_.m_20189_() - d5, p_9874_.m_134139_());
                       }
                    }
-@@ -954,28 +_,99 @@
+@@ -954,28 +_,106 @@
        return false;
     }
  
@@ -773,6 +774,12 @@
 +
 +   public void teleport(double d0, double d1, double d2, float f, float f1, PlayerTeleportEvent.TeleportCause cause) {
 +      this.teleport(d0, d1, d2, f, f1, Collections.emptySet(), cause);
++   }
++
++   private final AtomicReference<PlayerTeleportEvent.TeleportCause> teleport$cause = new AtomicReference<>(PlayerTeleportEvent.TeleportCause.UNKNOWN);
++   private final AtomicBoolean teleport$boolean = new AtomicBoolean(false);
++   public void teleport$cause(PlayerTeleportEvent.TeleportCause cause) {
++      this.teleport$cause.set(cause);
     }
  
     public void m_9780_(double p_9781_, double p_9782_, double p_9783_, float p_9784_, float p_9785_, Set<RelativeMovement> p_9786_) {
@@ -782,46 +789,47 @@
 -      float f = p_9786_.contains(RelativeMovement.Y_ROT) ? this.f_9743_.m_146908_() : 0.0F;
 -      float f1 = p_9786_.contains(RelativeMovement.X_ROT) ? this.f_9743_.m_146909_() : 0.0F;
 -      this.f_9766_ = new Vec3(p_9781_, p_9782_, p_9783_);
-+      this.teleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_, PlayerTeleportEvent.TeleportCause.UNKNOWN);
-+   }
-+
-+   public boolean teleport(double d0, double d1, double d2, float f, float f1, Set<RelativeMovement> set, PlayerTeleportEvent.TeleportCause cause) { // CraftBukkit - Return event status
 +      org.bukkit.entity.Player player = this.getCraftPlayer();
 +      Location from = player.getLocation();
 +
-+      double x = d0;
-+      double y = d1;
-+      double z = d2;
-+      float yaw = f;
-+      float pitch = f1;
++      double x = p_9781_;
++      double y = p_9782_;
++      double z = p_9783_;
++      float yaw = p_9784_;
++      float pitch = p_9785_;
 +
 +      Location to = new Location(this.getCraftPlayer().getWorld(), x, y, z, yaw, pitch);
 +      // SPIGOT-5171: Triggered on join
 +      if (from.equals(to)) {
-+         this.internalTeleport(d0, d1, d2, f, f1, set);
-+         return false; // CraftBukkit - Return event status
++         this.internalTeleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_);
++         return; // CraftBukkit - Return event status
 +      }
 +
 +      if (!AsyncCatcher.catchAsync()) {
-+         PlayerTeleportEvent event = new PlayerTeleportEvent(player, from.clone(), to.clone(), cause);
++         PlayerTeleportEvent event = new PlayerTeleportEvent(player, from.clone(), to.clone(), teleport$cause.getAndSet(PlayerTeleportEvent.TeleportCause.UNKNOWN));
 +         this.cserver.getPluginManager().callEvent(event);
 +
 +         if (event.isCancelled() || !to.equals(event.getTo())) {
-+            set = Collections.emptySet(); // Can't relative teleport
++            p_9786_ = Collections.emptySet(); // Can't relative teleport
 +            to = event.isCancelled() ? event.getFrom() : event.getTo();
-+            d0 = to.getX();
-+            d1 = to.getY();
-+            d2 = to.getZ();
-+            f = to.getYaw();
-+            f1 = to.getPitch();
++            p_9781_ = to.getX();
++            p_9782_ = to.getY();
++            p_9783_ = to.getZ();
++            p_9784_ = to.getYaw();
++            p_9785_ = to.getPitch();
 +         }
 +
-+         this.internalTeleport(d0, d1, d2, f, f1, set);
-+         return event.isCancelled(); // CraftBukkit - Return event status
++         this.internalTeleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_);
++         if (event.isCancelled())  teleport$boolean.set(true);
 +      } else {
-+         this.internalTeleport(d0, d1, d2, f, f1, set);
-+         return false;
++         this.internalTeleport(p_9781_, p_9782_, p_9783_, p_9784_, p_9785_, p_9786_);
 +      }
++   }
++
++   public boolean teleport(double d0, double d1, double d2, float f, float f1, Set<RelativeMovement> set, PlayerTeleportEvent.TeleportCause cause) { // CraftBukkit - Return event status
++      this.teleport$cause(cause);
++      m_9780_(d0, d1, d2, f, f1, set);
++      return teleport$boolean.getAndSet(false);
 +   }
 +
 +   public void teleport(Location dest) {
