@@ -341,7 +341,7 @@
 +   public void spawnIn(Level world) {
 +      this.f_19853_ = world;
 +      if (world == null) {
-+         this.m_146912_();
++         this.revive();
 +         Vec3 position = null;
 +         if (this.f_8935_ != null) {
 +            world = this.f_8924_.m_129880_(this.f_8935_);
@@ -1176,7 +1176,7 @@
     }
  
     public void m_6674_(InteractionHand p_9031_) {
-@@ -1400,12 +_,20 @@
+@@ -1400,29 +_,52 @@
        return this.f_8909_;
     }
  
@@ -1198,7 +1198,13 @@
           ServerLevel serverlevel = this.m_284548_();
           LevelData leveldata = p_9000_.m_6106_();
           this.f_8906_.m_9829_(new ClientboundRespawnPacket(p_9000_.m_220362_(), p_9000_.m_46472_(), BiomeManager.m_47877_(p_9000_.m_7328_()), this.f_8941_.m_9290_(), this.f_8941_.m_9293_(), p_9000_.m_46659_(), p_9000_.m_8584_(), (byte)3, this.m_219759_(), this.m_287157_()));
-@@ -1418,11 +_,26 @@
+          this.f_8906_.m_9829_(new ClientboundChangeDifficultyPacket(leveldata.m_5472_(), leveldata.m_5474_()));
+          this.f_8924_.m_6846_().m_11289_(this);
+          serverlevel.m_143261_(this, Entity.RemovalReason.CHANGED_DIMENSION);
+-         this.m_146912_();
++         this.revive();
+          this.m_7678_(p_9001_, p_9002_, p_9003_, p_9004_, p_9005_);
+          this.m_284127_(p_9000_);
           p_9000_.m_8622_(this);
           this.m_9209_(serverlevel);
           this.f_8906_.m_9774_(p_9001_, p_9002_, p_9003_, p_9004_, p_9005_);
