@@ -1014,7 +1014,7 @@
           }
  
           if (p_21194_ <= 0.0F) {
-@@ -1582,27 +_,238 @@
+@@ -1582,27 +_,253 @@
     }
  
     protected void m_6475_(DamageSource p_21240_, float p_21241_) {
@@ -1109,12 +1109,27 @@
 +            if (!shieldEvent.isCanceled()) {
 +               var blocked = shieldEvent.getBlockedDamage();
 +               shieldTakesDamage = shieldEvent.shieldTakesDamage();
-+               blocking = input -> -(double) blocked;
++               blocking = new Function<Double, Double>() {
++                   @Override
++                   public Double apply(Double input) {
++                       return -(double) blocked;
++                   }
++               };
 +            } else {
-+               blocking = input -> 0d;
++               blocking = new Function<Double, Double>() {
++                   @Override
++                   public Double apply(Double input) {
++                       return 0d;
++                   }
++               };
 +            }
 +         } else {
-+            blocking = input -> 0d;
++            blocking = new Function<Double, Double>() {
++                @Override
++                public Double apply(Double input) {
++                    return 0d;
++                }
++            };
 +         }
 +         float blockingModifier = blocking.apply((double) p_21241_).floatValue();
 +         p_21241_ += blockingModifier;
