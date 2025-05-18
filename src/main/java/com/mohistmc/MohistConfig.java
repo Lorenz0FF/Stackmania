@@ -14,6 +14,7 @@ import com.mohistmc.commands.PingCommand;
 import com.mohistmc.commands.PluginCommand;
 import com.mohistmc.commands.ShowsCommand;
 import com.mohistmc.plugins.MohistPlugin;
+import com.mohistmc.plugins.world.WorldManage;
 import com.mohistmc.util.YamlUtils;
 import java.io.File;
 import java.io.IOException;
@@ -108,6 +109,7 @@ public class MohistConfig {
         for (Map.Entry<String, Command> entry : commands.entrySet()) {
             MinecraftServer.getServer().server.getCommandMap().register(entry.getKey(), "Mohist", entry.getValue());
         }
+        if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable();
     }
 
     static void readConfig() {
