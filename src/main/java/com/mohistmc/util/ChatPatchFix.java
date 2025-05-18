@@ -22,7 +22,6 @@ public class ChatPatchFix {
         if (s.isEmpty() || packetListener.player.getChatVisibility() == ChatVisiblity.HIDDEN) {
             return;
         }
-        OutgoingChatMessage outgoing = OutgoingChatMessage.create(original);
 
         if (!async && s.startsWith("/")) {
             packetListener.handleCommand(s);

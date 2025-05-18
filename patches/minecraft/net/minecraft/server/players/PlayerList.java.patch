@@ -460,18 +460,19 @@
        float f = p_11237_.m_8962_();
        boolean flag = p_11237_.m_8964_();
 -      ServerLevel serverlevel = this.f_11195_.m_129880_(p_11237_.m_8963_());
+-      Optional<Vec3> optional;
+-      if (serverlevel != null && blockpos != null) {
+-         optional = Player.m_36130_(serverlevel, blockpos, f, flag, p_11238_);
 +
 +      fromWorld = p_11237_.getBukkitEntity().getWorld();
 +      p_11237_.f_8944_ = false;
 +
 +      boolean flag2 = false;
 +      ServerLevel worldserver1 = this.f_11195_.m_129880_(p_11237_.m_8963_());
-       Optional<Vec3> optional;
--      if (serverlevel != null && blockpos != null) {
--         optional = Player.m_36130_(serverlevel, blockpos, f, flag, p_11238_);
 +      if (mohist$location == null) {
 +         boolean isBedSpawn = false;
 +         if (worldserver1 != null) {
++            Optional<Vec3> optional;
 +            if (blockpos != null) {
 +               optional = Player.m_36130_(worldserver1, blockpos, f, flag, p_11238_);
 +            } else {
