@@ -4,7 +4,6 @@ import com.mohistmc.ai.deepseek.DeepSeek;
 import com.mohistmc.ai.koukou.KouKou;
 import java.util.concurrent.ExecutionException;
 import net.minecraft.network.chat.ChatType;
-import net.minecraft.network.chat.OutgoingChatMessage;
 import net.minecraft.network.chat.PlayerChatMessage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
