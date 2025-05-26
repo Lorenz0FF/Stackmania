@@ -2416,4 +2416,14 @@ public final class CraftServer implements Server {
         return spigot;
     }
     // Spigot end
+
+    @Override
+    public int getCurrentTick() {
+        return net.minecraft.server.MinecraftServer.currentTick;
+    }
+
+    @Override
+    public boolean isStopping() {
+        return net.minecraft.server.MinecraftServer.getServer().hasStopped();
+    }
 }
