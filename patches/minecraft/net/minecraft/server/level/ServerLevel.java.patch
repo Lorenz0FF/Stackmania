@@ -192,7 +192,7 @@
  
  public class ServerLevel extends Level implements WorldGenLevel {
     public static final BlockPos f_8562_ = new BlockPos(100, 50, 0);
-@@ -188,24 +_,99 @@
+@@ -188,24 +_,96 @@
     private final List<CustomSpawner> f_8558_;
     @Nullable
     private EndDragonFight f_8559_;
@@ -263,9 +263,6 @@
        ChunkGenerator chunkgenerator = p_215004_.f_63976_();
 +      long i = p_214999_.m_129910_().m_246337_().m_245499_(); // Mohist
 +      // CraftBukkit start
-+      if (K != null) {
-+         K.setWorld(this);
-+      }
 +      if (biomeProvider != null) {
 +         WorldInfo worldInfo = new CraftWorldInfo(K, p_215001_, environment, p_215004_.f_63975_().m_203334_());
 +         BiomeSource worldChunkManager = new CustomWorldChunkManager(worldInfo, biomeProvider, f_8548_.m_206579_().m_175515_(Registries.f_256952_));
@@ -306,12 +303,15 @@
        this.f_196556_ = new StructureCheck(this.f_8547_.m_196555_(), this.m_9598_(), p_214999_.m_236738_(), p_215003_, chunkgenerator, this.f_8547_.m_214994_(), this, chunkgenerator.m_62218_(), i, datafixer);
        this.f_214997_ = new StructureManager(this, p_214999_.m_129910_().m_246337_(), this.f_196556_);
        if (this.m_46472_() == Level.f_46430_ && this.m_204156_().m_203565_(BuiltinDimensionTypes.f_223540_)) {
-@@ -240,9 +_,12 @@
+@@ -240,9 +_,15 @@
              return new RandomSequences(i);
           }, "random_sequences");
        });
 +      this.world = new CraftWorld(this, generator, biomeProvider, environment);
 +      this.getCraftServer().addWorld(this.getWorld()); // CraftBukkit
++      if (K != null) {
++         K.setWorld(this);
++      }
 +      this.initCapabilities();
     }
  
@@ -996,7 +996,7 @@
 +   protected void initCapabilities() {
 +      this.gatherCapabilities();
 +      capabilityData = this.m_8895_().m_164861_(e -> LevelCapabilityData.load(e, getCapabilities()), () -> new LevelCapabilityData(getCapabilities()), LevelCapabilityData.ID);
-+      capabilityData.setCapabilities(getCapabilities());
++         capabilityData.setCapabilities(getCapabilities());
     }
  
     public LevelEntityGetter<Entity> m_142646_() {
