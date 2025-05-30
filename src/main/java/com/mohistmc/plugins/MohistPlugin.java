@@ -45,6 +45,7 @@ public class MohistPlugin {
     public static Logger LOGGER = LogManager.getLogger("MohistPlugin");
 
     public static void init(Server server) {
+        if (MohistConfig.yml.getBoolean("worldmanage", true)) WorldManage.onEnable();
         File out = new File("libraries/com/mohistmc/cache", "libPath.txt");
         if (out.exists()) {
             String data;
