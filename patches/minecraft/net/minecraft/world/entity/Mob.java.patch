@@ -164,7 +164,7 @@
           for(ItemEntity itementity : this.m_9236_().m_45976_(ItemEntity.class, this.m_20191_().m_82377_((double)vec3i.m_123341_(), (double)vec3i.m_123342_(), (double)vec3i.m_123343_()))) {
              if (!itementity.m_213877_() && !itementity.m_32055_().m_41619_() && !itementity.m_32063_() && this.m_7243_(itementity.m_32055_())) {
 +               // Paper Start
-+               if (!entityitem.canMobPickup) {
++               if (!itementity.canMobPickup) {
 +                  continue;
 +               }
 +               // Paper End
