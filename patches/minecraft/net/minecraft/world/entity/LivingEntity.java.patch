@@ -850,16 +850,14 @@
  
        boolean flag = this.f_20889_ > 0;
        if (this.m_6125_() && this.m_9236_().m_46469_().m_46207_(GameRules.f_46135_)) {
-@@ -1350,6 +_,14 @@
+@@ -1350,6 +_,12 @@
  
        this.m_5907_();
        this.m_21226_();
 +
 +      Collection<ItemEntity> drops = captureDrops(null);
 +      EmeraldClose.init(this, drops); // Mohist
-+      ArrayList<org.bukkit.inventory.ItemStack> dropsCB = new ArrayList<>();
-+      drops.forEach(e -> dropsCB.add(CraftItemStack.asCraftMirror(e.m_32055_().m_41777_())));
-+      CraftEventFactory.callEntityDeathEvent(this, dropsCB);
++      CraftEventFactory.callEntityDeathEvent(this, drops);
 +      if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, p_21192_, drops, i, f_20889_ > 0))
 +         drops.forEach(e -> m_9236_().m_7967_(e));
     }
