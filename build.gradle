@@ -173,6 +173,7 @@ def mohistDeps = {
     mohist "com.google.j2objc:j2objc-annotations:1.1"
     mohist "cpw.mods:bootstraplauncher:1.1.2"
     mohist "com.google.code.findbugs:jsr305:3.0.2"
+    mohist 'org.checkerframework:checker-qual:2.0.0'
 }
 
 def sharedDeps = {
@@ -212,7 +213,6 @@ def sharedDeps = {
 
     // LibraryLoader start
     installer "org.apache.maven:maven-artifact:3.8.5"
-    installer 'org.checkerframework:checker-qual:2.0.0'
     installer 'org.eclipse.sisu:org.eclipse.sisu.inject:0.3.5'
     installer 'org.codehaus.plexus:plexus-interpolation:1.26'
     installer 'org.codehaus.plexus:plexus-utils:3.3.0'
