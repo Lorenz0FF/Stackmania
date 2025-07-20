@@ -640,7 +640,7 @@
 -               if (entity instanceof LivingEntity) {
 -                  LivingEntity livingentity = (LivingEntity)entity;
 -                  this.m_6728_(livingentity);
-+         if (false && p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
++         if (Boolean.parseBoolean("false") && p_21017_ > 0.0F && this.m_21275_(p_21016_)) {
 +            net.minecraftforge.event.entity.living.ShieldBlockEvent ev = net.minecraftforge.common.ForgeHooks.onShieldBlock(this, p_21016_, p_21017_);
 +            if(!ev.isCanceled()) {
 +               if(ev.shieldTakesDamage()) this.m_7909_(p_21017_);
