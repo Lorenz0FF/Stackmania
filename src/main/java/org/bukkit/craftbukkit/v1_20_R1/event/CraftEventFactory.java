@@ -874,7 +874,7 @@ public class CraftEventFactory {
         if (captureDrops == null) {
             drops = new ArrayList<>();
         } else if (captureDrops instanceof List) {
-            drops = Lists.transform((List<ItemEntity>) captureDrops, e -> CraftItemStack.asCraftMirror(e.getItem()));
+            drops = new ArrayList<>(Lists.transform((List<ItemEntity>) captureDrops, e -> CraftItemStack.asCraftMirror(e.getItem())));
         } else {
             drops = captureDrops.stream().map(ItemEntity::getItem).map(CraftItemStack::asCraftMirror).collect(Collectors.toList());
         }

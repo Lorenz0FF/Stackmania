@@ -12,9 +12,14 @@ import java.util.List;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Material;
@@ -208,19 +213,24 @@ public class ItemAPI {
         return MohistConfig.ban_item_materials.contains(itemStack.getType().name());
     }
 
-    public static Material getEggMaterial(EntityType entitytype) {
+    public static Material getEggMaterial(net.minecraft.world.entity.EntityType<?> entitytype) {
         try {
-            if (entitytype == EntityType.PLAYER) {
+            if (entitytype == net.minecraft.world.entity.EntityType.PLAYER) {
                 return Material.PLAYER_HEAD;
             }
-            String getMaterial = entitytype + "_SPAWN_EGG";
-            return Material.valueOf(entitytype.toString().equals("MUSHROOM_COW") ? "MOOSHROOM_SPAWN_EGG" : getMaterial);
-        } catch (Exception e) {
-            try {
-                return Material.valueOf(entitytype.getName().toUpperCase());
-            } catch (Exception e1) {
-                return Material.SPAWNER;
+            var getMaterial = ForgeSpawnEggItem.fromEntityType(entitytype);
+            if (getMaterial != null) {
+                return getMaterial.getDefaultInstance().getBukkitStack().getType();
+            } else {
+                var key = net.minecraft.world.entity.EntityType.getKey(entitytype);
+                if (ForgeRegistries.ITEMS.getValue(key) == null) {
+                    return Material.SPAWNER;
+                }
+                Material material = get(key);
+                return material.isAir() ? Material.SPAWNER : material;
             }
+        } catch (Exception e) {
+            return Material.SPAWNER;
         }
     }
 
@@ -246,5 +256,9 @@ public class ItemAPI {
         } catch (Exception e) {
             return getEnchantmentByName(key);
         }
+    }
+
+    public static Material get(ResourceLocation key) {
+        return ForgeRegistries.ITEMS.getValue(key).getDefaultInstance().asBukkitCopy().getType();
     }
 }
