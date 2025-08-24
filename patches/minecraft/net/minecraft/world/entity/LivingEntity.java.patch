@@ -857,7 +857,7 @@
 +
 +      Collection<ItemEntity> drops = captureDrops(null);
 +      EmeraldClose.init(this, drops); // Mohist
-+      CraftEventFactory.callEntityDeathEvent(this, drops);
++      drops = CraftEventFactory.callEntityDeathEvent(this, drops);
 +      if (!net.minecraftforge.common.ForgeHooks.onLivingDrops(this, p_21192_, drops, i, f_20889_ > 0))
 +         drops.forEach(e -> m_9236_().m_7967_(e));
     }
