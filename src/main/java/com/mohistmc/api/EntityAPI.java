@@ -2,7 +2,6 @@ package com.mohistmc.api;
 
 import com.mohistmc.MohistConfig;
 import java.util.Objects;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.registries.ForgeRegistries;
