@@ -64,7 +64,7 @@
     private PlayerList f_129763_;
     private volatile boolean f_129764_ = true;
     private boolean f_129765_;
-@@ -237,24 +_,45 @@
+@@ -237,24 +_,44 @@
     private final FrameTimer f_129735_ = new FrameTimer();
     private boolean f_129736_;
     private float f_129737_;
@@ -107,7 +107,6 @@
        thread.setUncaughtExceptionHandler((p_177909_, p_177910_) -> {
           f_129750_.error("Uncaught exception in server thread", p_177910_);
        });
-+       thread.setPriority(Thread.NORM_PRIORITY+2); // Paper - boost priority
        if (Runtime.getRuntime().availableProcessors() > 4) {
 -         thread.setPriority(8);
 +         thread.setPriority(MohistConfig.yml.getInt("threadpriority.server_thread", 8));
