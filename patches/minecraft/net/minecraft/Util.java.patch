@@ -8,13 +8,11 @@
  import com.mojang.datafixers.DSL;
  import com.mojang.datafixers.DataFixUtils;
  import com.mojang.datafixers.types.Type;
-@@ -81,8 +_,24 @@
-    private static final int f_183935_ = 255;
+@@ -82,7 +_,23 @@
     private static final String f_183936_ = "max.bg.threads";
     private static final AtomicInteger f_137442_ = new AtomicInteger(1);
--   private static final ExecutorService f_137444_ = m_137477_("Main");
+    private static final ExecutorService f_137444_ = m_137477_("Main");
 -   private static final ExecutorService f_137445_ = m_137586_();
-+   private static final ExecutorService f_137444_ = makeExecutorPaper("Main", -1); // Paper - Perf: add priority
 +    // Paper start - don't submit BLOCKING PROFILE LOOKUPS to the world gen thread
 +    public static final ExecutorService PROFILE_EXECUTOR = Executors.newFixedThreadPool(2, new java.util.concurrent.ThreadFactory() {
 +
