@@ -607,7 +607,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable, Translat
 
     @Override
     @NotNull
-    @Deprecated(forRemoval = true) // Paper
     public String getTranslationKey() {
         return Bukkit.getUnsafe().getTranslationKey(this);
     }
