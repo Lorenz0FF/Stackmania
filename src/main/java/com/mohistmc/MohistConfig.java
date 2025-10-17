@@ -88,8 +88,6 @@ public class MohistConfig {
 
         version = getInt("config-version", 1);
         set("config-version", 1);
-        set("keepinventory.world.inventory", false);
-        set("keepinventory.world.exp", false);
         readConfig();
 
         try {
@@ -267,11 +265,13 @@ public class MohistConfig {
     public static boolean custom_raid_no_emerald;
     public static int custom_lava_speed_normal;
     public static int custom_lava_speed_nether;
+    public static String ping_status_version;
 
     private static void mohist() {
         show_logo = getBoolean("mohist.show_logo", true);
         mohist_lang = getString("mohist.lang", Locale.getDefault().toString());
         check_update = getBoolean("mohist.check_update", true);
+        ping_status_version = getString("mohist.ping_status_version", "mohist 1.20.1");
         watchdog_spigot = getBoolean("mohist.watchdog_spigot", true);
         watchdog_mohist = getBoolean("mohist.watchdog_mohist", false);
         maximumRepairCost = getInt("anvilfix.maximumrepaircost", 40);
@@ -352,5 +352,8 @@ public class MohistConfig {
         custom_raid_no_emerald = getBoolean("custom.raid_no_emerald", false);
         custom_lava_speed_normal = getInt("custom.lava_speed.normal", 30);
         custom_lava_speed_nether = getInt("custom.lava_speed.nether", 10);
+
+        getBoolean("keepinventory.world.inventory", false);
+        getBoolean("keepinventory.world.exp", false);
     }
 }
