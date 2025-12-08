@@ -311,6 +311,17 @@ public class SpigotWorldConfig
     public int mansionSeed;
     public int fossilSeed;
     public int portalSeed;
+    // Paper start - add missing structure set configs
+    public int ancientCitySeed;
+    public int trailRuinsSeed;
+    public int buriedTreasureSeed;
+    public Integer mineshaftSeed;
+    public Long strongholdSeed;
+    private <N extends Number> N getSeed(String path, java.util.function.Function<String, N> toNumberFunc) {
+        final String value = this.getString(path, "default");
+        return org.apache.commons.lang3.math.NumberUtils.isParsable(value) ? toNumberFunc.apply(value) : null;
+    }
+    // Paper end
     private void initWorldGenSeeds()
     {
         villageSeed = getInt( "seed-village", 10387312 );
@@ -328,6 +339,13 @@ public class SpigotWorldConfig
         mansionSeed = getInt( "seed-mansion", 10387319 );
         fossilSeed = getInt( "seed-fossil", 14357921 );
         portalSeed = getInt( "seed-portal", 34222645 );
+        // Paper start - add missing structure set configs
+        this.ancientCitySeed = this.getInt("seed-ancientcity", 20083232);
+        this.trailRuinsSeed = this.getInt("seed-trailruins", 83469867);
+        this.buriedTreasureSeed = this.getInt("seed-buriedtreasure", 10387320); // StructurePlacement#HIGHLY_ARBITRARY_RANDOM_SALT
+        this.mineshaftSeed = this.getSeed("seed-mineshaft", Integer::parseInt);
+        this.strongholdSeed = this.getSeed("seed-stronghold", Long::parseLong);
+        // Paper end
         log( "Custom Map Seeds:  Village: " + villageSeed + " Desert: " + desertSeed + " Igloo: " + iglooSeed + " Jungle: " + jungleSeed + " Swamp: " + swampSeed + " Monument: " + monumentSeed
                 + " Ocean: " + oceanSeed + " Shipwreck: " + shipwreckSeed + " End City: " + endCitySeed + " Slime: " + slimeSeed + " Nether: " + netherSeed + " Mansion: " + mansionSeed + " Fossil: " + fossilSeed + " Portal: " + portalSeed );
     }

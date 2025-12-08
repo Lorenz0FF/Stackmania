@@ -1,12 +1,13 @@
 --- a/net/minecraft/server/level/ServerLevel.java
 +++ b/net/minecraft/server/level/ServerLevel.java
-@@ -2,6 +_,13 @@
+@@ -2,6 +_,14 @@
  
  import com.google.common.annotations.VisibleForTesting;
  import com.google.common.collect.Lists;
 +import com.google.common.collect.Streams;
 +import com.mohistmc.MohistConfig;
 +import com.mohistmc.api.WorldAPI;
++import com.mohistmc.forge.ForgeInjectBukkit;
 +import com.mohistmc.forge.MohistDerivedWorldInfo;
 +import com.mohistmc.plugins.ban.bans.BanEntity;
 +import com.mohistmc.util.BooleanUtils;
@@ -193,7 +194,7 @@
  
  public class ServerLevel extends Level implements WorldGenLevel {
     public static final BlockPos f_8562_ = new BlockPos(100, 50, 0);
-@@ -188,24 +_,99 @@
+@@ -188,24 +_,101 @@
     private final List<CustomSpawner> f_8558_;
     @Nullable
     private EndDragonFight f_8559_;
@@ -265,8 +266,10 @@
        this.f_8558_ = p_215008_;
        this.f_8549_ = p_215002_;
        ChunkGenerator chunkgenerator = p_215004_.f_63976_();
-+      long i = p_214999_.m_129910_().m_246337_().m_245499_(); // Mohist
 +      // CraftBukkit start
++      if (environment == null) {
++         environment = ForgeInjectBukkit.environment.get(getTypeKey());
++      }
 +      if (biomeProvider != null) {
 +         WorldInfo worldInfo = new CraftWorldInfo(K, p_215001_, environment, p_215004_.f_63975_().m_203334_());
 +         BiomeSource worldChunkManager = new CustomWorldChunkManager(worldInfo, biomeProvider, f_8548_.m_206579_().m_175515_(Registries.f_256952_));
@@ -276,13 +279,13 @@
 +            chunkgenerator = new FlatLevelSource(cpf.m_64191_(), worldChunkManager);
 +         }
 +      } else {
-+         biomeProvider = getCraftServer().getBiomeProvider(p_215002_.m_5462_());
++         biomeProvider = getCraftServer().getBiomeProvider(name);
 +      }
 +
 +      if (generator != null) {
 +         chunkgenerator = new org.bukkit.craftbukkit.v1_20_R1.generator.CustomChunkGenerator(this, chunkgenerator, generator);
 +      } else {
-+         generator = getCraftServer().getGenerator(p_215002_.m_5462_());
++         generator = getCraftServer().getGenerator(name);
 +      }
 +
 +      this.spigotConfig = new SpigotWorldConfig(name); // Spigot
@@ -298,15 +301,15 @@
           return p_214999_.m_129783_().m_8895_();
        });
        this.f_8547_.m_255415_().m_254958_();
-@@ -222,7 +_,7 @@
-          p_215002_.m_5458_(p_214999_.m_130008_());
-       }
- 
--      long i = p_214999_.m_129910_().m_246337_().m_245499_();
-+
+@@ -225,7 +_,7 @@
+       long i = p_214999_.m_129910_().m_246337_().m_245499_();
        this.f_196556_ = new StructureCheck(this.f_8547_.m_196555_(), this.m_9598_(), p_214999_.m_236738_(), p_215003_, chunkgenerator, this.f_8547_.m_214994_(), this, chunkgenerator.m_62218_(), i, datafixer);
        this.f_214997_ = new StructureManager(this, p_214999_.m_129910_().m_246337_(), this.f_196556_);
-       if (this.m_46472_() == Level.f_46430_ && this.m_204156_().m_203565_(BuiltinDimensionTypes.f_223540_)) {
+-      if (this.m_46472_() == Level.f_46430_ && this.m_204156_().m_203565_(BuiltinDimensionTypes.f_223540_)) {
++      if (this.m_46472_() == Level.f_46430_ && this.m_204156_().m_203565_(BuiltinDimensionTypes.f_223540_) || environment == org.bukkit.World.Environment.THE_END) {
+          this.f_8559_ = new EndDragonFight(this, i, p_214999_.m_129910_().m_6564_());
+       } else {
+          this.f_8559_ = null;
 @@ -240,9 +_,15 @@
              return new RandomSequences(i);
           }, "random_sequences");
