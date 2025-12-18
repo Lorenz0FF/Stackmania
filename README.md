@@ -11,9 +11,11 @@
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green?style=for-the-badge)](LICENSE)
 
-[![RAM](https://img.shields.io/badge/RAM-−45%25_vs_Mohist-success?style=flat-square)](https://github.com/ValoniGames/Stackmania)
-[![TPS](https://img.shields.io/badge/TPS-20.0_Stable-success?style=flat-square)](https://github.com/ValoniGames/Stackmania)
-[![Crash](https://img.shields.io/badge/Crash_Rate-~0%25-success?style=flat-square)](https://github.com/ValoniGames/Stackmania)
+[![Download](https://img.shields.io/badge/⬇_DOWNLOAD-Stackmania_1.1.0-FF6B6B?style=for-the-badge&logo=download&logoColor=white)](https://github.com/Lorenz0FF/Stackmania/releases/latest)
+
+[![RAM](https://img.shields.io/badge/RAM-−45%25_vs_Mohist-success?style=flat-square)](https://github.com/Lorenz0FF/Stackmania)
+[![TPS](https://img.shields.io/badge/TPS-20.0_Stable-success?style=flat-square)](https://github.com/Lorenz0FF/Stackmania)
+[![Crash](https://img.shields.io/badge/Crash_Rate-~0%25-success?style=flat-square)](https://github.com/Lorenz0FF/Stackmania)
 
 ---
 
