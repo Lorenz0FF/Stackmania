@@ -1,0 +1,49 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenLocal()
+        maven { url = 'https://maven.minecraftforge.net/' }
+    }
+}
+
+buildscript {
+    dependencies {
+        classpath('com.google.code.gson:gson') {
+            version {
+                strictly '2.10.1'
+            }
+        }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}
+
+rootProject.name = 'Stackmania'
+
+include 'fmlloader'
+include 'fmlcore'
+include 'mclanguage'
+include 'javafmllanguage'
+include 'lowcodelanguage'
+
+include ':mcp'
+include ':clean'
+include ':stackmania'
+
+include 'stackmanialauncher'
+include 'stackmaniaplugins'
+
+project(":mcp").projectDir = file("projects/mcp")
+project(":clean").projectDir = file("projects/clean")
+project(":stackmania").projectDir = file("projects/stackmania")
+
+project(":stackmanialauncher").projectDir = file("stackmanialauncher")
+project(":stackmaniaplugins").projectDir = file("stackmaniaplugins")
+
+project(":fmlloader").projectDir = file("forge/fmlloader")
+project(":fmlcore").projectDir = file("forge/fmlcore")
+project(":mclanguage").projectDir = file("forge/mclanguage")
+project(":javafmllanguage").projectDir = file("forge/javafmllanguage")
+project(":lowcodelanguage").projectDir = file("forge/lowcodelanguage")
