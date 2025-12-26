@@ -1,34 +1,191 @@
 --- a/net/minecraft/locale/Language.java
 +++ b/net/minecraft/locale/Language.java
-@@ -34,7 +_,8 @@
-       ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-       BiConsumer<String, String> biconsumer = builder::put;
-       m_280428_(biconsumer, "/assets/minecraft/lang/en_us.json");
+@@ -6,6 +_,8 @@
+ import com.google.gson.JsonElement;
+ import com.google.gson.JsonObject;
+ import com.google.gson.JsonParseException;
++import com.mohistmc.MohistConfig;
++import com.mohistmc.MohistMC;
+ import com.mojang.logging.LogUtils;
+ import java.io.IOException;
+ import java.io.InputStream;
+@@ -24,80 +_,103 @@
+ import org.slf4j.Logger;
+ 
+ public abstract class Language {
+-   private static final Logger f_128101_ = LogUtils.getLogger();
+-   private static final Gson f_128102_ = new Gson();
+-   private static final Pattern f_128103_ = Pattern.compile("%(\\d+\\$)?[\\d.]*[df]");
+-   public static final String f_177832_ = "en_us";
+-   private static volatile Language f_128104_ = m_128118_();
+-
+-   private static Language m_128118_() {
+-      ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+-      BiConsumer<String, String> biconsumer = builder::put;
+-      m_280428_(biconsumer, "/assets/minecraft/lang/en_us.json");
 -      final Map<String, String> map = builder.build();
-+      final Map<String, String> map = new java.util.HashMap<>(builder.build());
-+      net.minecraftforge.server.LanguageHook.captureLanguageMap(map);
-       return new Language() {
-          public String m_118919_(String p_128127_, String p_265421_) {
-             return map.getOrDefault(p_128127_, p_265421_);
-@@ -55,6 +_,11 @@
-                }, Style.f_131099_).isPresent();
-             };
-          }
+-      return new Language() {
+-         public String m_118919_(String p_128127_, String p_265421_) {
+-            return map.getOrDefault(p_128127_, p_265421_);
+-         }
+-
+-         public boolean m_6722_(String p_128135_) {
+-            return map.containsKey(p_128135_);
+-         }
+-
+-         public boolean m_6627_() {
+-            return false;
+-         }
+-
+-         public FormattedCharSequence m_5536_(FormattedText p_128129_) {
+-            return (p_128132_) -> {
+-               return p_128129_.m_7451_((p_177835_, p_177836_) -> {
+-                  return StringDecomposer.m_14346_(p_177836_, p_177835_, p_128132_) ? Optional.empty() : FormattedText.f_130759_;
+-               }, Style.f_131099_).isPresent();
+-            };
+-         }
+-      };
+-   }
+-
+-   private static void m_280428_(BiConsumer<String, String> p_282031_, String p_283638_) {
+-      try (InputStream inputstream = Language.class.getResourceAsStream(p_283638_)) {
+-         m_128108_(inputstream, p_282031_);
+-      } catch (JsonParseException | IOException ioexception) {
+-         f_128101_.error("Couldn't read strings from {}", p_283638_, ioexception);
+-      }
+-
+-   }
+-
+-   public static void m_128108_(InputStream p_128109_, BiConsumer<String, String> p_128110_) {
+-      JsonObject jsonobject = f_128102_.fromJson(new InputStreamReader(p_128109_, StandardCharsets.UTF_8), JsonObject.class);
+-
+-      for(Map.Entry<String, JsonElement> entry : jsonobject.entrySet()) {
+-         String s = f_128103_.matcher(GsonHelper.m_13805_(entry.getValue(), entry.getKey())).replaceAll("%$1s");
+-         p_128110_.accept(entry.getKey(), s);
+-      }
+-
+-   }
+-
+-   public static Language m_128107_() {
+-      return f_128104_;
+-   }
+-
+-   public static void m_128114_(Language p_128115_) {
+-      f_128104_ = p_128115_;
+-   }
+-
+-   public String m_6834_(String p_128111_) {
+-      return this.m_118919_(p_128111_, p_128111_);
+-   }
+-
+-   public abstract String m_118919_(String p_265702_, String p_265599_);
+-
+-   public abstract boolean m_6722_(String p_128117_);
+-
+-   public abstract boolean m_6627_();
+-
+-   public abstract FormattedCharSequence m_5536_(FormattedText p_128116_);
+-
+-   public List<FormattedCharSequence> m_128112_(List<FormattedText> p_128113_) {
+-      return p_128113_.stream().map(this::m_5536_).collect(ImmutableList.toImmutableList());
+-   }
++    private static final Logger f_128101_ = LogUtils.getLogger();
++    private static final Gson f_128102_ = new Gson();
++    private static final Pattern f_128103_ = Pattern.compile("%(\\d+\\$)?[\\d.]*[df]");
++    public static final String f_177832_ = "en_us";
++    private static volatile Language f_128104_ = m_128118_();
 +
-+         @Override
-+         public Map<String, String> getLanguageData() {
-+            return map;
-+         }
-       };
-    }
- 
-@@ -84,6 +_,9 @@
-    public static void m_128114_(Language p_128115_) {
-       f_128104_ = p_128115_;
-    }
++    private static Language m_128118_() {
++        ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
++        BiConsumer<String, String> biconsumer = builder::put;
++        String lang = MohistConfig.mohist_lang().toLowerCase();
++        InputStream inputstream1 = MohistMC.class.getResourceAsStream("/assets/minecraft/lang/" + lang + ".lang");
++        InputStream inputstream2 = MohistMC.class.getResourceAsStream("/assets/minecraft/lang/en_us.lang");
++        InputStream inputstream = (inputstream1 == null ? inputstream2 : inputstream1);
++        injectLang(inputstream, biconsumer, "/assets/minecraft/lang/" + lang + ".lang");
++        // parseTranslations(biconsumer, "/assets/minecraft/lang/en_us.json");// NeoTenet - use parse i18n instead
++        final Map<String, String> map = new java.util.HashMap<>(builder.build());
++        net.minecraftforge.server.LanguageHook.captureLanguageMap(map);
++        return new Language() {
++            public String m_118919_(String p_128127_, String p_265421_) {
++                return map.getOrDefault(p_128127_, p_265421_);
++            }
 +
-+   // FORGE START
-+   public Map<String, String> getLanguageData() { return ImmutableMap.of(); }
- 
-    public String m_6834_(String p_128111_) {
-       return this.m_118919_(p_128111_, p_128111_);
++            public boolean m_6722_(String p_128135_) {
++                return map.containsKey(p_128135_);
++            }
++
++            public boolean m_6627_() {
++                return false;
++            }
++
++            public FormattedCharSequence m_5536_(FormattedText p_128129_) {
++                return (p_128132_) -> {
++                    return p_128129_.m_7451_((p_177835_, p_177836_) -> {
++                        return StringDecomposer.m_14346_(p_177836_, p_177835_, p_128132_) ? Optional.empty() : FormattedText.f_130759_;
++                    }, Style.f_131099_).isPresent();
++                };
++            }
++
++            @Override
++            public Map<String, String> getLanguageData() {
++                return map;
++            }
++        };
++    }
++
++    private static void m_280428_(BiConsumer<String, String> p_282031_, String p_283638_) {
++        try (InputStream inputstream = Language.class.getResourceAsStream(p_283638_)) {
++            m_128108_(inputstream, p_282031_);
++        } catch (JsonParseException | IOException ioexception) {
++            f_128101_.error("Couldn't read strings from {}", p_283638_, ioexception);
++        }
++
++    }
++
++    private static void injectLang(InputStream inputstreamLang, BiConsumer<String, String> p_282031_, String p_283638_) {
++        try (InputStream inputstream = inputstreamLang) {
++            m_128108_(inputstream, p_282031_);
++        } catch (JsonParseException | IOException ioexception) {
++            f_128101_.error("Couldn't read strings from {}", p_283638_, ioexception);
++        }
++
++    }
++
++    public static void m_128108_(InputStream p_128109_, BiConsumer<String, String> p_128110_) {
++        JsonObject jsonobject = f_128102_.fromJson(new InputStreamReader(p_128109_, StandardCharsets.UTF_8), JsonObject.class);
++
++        for(Map.Entry<String, JsonElement> entry : jsonobject.entrySet()) {
++            String s = f_128103_.matcher(GsonHelper.m_13805_(entry.getValue(), entry.getKey())).replaceAll("%$1s");
++            p_128110_.accept(entry.getKey(), s);
++        }
++
++    }
++
++    public static Language m_128107_() {
++        return f_128104_;
++    }
++
++    public static void m_128114_(Language p_128115_) {
++        f_128104_ = p_128115_;
++    }
++
++    // FORGE START
++    public Map<String, String> getLanguageData() { return ImmutableMap.of(); }
++
++    public String m_6834_(String p_128111_) {
++        return this.m_118919_(p_128111_, p_128111_);
++    }
++
++    public abstract String m_118919_(String p_265702_, String p_265599_);
++
++    public abstract boolean m_6722_(String p_128117_);
++
++    public abstract boolean m_6627_();
++
++    public abstract FormattedCharSequence m_5536_(FormattedText p_128116_);
++
++    public List<FormattedCharSequence> m_128112_(List<FormattedText> p_128113_) {
++        return p_128113_.stream().map(this::m_5536_).collect(ImmutableList.toImmutableList());
++    }
+ }
