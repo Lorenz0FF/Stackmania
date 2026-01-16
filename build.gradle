@@ -109,6 +109,7 @@ subprojects {
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
     tasks.withType(JavaCompile).configureEach {
+        options.forkOptions.jvmArgs += "-Xmx4G"
         options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
         options.warnings = false // Shutup deprecated for removal warnings
     }
