@@ -29,11 +29,11 @@ import java.util.function.Supplier;
  * - Watchdogs on all threads
  * - State snapshots for instant rollback
  */
-public class ZeroCrashSystem {
+public class CrashRecoverySystem {
     
     private static final Logger LOGGER = LogManager.getLogger("Stackmania/ZeroCrash");
     
-    private static ZeroCrashSystem instance;
+    private static CrashRecoverySystem instance;
     private static boolean initialized = false;
     
     private final Map<String, IsolatedContext> isolatedContexts = new ConcurrentHashMap<>();
@@ -55,7 +55,7 @@ public class ZeroCrashSystem {
     private static final long WATCHDOG_INTERVAL_MS = 50;
     private static final long RECOVERY_TIMEOUT_MS = 10;
     
-    private ZeroCrashSystem() {
+    private CrashRecoverySystem() {
         this.watchdogExecutor = Executors.newScheduledThreadPool(2, r -> {
             Thread t = new Thread(r, "Stackmania-Watchdog");
             t.setDaemon(true);
@@ -75,17 +75,17 @@ public class ZeroCrashSystem {
     
     public static void initialize() {
         if (initialized) {
-            LOGGER.warn("ZeroCrashSystem already initialized");
+            LOGGER.warn("CrashRecoverySystem already initialized");
             return;
         }
 
-        if (!StackmaniaConfig.moduleZeroCrashEnabled) {
+        if (!StackmaniaConfig.moduleCrashRecoveryEnabled) {
             LOGGER.info("[Bench] Zero-Crash System DISABLED via stackmania.yml (modules.zero_crash.enabled=false)");
             initialized = true;
             return;
         }
 
-        instance = new ZeroCrashSystem();
+        instance = new CrashRecoverySystem();
         instance.startWatchdogs();
         instance.startSnapshotScheduler();
 
@@ -93,9 +93,9 @@ public class ZeroCrashSystem {
         LOGGER.info("Zero-Crash System initialized - Target: 0.00% crash rate");
     }
     
-    public static ZeroCrashSystem getInstance() {
+    public static CrashRecoverySystem getInstance() {
         if (!initialized) {
-            throw new IllegalStateException("ZeroCrashSystem not initialized");
+            throw new IllegalStateException("CrashRecoverySystem not initialized");
         }
         return instance;
     }
@@ -108,7 +108,7 @@ public class ZeroCrashSystem {
             instance = null;
         }
         initialized = false;
-        LOGGER.info("ZeroCrashSystem shutdown complete");
+        LOGGER.info("CrashRecoverySystem shutdown complete");
     }
     
     /**

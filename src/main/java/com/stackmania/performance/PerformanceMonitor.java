@@ -29,11 +29,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * - Aggressive caching
  * - Async-first architecture
  */
-public class PerformancePerfection {
+public class PerformanceMonitor {
     
     private static final Logger LOGGER = LogManager.getLogger("Stackmania/Performance");
     
-    private static PerformancePerfection instance;
+    private static PerformanceMonitor instance;
     private static boolean initialized = false;
     
     private final ScheduledExecutorService monitorExecutor;
@@ -68,7 +68,7 @@ public class PerformancePerfection {
         "-Daikars.new.flags=true"
     };
     
-    private PerformancePerfection() {
+    private PerformanceMonitor() {
         this.monitorExecutor = Executors.newScheduledThreadPool(2, r -> {
             Thread t = new Thread(r, "Stackmania-PerfMonitor");
             t.setDaemon(true);
@@ -89,16 +89,16 @@ public class PerformancePerfection {
     
     public static void initialize() {
         if (initialized) {
-            LOGGER.warn("PerformancePerfection already initialized");
+            LOGGER.warn("PerformanceMonitor already initialized");
             return;
         }
-        if (!StackmaniaConfig.modulePerformancePerfectionEnabled) {
-            LOGGER.info("[Bench] PerformancePerfection DISABLED via stackmania.yml (modules.performance_perfection.enabled=false)");
+        if (!StackmaniaConfig.modulePerformanceMonitorEnabled) {
+            LOGGER.info("[Bench] PerformanceMonitor DISABLED via stackmania.yml (modules.performance_perfection.enabled=false)");
             initialized = true;
             return;
         }
 
-        instance = new PerformancePerfection();
+        instance = new PerformanceMonitor();
         instance.startMonitoring();
         instance.optimizeJVM();
 
@@ -107,9 +107,9 @@ public class PerformancePerfection {
             (int)(TARGET_PERFORMANCE_RATIO * 100));
     }
     
-    public static PerformancePerfection getInstance() {
+    public static PerformanceMonitor getInstance() {
         if (!initialized) {
-            throw new IllegalStateException("PerformancePerfection not initialized");
+            throw new IllegalStateException("PerformanceMonitor not initialized");
         }
         return instance;
     }
@@ -121,7 +121,7 @@ public class PerformancePerfection {
             instance = null;
         }
         initialized = false;
-        LOGGER.info("PerformancePerfection shutdown complete");
+        LOGGER.info("PerformanceMonitor shutdown complete");
     }
     
     /**

@@ -91,14 +91,14 @@ public class StackmaniaConfig {
     public static boolean moduleTickOptimizerEnabled = true;
     public static boolean moduleAggressiveMemoryEnabled = true;
     // Init-only modules (gate initialize(), background work skipped):
-    public static boolean moduleZeroCrashEnabled = true;
+    public static boolean moduleCrashRecoveryEnabled = true;
     public static boolean moduleSecurityEnabled = true;
-    public static boolean moduleUniversalCompatibilityEnabled = true;
+    public static boolean moduleModLoaderBridgeEnabled = true;
     public static boolean moduleMaterialCacheEnabled = true;
     public static boolean modulePersistentPlayerEnabled = true;
-    public static boolean modulePerfectBukkitApiEnabled = true;
+    public static boolean moduleBukkitBridgeEnabled = true;
     public static boolean modulePerfectRegistryEnabled = true;
-    public static boolean modulePerformancePerfectionEnabled = true;
+    public static boolean modulePerformanceMonitorEnabled = true;
     public static boolean moduleStackmaniaMemoryEnabled = true;
     public static boolean moduleUniversalPlatformAdapterEnabled = true;
     public static boolean moduleFabricCompatibilityEnabled = true;
@@ -172,14 +172,14 @@ public class StackmaniaConfig {
         // Modules (benchmark toggles)
         moduleTickOptimizerEnabled = getBoolean("modules.tick_optimizer.enabled", true);
         moduleAggressiveMemoryEnabled = getBoolean("modules.aggressive_memory.enabled", true);
-        moduleZeroCrashEnabled = getBoolean("modules.zero_crash.enabled", true);
+        moduleCrashRecoveryEnabled = getBoolean("modules.crash_recovery.enabled", true);
         moduleSecurityEnabled = getBoolean("modules.security.enabled", true);
-        moduleUniversalCompatibilityEnabled = getBoolean("modules.universal_compatibility.enabled", true);
+        moduleModLoaderBridgeEnabled = getBoolean("modules.mod_loader_bridge.enabled", true);
         moduleMaterialCacheEnabled = getBoolean("modules.material_cache.enabled", true);
         modulePersistentPlayerEnabled = getBoolean("modules.persistent_player.enabled", true);
-        modulePerfectBukkitApiEnabled = getBoolean("modules.perfect_bukkit_api.enabled", true);
+        moduleBukkitBridgeEnabled = getBoolean("modules.bukkit_bridge.enabled", true);
         modulePerfectRegistryEnabled = getBoolean("modules.perfect_registry.enabled", true);
-        modulePerformancePerfectionEnabled = getBoolean("modules.performance_perfection.enabled", true);
+        modulePerformanceMonitorEnabled = getBoolean("modules.performance_monitor.enabled", true);
         moduleStackmaniaMemoryEnabled = getBoolean("modules.stackmania_memory.enabled", true);
         moduleUniversalPlatformAdapterEnabled = getBoolean("modules.universal_platform_adapter.enabled", true);
         moduleFabricCompatibilityEnabled = getBoolean("modules.fabric_compatibility.enabled", true);

@@ -23,7 +23,7 @@ public class ConflictDatabase {
     
     private final Map<String, Set<String>> knownIncompatible = new ConcurrentHashMap<>();
     private final Map<String, Set<String>> knownCompatible = new ConcurrentHashMap<>();
-    private final Map<String, UniversalCompatibilityLayer.Conflict> conflictDetails = new ConcurrentHashMap<>();
+    private final Map<String, ModLoaderBridge.Conflict> conflictDetails = new ConcurrentHashMap<>();
     private final Map<String, Integer> conflictFrequency = new ConcurrentHashMap<>();
     
     public ConflictDatabase() {
@@ -47,8 +47,8 @@ public class ConflictDatabase {
         knownIncompatible.computeIfAbsent(key, k -> ConcurrentHashMap.newKeySet()).add(pluginId.toLowerCase());
         
         conflictDetails.put(key + "+" + pluginId.toLowerCase(), 
-            new UniversalCompatibilityLayer.Conflict(
-                UniversalCompatibilityLayer.Conflict.Type.VERSION_INCOMPATIBLE,
+            new ModLoaderBridge.Conflict(
+                ModLoaderBridge.Conflict.Type.VERSION_INCOMPATIBLE,
                 reason, modId, pluginId
             ));
     }
@@ -70,8 +70,8 @@ public class ConflictDatabase {
         return compatible.contains(pluginId.toLowerCase()) || compatible.contains("*");
     }
     
-    public List<UniversalCompatibilityLayer.Conflict> findPotentialConflicts(BytecodeAnalysis analysis) {
-        List<UniversalCompatibilityLayer.Conflict> conflicts = new ArrayList<>();
+    public List<ModLoaderBridge.Conflict> findPotentialConflicts(BytecodeAnalysis analysis) {
+        List<ModLoaderBridge.Conflict> conflicts = new ArrayList<>();
         
         String sourceId = analysis.getSourceId().toLowerCase();
         
@@ -79,7 +79,7 @@ public class ConflictDatabase {
         if (knownIncompatible.containsKey(sourceId)) {
             Set<String> incompatible = knownIncompatible.get(sourceId);
             for (String target : incompatible) {
-                UniversalCompatibilityLayer.Conflict detail = conflictDetails.get(sourceId + "+" + target);
+                ModLoaderBridge.Conflict detail = conflictDetails.get(sourceId + "+" + target);
                 if (detail != null) {
                     conflicts.add(detail);
                 }
@@ -88,16 +88,16 @@ public class ConflictDatabase {
         
         // Check for patterns that commonly cause conflicts
         if (analysis.modifiesCoreSystems()) {
-            conflicts.add(new UniversalCompatibilityLayer.Conflict(
-                UniversalCompatibilityLayer.Conflict.Type.CORE_MODIFICATION,
+            conflicts.add(new ModLoaderBridge.Conflict(
+                ModLoaderBridge.Conflict.Type.CORE_MODIFICATION,
                 "Modifies core Minecraft systems - high conflict risk",
                 sourceId, null
             ));
         }
         
         if (analysis.usesReflection() && !analysis.getNmsAccess().isEmpty()) {
-            conflicts.add(new UniversalCompatibilityLayer.Conflict(
-                UniversalCompatibilityLayer.Conflict.Type.POTENTIAL_REFLECTION,
+            conflicts.add(new ModLoaderBridge.Conflict(
+                ModLoaderBridge.Conflict.Type.POTENTIAL_REFLECTION,
                 "Uses reflection on NMS classes - may break with updates",
                 sourceId, null
             ));
@@ -106,7 +106,7 @@ public class ConflictDatabase {
         return conflicts;
     }
     
-    public void recordConflict(UniversalCompatibilityLayer.Conflict conflict) {
+    public void recordConflict(ModLoaderBridge.Conflict conflict) {
         String key = conflict.getSourceId() + "+" + 
             (conflict.getTargetId() != null ? conflict.getTargetId() : "*");
         

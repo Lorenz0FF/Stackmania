@@ -34,11 +34,11 @@ import java.util.zip.ZipEntry;
  * - Database of 10M+ tested combinations
  * - ML-based conflict prediction
  */
-public class UniversalCompatibilityLayer {
+public class ModLoaderBridge {
     
     private static final Logger LOGGER = LogManager.getLogger("Stackmania/UCL");
     
-    private static UniversalCompatibilityLayer instance;
+    private static ModLoaderBridge instance;
     private static boolean initialized = false;
     
     private final Map<String, CompatibilityReport> modReports = new ConcurrentHashMap<>();
@@ -51,7 +51,7 @@ public class UniversalCompatibilityLayer {
     private final AdapterGenerator adapterGenerator;
     private final BytecodeAnalyzer bytecodeAnalyzer;
     
-    private UniversalCompatibilityLayer() {
+    private ModLoaderBridge() {
         this.conflictDatabase = new ConflictDatabase();
         this.adapterGenerator = new AdapterGenerator();
         this.bytecodeAnalyzer = new BytecodeAnalyzer();
@@ -62,18 +62,18 @@ public class UniversalCompatibilityLayer {
             LOGGER.warn("UCL already initialized");
             return;
         }
-        if (!StackmaniaConfig.moduleUniversalCompatibilityEnabled) {
-            LOGGER.info("[Bench] UniversalCompatibilityLayer DISABLED via stackmania.yml (modules.universal_compatibility.enabled=false)");
+        if (!StackmaniaConfig.moduleModLoaderBridgeEnabled) {
+            LOGGER.info("[Bench] ModLoaderBridge DISABLED via stackmania.yml (modules.universal_compatibility.enabled=false)");
             initialized = true;
             return;
         }
 
-        instance = new UniversalCompatibilityLayer();
+        instance = new ModLoaderBridge();
         initialized = true;
         LOGGER.info("Universal Compatibility Layer initialized");
     }
     
-    public static UniversalCompatibilityLayer getInstance() {
+    public static ModLoaderBridge getInstance() {
         if (!initialized) {
             throw new IllegalStateException("UCL not initialized");
         }

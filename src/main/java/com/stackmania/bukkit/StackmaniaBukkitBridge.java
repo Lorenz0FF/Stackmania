@@ -26,11 +26,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * - Event System PERFECT (correct priority, no double-firing)
  * - Paper API COMPLETE (all methods including getPluginMeta())
  */
-public class PerfectBukkitAPI {
+public class StackmaniaBukkitBridge {
     
     private static final Logger LOGGER = LogManager.getLogger("Stackmania/BukkitAPI");
     
-    private static PerfectBukkitAPI instance;
+    private static StackmaniaBukkitBridge instance;
     private static boolean initialized = false;
     
     private final MaterialRegistry materialRegistry;
@@ -41,7 +41,7 @@ public class PerfectBukkitAPI {
     private final AtomicInteger apiCallCount = new AtomicInteger(0);
     private final AtomicInteger successfulCalls = new AtomicInteger(0);
     
-    private PerfectBukkitAPI() {
+    private StackmaniaBukkitBridge() {
         this.materialRegistry = new MaterialRegistry();
         this.playerRegistry = new PlayerRegistry();
         this.eventManager = new EventManager();
@@ -50,23 +50,23 @@ public class PerfectBukkitAPI {
     
     public static void initialize() {
         if (initialized) {
-            LOGGER.warn("PerfectBukkitAPI already initialized");
+            LOGGER.warn("StackmaniaBukkitBridge already initialized");
             return;
         }
-        if (!StackmaniaConfig.modulePerfectBukkitApiEnabled) {
-            LOGGER.info("[Bench] PerfectBukkitAPI DISABLED via stackmania.yml (modules.perfect_bukkit_api.enabled=false)");
+        if (!StackmaniaConfig.moduleBukkitBridgeEnabled) {
+            LOGGER.info("[Bench] StackmaniaBukkitBridge DISABLED via stackmania.yml (modules.perfect_bukkit_api.enabled=false)");
             initialized = true;
             return;
         }
 
-        instance = new PerfectBukkitAPI();
+        instance = new StackmaniaBukkitBridge();
         initialized = true;
         LOGGER.info("Perfect Bukkit API initialized - Target: 100% compliance");
     }
     
-    public static PerfectBukkitAPI getInstance() {
+    public static StackmaniaBukkitBridge getInstance() {
         if (!initialized) {
-            throw new IllegalStateException("PerfectBukkitAPI not initialized");
+            throw new IllegalStateException("StackmaniaBukkitBridge not initialized");
         }
         return instance;
     }
@@ -77,7 +77,7 @@ public class PerfectBukkitAPI {
             instance = null;
         }
         initialized = false;
-        LOGGER.info("PerfectBukkitAPI shutdown complete");
+        LOGGER.info("StackmaniaBukkitBridge shutdown complete");
     }
     
     /**

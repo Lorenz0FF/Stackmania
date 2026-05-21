@@ -5,10 +5,10 @@ import com.mohistmc.i18n.i18n;
 import com.mohistmc.plugins.MohistProxySelector;
 import com.mohistmc.util.VersionInfo;
 import com.stackmania.compatibility.ModernFixRaceSilencer;
-import com.stackmania.compatibility.UniversalCompatibilityLayer;
-import com.stackmania.crash.ZeroCrashSystem;
-import com.stackmania.performance.PerformancePerfection;
-import com.stackmania.bukkit.PerfectBukkitAPI;
+import com.stackmania.compatibility.ModLoaderBridge;
+import com.stackmania.crash.CrashRecoverySystem;
+import com.stackmania.performance.PerformanceMonitor;
+import com.stackmania.bukkit.StackmaniaBukkitBridge;
 import com.stackmania.registry.PerfectRegistryManager;
 import com.stackmania.material.MaterialCacheManager;
 import com.stackmania.player.PersistentPlayerManager;
@@ -88,13 +88,13 @@ public class MohistMC {
         
         // Layer 2: Universal Compatibility Layer
         LOGGER.info("[Layer 2/6] Initializing Universal Compatibility Layer...");
-        UniversalCompatibilityLayer.initialize();
+        ModLoaderBridge.initialize();
         
         // Layer 3: Perfect Bukkit API
         LOGGER.info("[Layer 3/6] Initializing Perfect Bukkit API...");
         MaterialCacheManager.initialize();
         PersistentPlayerManager.initialize();
-        PerfectBukkitAPI.initialize();
+        StackmaniaBukkitBridge.initialize();
         
         // Layer 4: Perfect Registry System
         LOGGER.info("[Layer 4/6] Initializing Perfect Registry System...");
@@ -102,11 +102,11 @@ public class MohistMC {
         
         // Layer 5: Zero-Crash System
         LOGGER.info("[Layer 5/6] Initializing Zero-Crash System...");
-        ZeroCrashSystem.initialize();
+        CrashRecoverySystem.initialize();
         
         // Layer 6: Performance Perfection
         LOGGER.info("[Layer 6/6] Initializing Performance Perfection Layer...");
-        PerformancePerfection.initialize();
+        PerformanceMonitor.initialize();
         
         // Layer 7: Memory Optimization (CRITICAL)
         LOGGER.info("[Layer 7/8] Initializing Memory Optimization...");
@@ -154,13 +154,13 @@ public class MohistMC {
         StackmaniaTickOptimizer.shutdown();
         AggressiveMemoryOptimizer.shutdown();
         StackmaniaMemoryManager.shutdown();
-        PerformancePerfection.shutdown();
-        ZeroCrashSystem.shutdown();
+        PerformanceMonitor.shutdown();
+        CrashRecoverySystem.shutdown();
         PerfectRegistryManager.shutdown();
-        PerfectBukkitAPI.shutdown();
+        StackmaniaBukkitBridge.shutdown();
         PersistentPlayerManager.shutdown();
         MaterialCacheManager.shutdown();
-        UniversalCompatibilityLayer.shutdown();
+        ModLoaderBridge.shutdown();
         StackmaniaSecurityManager.shutdown();
         
         stackmaniaInitialized = false;
