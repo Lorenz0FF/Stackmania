@@ -4,3 +4,15 @@ main: com.mohistmc.plugins.Main
 api-version: "1.20"
 
 softdepend: [PlaceholderAPI]
+
+commands:
+  stackmania:
+    description: Stackmania administration and bench harness.
+    usage: /stackmania bench [status|dump|help]
+    permission: stackmania.admin
+    permission-message: You do not have permission to use /stackmania.
+
+permissions:
+  stackmania.admin:
+    description: Allows access to the /stackmania command and its subcommands.
+    default: op
