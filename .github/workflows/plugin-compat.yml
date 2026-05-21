@@ -1,0 +1,94 @@
+# Stackmania plugin-compat CI
+#
+# Boots Stackmania 1.1.2+ inside a Docker container with exactly one plugin
+# at a time and asserts that the plugin enables without surfacing known
+# regressions (e.g. the 1.1.1 PAPI `MohistMC.classLoader is null` bug).
+#
+# Trigger: workflow_dispatch (manual) only. Running all 7 plugins in
+# parallel takes ~10-15 min per matrix cell, so we don't gate every PR
+# on this. Plan: move to a nightly cron + Discord alert once the matrix
+# has been green for a release cycle.
+#
+# Owner: Lorenzo (Stackmania maintainer). See tools/plugin-compat/README.md
+# for the testing protocol and how to add a new plugin.
+
+name: plugin-compat
+
+on:
+  workflow_dispatch:
+    inputs:
+      stackmania_tag:
+        description: "Stackmania release tag to test (Docker ARG STACKMANIA_TAG)"
+        required: false
+        default: "stackmania-1.20.1-1.1.2"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plugin-compat-${{ github.ref }}-${{ inputs.stackmania_tag }}
+  cancel-in-progress: false
+
+jobs:
+  compat:
+    name: ${{ matrix.plugin }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      # Run every plugin even if one fails — we want the full matrix
+      # picture, not an early-exit. The overall job still fails red.
+      fail-fast: false
+      matrix:
+        plugin:
+          - placeholderapi
+          - luckperms
+          - essentialsx
+          - worldedit
+          - coreprotect
+          - vault
+          - protocollib
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Docker buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build plugin-compat image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./tools/plugin-compat
+          file: ./tools/plugin-compat/Dockerfile
+          tags: stackmania-compat:ci
+          load: true
+          push: false
+          build-args: |
+            STACKMANIA_TAG=${{ inputs.stackmania_tag }}
+            STACKMANIA_JAR=${{ inputs.stackmania_tag }}-server.jar
+          cache-from: type=gha,scope=plugin-compat
+          cache-to: type=gha,scope=plugin-compat,mode=max
+
+      - name: Run plugin test (${{ matrix.plugin }})
+        id: run
+        run: |
+          set -o pipefail
+          mkdir -p "${{ github.workspace }}/artifacts"
+          docker run --rm \
+            -v "${{ github.workspace }}/artifacts:/out" \
+            --entrypoint /bin/bash \
+            stackmania-compat:ci \
+            -c "/server/test_plugin.sh ${{ matrix.plugin }} | tee /out/${{ matrix.plugin }}.log; \
+                exit \${PIPESTATUS[0]}"
+
+      - name: Upload captured log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-compat-${{ matrix.plugin }}-log
+          path: artifacts/${{ matrix.plugin }}.log
+          retention-days: 7
+          if-no-files-found: warn

@@ -1,0 +1,5 @@
+# Minecraft EULA acceptance for the local plugin-compat test container.
+# The container is ephemeral, never exposed to the public, and used only
+# to validate that critical plugins load on Stackmania without crashing.
+# See https://aka.ms/MinecraftEULA
+eula=true

@@ -1,0 +1,90 @@
+# Plugin matrix for the Stackmania plugin-compat CI framework.
+#
+# Each entry describes how to download a plugin jar and how to decide
+# pass/fail by grepping the server's `latest.log` after boot+60s.
+#
+# Schema:
+#   <plugin_id>:
+#     name:                 human-readable name (shown in CI output)
+#     url:                  direct jar URL (curl -fL fetchable). Use `https://TODO/...`
+#                           if upstream does not provide a stable direct URL — the
+#                           operator must replace it before the workflow can run.
+#     filename:             jar filename written into `plugins/`
+#     pass_pattern:         POSIX ERE regex (egrep). Must appear in the log for PASS.
+#     extra_fail_patterns:  optional list of regex; any match means FAIL even if
+#                           pass_pattern is found. Use this to catch regressions
+#                           like `MohistMC.classLoader is null` (the 1.1.1 PAPI bug)
+#                           that may surface before the plugin's own enable line.
+#
+# Notes on URL stability:
+#   - GitHub release URLs are stable once a tag is published.
+#   - dev.bukkit.org `/files/latest` redirects to the latest approved build — fine
+#     for a smoke test but the version may drift; the workflow tolerates this.
+#   - Jenkins `lastSuccessfulBuild` may drift in the same way.
+#   - If a URL 404s, replace it in a follow-up PR.
+
+plugins:
+  placeholderapi:
+    name: "PlaceholderAPI"
+    url: "https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.11.6/PlaceholderAPI-2.11.6.jar"
+    filename: "PlaceholderAPI-2.11.6.jar"
+    pass_pattern: "\\[PlaceholderAPI\\].*Enabled"
+    extra_fail_patterns:
+      - "MohistMC\\.classLoader is null"
+      - "TransformingClassLoader.*ClassCastException"
+      - "NullPointerException.*PlaceholderAPI"
+
+  luckperms:
+    name: "LuckPerms"
+    url: "https://download.luckperms.net/1576/bukkit/loader/LuckPerms-Bukkit-5.5.45.jar"
+    filename: "LuckPerms-Bukkit-5.5.45.jar"
+    pass_pattern: "\\[LuckPerms\\].*v5\\.5\\.45 enabled"
+    extra_fail_patterns:
+      - "NullPointerException.*LuckPerms"
+
+  essentialsx:
+    name: "EssentialsX"
+    url: "https://github.com/EssentialsX/Essentials/releases/download/2.21.2/EssentialsX-2.21.2.jar"
+    filename: "EssentialsX-2.21.2.jar"
+    pass_pattern: "Loaded Essentials"
+    extra_fail_patterns:
+      - "NullPointerException.*Essentials"
+
+  worldedit:
+    name: "WorldEdit"
+    url: "https://dev.bukkit.org/projects/worldedit/files/latest"
+    filename: "worldedit-bukkit.jar"
+    pass_pattern: "WorldEdit.*enabled"
+    extra_fail_patterns:
+      - "NullPointerException.*WorldEdit"
+
+  coreprotect:
+    name: "CoreProtect"
+    url: "https://github.com/PlayPro/CoreProtect/releases/download/v22.4/CoreProtect-22.4.jar"
+    filename: "CoreProtect-22.4.jar"
+    pass_pattern: "CoreProtect.*enabled"
+    extra_fail_patterns:
+      - "NullPointerException.*CoreProtect"
+
+  vault:
+    name: "Vault"
+    url: "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar"
+    filename: "Vault.jar"
+    pass_pattern: "\\[Vault\\] Enabled Version"
+    extra_fail_patterns:
+      - "NullPointerException.*Vault"
+
+  protocollib:
+    name: "ProtocolLib"
+    url: "https://ci.dmulloy2.net/job/ProtocolLib/lastSuccessfulBuild/artifact/build/libs/ProtocolLib.jar"
+    filename: "ProtocolLib.jar"
+    pass_pattern: "\\[ProtocolLib\\] Built against"
+    extra_fail_patterns:
+      - "NullPointerException.*ProtocolLib"
+
+# Known false positives (silenced in test_plugin.sh `IGNORE_PATTERNS`):
+#   - `NoClassDefFoundError: org/embeddedt/modernfix/forge/config/NightConfigWatchThrottler$1$1`
+#     ModernFix race during boot, harmless. Silenced in Stackmania 1.1.2 but may
+#     still surface in early boot lines before the silencer attaches.
+#   - Warnings about missing Forge mods — the compat container ships no mods,
+#     plugins only.
