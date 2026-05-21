@@ -38,14 +38,18 @@ public class MohistMC {
     public static i18n i18n;
     public static String version = "1.20.1";
     public static String modid = "stackmania";
-    public static ClassLoader classLoader;
+    // Initialized at class-load time, not in the @Mod constructor, so Bukkit
+    // plugin loading (PluginClassLoader.java:108) can never NPE on a plugin
+    // that is instantiated before Forge invokes our @Mod constructor.
+    // This is the root cause of "MohistMC.classLoader is null" in PAPI,
+    // OneAC, Spartan AntiCheat and TAB plugin on stock Mohist.
+    public static ClassLoader classLoader = MohistMC.class.getClassLoader();
     public static VersionInfo versionInfo;
-    
+
     private static boolean stackmaniaInitialized = false;
 
     public MohistMC() {
-        classLoader = MohistMC.class.getClassLoader();
-        
+
         LOGGER.info("╔══════════════════════════════════════════════════════════╗");
         LOGGER.info("║              STACKMANIA SERVER LOADING                    ║");
         LOGGER.info("║          Optimized Forge + Bukkit Hybrid Server          ║");

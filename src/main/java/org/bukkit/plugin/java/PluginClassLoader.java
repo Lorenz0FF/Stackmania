@@ -105,7 +105,20 @@ public final class PluginClassLoader extends URLClassLoader implements Remapping
             throw new InvalidPluginException("Abnormal plugin type", ex);
         }
         if (PluginHooks.hook(plugin)) {
-            ((TransformingClassLoader) MohistMC.classLoader).addChild(this);
+            // Defensive: classLoader is initialized at MohistMC class-load time, but
+            // we still guard against unusual boot orders or non-TransformingClassLoader
+            // contexts so a plugin load can never crash the server on a class-cast or NPE.
+            ClassLoader cl = MohistMC.classLoader;
+            if (cl == null) {
+                cl = MohistMC.class.getClassLoader();
+            }
+            if (cl instanceof TransformingClassLoader) {
+                ((TransformingClassLoader) cl).addChild(this);
+            } else {
+                MohistMC.LOGGER.warn("PluginClassLoader: classLoader is not a TransformingClassLoader ({}), skipping addChild for {}",
+                        cl == null ? "null" : cl.getClass().getName(),
+                        description.getName());
+            }
         }
     }
 
