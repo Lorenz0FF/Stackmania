@@ -65,7 +65,7 @@ ext {
     VERSION = MC_VERSION + "-" + project.forge_version
     FORGE_VERSION = project.forge_version
     MOHIST_VERSION = gradleutils.gitInfo.abbreviatedId
-    ADVENTURE_VERSION = '4.14.0'
+    ADVENTURE_VERSION = '5.1.1'
 
     SPECIAL_SOURCE = 'net.md-5:SpecialSource:1.11.0'
     BINPATCH_TOOL = 'net.minecraftforge:binarypatcher:1.1.1:fatjar'
