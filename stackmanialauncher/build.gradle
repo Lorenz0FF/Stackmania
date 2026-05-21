@@ -13,8 +13,8 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains:annotations:24.1.0'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
-    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.46'
+    compileOnly 'org.projectlombok:lombok:1.18.46'
 
     implementation 'com.mohistmc:yaml:0.8'
     implementation 'com.mohistmc:i18n:0.6'
