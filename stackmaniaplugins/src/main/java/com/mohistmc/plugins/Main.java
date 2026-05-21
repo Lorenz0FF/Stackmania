@@ -21,5 +21,11 @@ public class Main extends JavaPlugin {
                     "Could not register the /stackmania command — make sure plugin.yml "
                             + "declares it under commands:");
         }
+
+        // Per-player hostile mob cap. The listener itself is gated on
+        // StackmaniaConfig.moduleMobCapDistributorEnabled (default false), so
+        // registering it unconditionally is fine — until the operator opts in
+        // via stackmania.yml, every event short-circuits on the first check.
+        getServer().getPluginManager().registerEvents(new StackmaniaMobCapDistributor(), this);
     }
 }

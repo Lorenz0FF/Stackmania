@@ -82,6 +82,16 @@ public class StackmaniaConfig {
     public static String motdFirstLine = "<gradient:#00ff88:#0088ff>Stackmania Server</gradient>";
     public static String motdSecondLine = "<gray>Forge + Bukkit Hybrid</gray>";
 
+    // ==================== MOB CAP DISTRIBUTOR ====================
+    // Paper-style per-player mob cap distribution. Disabled by default — the
+    // listener is a no-op until the operator opts in, because mob spawn rate
+    // affects gameplay enough that it must be staging-tested before prod.
+    public static boolean moduleMobCapDistributorEnabled = false;
+    // Max hostile monsters considered "owned" by a single nearby player.
+    public static int mobCapPerPlayerCap = 25;
+    // Horizontal radius (blocks) used to count nearby players and monsters.
+    public static int mobCapConsiderRangeBlocks = 128;
+
     // ==================== MODULES (BENCHMARK TOGGLES) ====================
     // Per-module on/off switches so we can measure each Stackmania module's
     // real impact (TPS, RAM, crash rate) by flipping it off and rebooting.
@@ -168,6 +178,11 @@ public class StackmaniaConfig {
         // Messages
         motdFirstLine = getString("messages.motd.first_line", motdFirstLine);
         motdSecondLine = getString("messages.motd.second_line", motdSecondLine);
+
+        // Mob cap distributor (default OFF — operator opt-in)
+        moduleMobCapDistributorEnabled = getBoolean("mob_cap.enabled", false);
+        mobCapPerPlayerCap = getInt("mob_cap.per_player_cap", 25);
+        mobCapConsiderRangeBlocks = getInt("mob_cap.consider_range_blocks", 128);
 
         // Modules (benchmark toggles)
         moduleTickOptimizerEnabled = getBoolean("modules.tick_optimizer.enabled", true);
