@@ -1,0 +1,54 @@
+# Minimal docker-compose for running a soak-bench Stackmania 1.20.1-1.1.2
+# server in a container. The bench scripts in this directory can drive it
+# directly via SERVER_TYPE=docker.
+#
+# Usage:
+#   1. Download the Stackmania jar into ./server/ (URL below).
+#   2. Place a Forge installer + your mods/ folder under ./server/.
+#   3. `docker compose up -d`
+#   4. Once the server says "Done", `docker compose stop` it, then point
+#      bench.env at the volumes and run ./run_bench_matrix.sh bench.env.
+#
+# This is intentionally minimal: no proxy, no plugin DB, no auth. Bench-only.
+
+services:
+  stackmania-bench:
+    image: eclipse-temurin:17-jre
+    container_name: stackmania-bench
+    working_dir: /server
+    stdin_open: true
+    tty: true
+    # Bench-grade allocation. Tune to match your TWC prod box.
+    environment:
+      JAVA_OPTS: >-
+        -Xms6G
+        -Xmx6G
+        -XX:+UnlockExperimentalVMOptions
+        -XX:+UseZGC
+        -XX:+AlwaysPreTouch
+        -XX:+DisableExplicitGC
+        -Dfile.encoding=UTF-8
+      EULA: "TRUE"
+    # rcon-cli ships with itzg/minecraft-server but not with vanilla temurin,
+    # so we fall back to docker exec for console commands by default. If you
+    # want richer RCON, swap to image: itzg/minecraft-server and set
+    # TYPE=CUSTOM + CUSTOM_SERVER=stackmania-1.20.1-1.1.2-server.jar.
+    ports:
+      - "25565:25565"
+      # Uncomment if you wire up RCON in server.properties:
+      # - "25575:25575"
+    volumes:
+      # Server root. Put the Stackmania jar + libraries + run.sh here.
+      # Download the jar from:
+      #   https://github.com/Lorenz0FF/Stackmania/releases/download/stackmania-1.20.1-1.1.2/stackmania-1.20.1-1.1.2-server.jar
+      - ./server:/server
+      # Config dir patched by the bench scripts.
+      - ./server/stackmania-config:/server/stackmania-config
+      # Where bench dumps land. The bench script reads from this path on the
+      # host side.
+      - ./server/plugins/Stackmania:/server/plugins/Stackmania
+    # Accept the EULA, then launch the jar.
+    command: >
+      sh -c "echo 'eula=true' > eula.txt &&
+             java $$JAVA_OPTS -jar stackmania-1.20.1-1.1.2-server.jar nogui"
+    restart: "no"
