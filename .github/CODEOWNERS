@@ -1,0 +1,8 @@
+# CODEOWNERS for Stackmania
+#
+# This is a solo-maintained fork. All files are owned by the maintainer.
+# GitHub will auto-request a review from @Lorenz0FF on every PR.
+#
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @Lorenz0FF
