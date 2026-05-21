@@ -103,6 +103,15 @@ public class StackmaniaConfig {
     // How often (in ticks) to re-evaluate. 600 = 30 s at 20 TPS.
     public static int dynamicViewDistanceCheckIntervalTicks = 600;
 
+    // ==================== PARALLEL BOOT INIT ====================
+    // When enabled, the 8 "heavy" Stackmania layers (5-12 in the legacy
+    // numbering) run their initialize() in parallel via CompletableFuture
+    // instead of sequentially. Per-layer timing is always logged, so even
+    // with this flag off you can see which layer dominates the boot budget.
+    // Default OFF until we have a few profiles confirming the heavy layers
+    // are race-free under concurrent init.
+    public static boolean parallelInitEnabled = false;
+
     // ==================== MODULES (BENCHMARK TOGGLES) ====================
     // Per-module on/off switches so we can measure each Stackmania module's
     // real impact (TPS, RAM, crash rate) by flipping it off and rebooting.
@@ -200,6 +209,9 @@ public class StackmaniaConfig {
         dynamicViewDistanceMax = getInt("dynamic_view_distance.max", 10);
         dynamicViewDistanceMin = getInt("dynamic_view_distance.min", 4);
         dynamicViewDistanceCheckIntervalTicks = getInt("dynamic_view_distance.check_interval_ticks", 600);
+
+        // Parallel boot init (default OFF — needs staging validation)
+        parallelInitEnabled = getBoolean("parallel_init.enabled", false);
 
         // Modules (benchmark toggles)
         moduleTickOptimizerEnabled = getBoolean("modules.tick_optimizer.enabled", true);

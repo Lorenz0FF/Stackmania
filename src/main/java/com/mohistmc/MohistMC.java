@@ -4,6 +4,7 @@ import com.mohistmc.eventhandler.EventDispatcherRegistry;
 import com.mohistmc.i18n.i18n;
 import com.mohistmc.plugins.MohistProxySelector;
 import com.mohistmc.util.VersionInfo;
+import com.stackmania.core.StackmaniaConfig;
 import com.stackmania.compatibility.ModernFixRaceSilencer;
 import com.stackmania.compatibility.ModLoaderBridge;
 import com.stackmania.crash.CrashRecoverySystem;
@@ -23,6 +24,7 @@ import java.net.ProxySelector;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.Mod;
@@ -49,6 +51,23 @@ public class MohistMC {
 
     private static boolean stackmaniaInitialized = false;
 
+    /**
+     * Runs {@code task} and logs how long it took on a single line. Failures
+     * are caught and logged at ERROR level so one broken layer does not
+     * cancel the whole boot — the caller's loop continues with the next
+     * layer. Used by both the sequential and the parallel init paths so the
+     * timing data is comparable.
+     */
+    private static void timed(String label, Runnable task) {
+        long start = System.currentTimeMillis();
+        try {
+            task.run();
+            LOGGER.info("{}  initialized in {} ms", label, System.currentTimeMillis() - start);
+        } catch (Throwable t) {
+            LOGGER.error("{} FAILED after {} ms: {}", label, System.currentTimeMillis() - start, t.toString(), t);
+        }
+    }
+
     static {
         // Install the silencer for embeddedt/ModernFix#632 at class-load time,
         // i.e. earlier than any @Mod constructor including ModernFix's. This
@@ -74,64 +93,59 @@ public class MohistMC {
     }
     
     /**
-     * Initialize all 6 Stackmania architectural layers
+     * Initialize the 12 Stackmania layers.
+     *
+     * Layers 1-4 (Security, ModLoader bridge, Bukkit API, Registry) always
+     * run sequentially because later layers reference them. Layers 5-12
+     * (Crash, Performance, Memory*2, Tick, Platform, Fabric, Sinytra) are
+     * leaf modules that mostly spin up background daemons; they can run
+     * concurrently when {@code parallel_init.enabled} is true in
+     * stackmania.yml.
+     *
+     * Per-layer timing is always logged so an operator can decide which
+     * heavy layer is worth parallelizing on their hardware.
      */
     private void initializeStackmaniaLayers() {
         if (stackmaniaInitialized) return;
-        
+
         long startTime = System.currentTimeMillis();
-        LOGGER.info("Initializing Stackmania 6-Layer Architecture...");
-        
-        // Layer 1: Security (MUST be first)
-        LOGGER.info("[Layer 1/6] Initializing Security Manager...");
-        StackmaniaSecurityManager.initialize();
-        
-        // Layer 2: Universal Compatibility Layer
-        LOGGER.info("[Layer 2/6] Initializing Universal Compatibility Layer...");
-        ModLoaderBridge.initialize();
-        
-        // Layer 3: Perfect Bukkit API
-        LOGGER.info("[Layer 3/6] Initializing Perfect Bukkit API...");
-        MaterialCacheManager.initialize();
-        PersistentPlayerManager.initialize();
-        StackmaniaBukkitBridge.initialize();
-        
-        // Layer 4: Perfect Registry System
-        LOGGER.info("[Layer 4/6] Initializing Perfect Registry System...");
-        PerfectRegistryManager.initialize();
-        
-        // Layer 5: Zero-Crash System
-        LOGGER.info("[Layer 5/6] Initializing Zero-Crash System...");
-        CrashRecoverySystem.initialize();
-        
-        // Layer 6: Performance Perfection
-        LOGGER.info("[Layer 6/6] Initializing Performance Perfection Layer...");
-        PerformanceMonitor.initialize();
-        
-        // Layer 7: Memory Optimization (CRITICAL)
-        LOGGER.info("[Layer 7/8] Initializing Memory Optimization...");
-        StackmaniaMemoryManager.initialize();
-        
-        // Layer 8: Aggressive Memory Optimizer (45% RAM reduction target)
-        LOGGER.info("[Layer 8/9] Initializing Aggressive Memory Optimizer...");
-        AggressiveMemoryOptimizer.initialize();
-        
-        // Layer 9: Tick Optimizer (TPS 20 stable)
-        LOGGER.info("[Layer 9/10] Initializing Tick Optimizer...");
-        StackmaniaTickOptimizer.initialize();
-        
-        // Layer 10: Universal Platform Adapter (100% compatibility)
-        LOGGER.info("[Layer 10/11] Initializing Universal Platform Adapter...");
-        UniversalPlatformAdapter.initialize();
-        
-        // Layer 11: Fabric Compatibility (Fallback)
-        LOGGER.info("[Layer 11/12] Initializing Fabric Compatibility Layer...");
-        FabricCompatibilityLayer.initialize();
-        
-        // Layer 12: Sinytra Connector Bridge (REAL Fabric support)
-        LOGGER.info("[Layer 12/12] Initializing Sinytra Connector Bridge...");
-        SinytraConnectorBridge.initialize();
-        
+        LOGGER.info("Initializing Stackmania 12-Layer Architecture (parallel_init={})",
+                StackmaniaConfig.parallelInitEnabled);
+
+        // ---- Sequential foundation (layers 1-4) ----------------------------
+        timed("[Layer 1/12] SecurityManager",          StackmaniaSecurityManager::initialize);
+        timed("[Layer 2/12] ModLoaderBridge",          ModLoaderBridge::initialize);
+        timed("[Layer 3/12] MaterialCacheManager",     MaterialCacheManager::initialize);
+        timed("[Layer 3/12] PersistentPlayerManager",  PersistentPlayerManager::initialize);
+        timed("[Layer 3/12] StackmaniaBukkitBridge",   StackmaniaBukkitBridge::initialize);
+        timed("[Layer 4/12] PerfectRegistryManager",   PerfectRegistryManager::initialize);
+
+        // ---- Heavy leaf modules (layers 5-12) ------------------------------
+        Runnable[] heavy = {
+                () -> timed("[Layer 5/12] CrashRecoverySystem",      CrashRecoverySystem::initialize),
+                () -> timed("[Layer 6/12] PerformanceMonitor",       PerformanceMonitor::initialize),
+                () -> timed("[Layer 7/12] StackmaniaMemoryManager",  StackmaniaMemoryManager::initialize),
+                () -> timed("[Layer 8/12] AggressiveMemoryOptimizer",AggressiveMemoryOptimizer::initialize),
+                () -> timed("[Layer 9/12] StackmaniaTickOptimizer",  StackmaniaTickOptimizer::initialize),
+                () -> timed("[Layer 10/12] UniversalPlatformAdapter",UniversalPlatformAdapter::initialize),
+                () -> timed("[Layer 11/12] FabricCompatibilityLayer",FabricCompatibilityLayer::initialize),
+                () -> timed("[Layer 12/12] SinytraConnectorBridge",  SinytraConnectorBridge::initialize),
+        };
+
+        if (StackmaniaConfig.parallelInitEnabled) {
+            CompletableFuture<?>[] futures = new CompletableFuture<?>[heavy.length];
+            for (int i = 0; i < heavy.length; i++) {
+                futures[i] = CompletableFuture.runAsync(heavy[i]);
+            }
+            // Block until every heavy layer is done. We need them all initialized
+            // before the Forge mod-construct phase ends; doing this asynchronously
+            // would break callers that rely on getInstance() being non-throwing
+            // immediately after the constructor returns.
+            CompletableFuture.allOf(futures).join();
+        } else {
+            for (Runnable r : heavy) r.run();
+        }
+
         stackmaniaInitialized = true;
         LOGGER.info("All 12 Stackmania layers initialized in {}ms", System.currentTimeMillis() - startTime);
         LOGGER.info("═══════════════════════════════════════════════════════════");
