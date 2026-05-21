@@ -92,6 +92,17 @@ public class StackmaniaConfig {
     // Horizontal radius (blocks) used to count nearby players and monsters.
     public static int mobCapConsiderRangeBlocks = 128;
 
+    // ==================== DYNAMIC VIEW DISTANCE ====================
+    // Adjusts every player's view distance once per check interval based on
+    // current TPS. Disabled by default — operators opt in via stackmania.yml.
+    public static boolean moduleDynamicViewDistanceEnabled = false;
+    // Highest view distance allowed when the server is healthy (TPS >= 19.5).
+    public static int dynamicViewDistanceMax = 10;
+    // Lowest view distance allowed when the server is under load (TPS < 18.0).
+    public static int dynamicViewDistanceMin = 4;
+    // How often (in ticks) to re-evaluate. 600 = 30 s at 20 TPS.
+    public static int dynamicViewDistanceCheckIntervalTicks = 600;
+
     // ==================== MODULES (BENCHMARK TOGGLES) ====================
     // Per-module on/off switches so we can measure each Stackmania module's
     // real impact (TPS, RAM, crash rate) by flipping it off and rebooting.
@@ -183,6 +194,12 @@ public class StackmaniaConfig {
         moduleMobCapDistributorEnabled = getBoolean("mob_cap.enabled", false);
         mobCapPerPlayerCap = getInt("mob_cap.per_player_cap", 25);
         mobCapConsiderRangeBlocks = getInt("mob_cap.consider_range_blocks", 128);
+
+        // Dynamic view distance (default OFF — operator opt-in)
+        moduleDynamicViewDistanceEnabled = getBoolean("dynamic_view_distance.enabled", false);
+        dynamicViewDistanceMax = getInt("dynamic_view_distance.max", 10);
+        dynamicViewDistanceMin = getInt("dynamic_view_distance.min", 4);
+        dynamicViewDistanceCheckIntervalTicks = getInt("dynamic_view_distance.check_interval_ticks", 600);
 
         // Modules (benchmark toggles)
         moduleTickOptimizerEnabled = getBoolean("modules.tick_optimizer.enabled", true);

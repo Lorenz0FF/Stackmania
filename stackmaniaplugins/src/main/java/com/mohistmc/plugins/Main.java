@@ -27,5 +27,10 @@ public class Main extends JavaPlugin {
         // registering it unconditionally is fine — until the operator opts in
         // via stackmania.yml, every event short-circuits on the first check.
         getServer().getPluginManager().registerEvents(new StackmaniaMobCapDistributor(), this);
+
+        // Dynamic view distance scheduler. Same opt-in pattern as the mob cap:
+        // the task is scheduled unconditionally and bails on the first line of
+        // run() when the feature is disabled.
+        StackmaniaDynamicViewDistance.start(this);
     }
 }
