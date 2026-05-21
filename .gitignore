@@ -51,3 +51,6 @@ changelog.txt
 /forge/**/run/
 /paper/
 /nms-patches/
+
+# Local build / debug logs
+*.log

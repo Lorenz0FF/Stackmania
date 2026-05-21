@@ -174,7 +174,7 @@
        }
  
        if (this.m_139668_()) {
-@@ -153,14 +_,32 @@
+@@ -153,14 +_,35 @@
           return false;
        } else {
           this.m_129823_(new DedicatedPlayerList(this, this.m_247573_(), this.f_129745_));
@@ -190,6 +190,9 @@
 +            this.m_129989_(MohistConfig.motd());
 +         }
 +         // Mohist end
++         // Stackmania start - load module on/off flags before any module touches them
++         com.stackmania.core.StackmaniaConfig.init();
++         // Stackmania end
 +         // CraftBukkit start
 +         server.loadPlugins();
 +         server.enablePlugins(org.bukkit.plugin.PluginLoadOrder.STARTUP);

@@ -8,6 +8,7 @@
 
 package com.stackmania.memory;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -80,14 +81,19 @@ public class AggressiveMemoryOptimizer {
     
     public static void initialize() {
         if (initialized) return;
-        
+
         instance = new AggressiveMemoryOptimizer();
-        instance.startOptimizationLoop();
-        
+
+        if (StackmaniaConfig.moduleAggressiveMemoryEnabled) {
+            instance.startOptimizationLoop();
+            LOGGER.info("Aggressive Memory Optimizer initialized");
+            LOGGER.info("Target: 45% RAM reduction vs standard Mohist");
+            LOGGER.info("Strategies: SoftCache, LazyLoad, StringDedup, ChunkOpt, EntityOpt");
+        } else {
+            LOGGER.info("[Bench] Aggressive Memory Optimizer DISABLED via stackmania.yml (modules.aggressive_memory.enabled=false)");
+        }
+
         initialized = true;
-        LOGGER.info("Aggressive Memory Optimizer initialized");
-        LOGGER.info("Target: 45% RAM reduction vs standard Mohist");
-        LOGGER.info("Strategies: SoftCache, LazyLoad, StringDedup, ChunkOpt, EntityOpt");
     }
     
     public static AggressiveMemoryOptimizer getInstance() {
@@ -290,9 +296,11 @@ public class AggressiveMemoryOptimizer {
     }
     
     /**
-     * Check if in ultra aggressive mode
+     * Check if in ultra aggressive mode. Returns false when the module is
+     * disabled via stackmania.yml so the tick-loop GC trigger short-circuits.
      */
     public boolean isUltraAggressiveMode() {
+        if (!StackmaniaConfig.moduleAggressiveMemoryEnabled) return false;
         return ultraAggressiveMode.get();
     }
     

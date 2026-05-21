@@ -8,6 +8,7 @@
 
 package com.stackmania.optimization;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -85,13 +86,18 @@ public class StackmaniaTickOptimizer {
     
     public static void initialize() {
         if (initialized) return;
-        
+
         instance = new StackmaniaTickOptimizer();
-        instance.startMonitoring();
-        
+
+        if (StackmaniaConfig.moduleTickOptimizerEnabled) {
+            instance.startMonitoring();
+            LOGGER.info("Stackmania Tick Optimizer initialized");
+            LOGGER.info("Target: {} TPS stable | Max tick time: {}ms", TARGET_TPS, MS_PER_TICK);
+        } else {
+            LOGGER.info("[Bench] Stackmania Tick Optimizer DISABLED via stackmania.yml (modules.tick_optimizer.enabled=false)");
+        }
+
         initialized = true;
-        LOGGER.info("Stackmania Tick Optimizer initialized");
-        LOGGER.info("Target: {} TPS stable | Max tick time: {}ms", TARGET_TPS, MS_PER_TICK);
     }
     
     public static StackmaniaTickOptimizer getInstance() {
@@ -122,6 +128,7 @@ public class StackmaniaTickOptimizer {
      * Returns true if tick should proceed, false to skip non-essential work
      */
     public boolean preTickOptimize(long tickStartNs) {
+        if (!StackmaniaConfig.moduleTickOptimizerEnabled) return true;
         // Check if we're falling behind
         if (isOverloaded) {
             consecutiveSlowTicks.incrementAndGet();
@@ -154,6 +161,7 @@ public class StackmaniaTickOptimizer {
      * Called AFTER each server tick
      */
     public void postTickOptimize(long tickStartNs, long tickEndNs) {
+        if (!StackmaniaConfig.moduleTickOptimizerEnabled) return;
         long tickDuration = tickEndNs - tickStartNs;
         
         // Record tick time

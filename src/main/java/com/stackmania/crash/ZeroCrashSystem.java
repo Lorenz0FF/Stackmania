@@ -7,6 +7,7 @@
 
 package com.stackmania.crash;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,11 +78,17 @@ public class ZeroCrashSystem {
             LOGGER.warn("ZeroCrashSystem already initialized");
             return;
         }
-        
+
+        if (!StackmaniaConfig.moduleZeroCrashEnabled) {
+            LOGGER.info("[Bench] Zero-Crash System DISABLED via stackmania.yml (modules.zero_crash.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new ZeroCrashSystem();
         instance.startWatchdogs();
         instance.startSnapshotScheduler();
-        
+
         initialized = true;
         LOGGER.info("Zero-Crash System initialized - Target: 0.00% crash rate");
     }

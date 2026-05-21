@@ -82,6 +82,14 @@ public class StackmaniaConfig {
     public static String motdFirstLine = "<gradient:#00ff88:#0088ff>Stackmania Server</gradient>";
     public static String motdSecondLine = "<gray>Forge + Bukkit Hybrid</gray>";
 
+    // ==================== MODULES (BENCHMARK TOGGLES) ====================
+    // Per-module on/off switches so we can measure each Stackmania module's
+    // real impact (TPS, RAM, crash rate) by flipping it off and rebooting.
+    // Requires restart to take effect. Default = enabled.
+    public static boolean moduleTickOptimizerEnabled = true;
+    public static boolean moduleAggressiveMemoryEnabled = true;
+    public static boolean moduleZeroCrashEnabled = true;
+
     public static void init() {
         if (!CONFIG_DIR.exists()) {
             CONFIG_DIR.mkdirs();
@@ -146,6 +154,11 @@ public class StackmaniaConfig {
         // Messages
         motdFirstLine = getString("messages.motd.first_line", motdFirstLine);
         motdSecondLine = getString("messages.motd.second_line", motdSecondLine);
+
+        // Modules (benchmark toggles)
+        moduleTickOptimizerEnabled = getBoolean("modules.tick_optimizer.enabled", true);
+        moduleAggressiveMemoryEnabled = getBoolean("modules.aggressive_memory.enabled", true);
+        moduleZeroCrashEnabled = getBoolean("modules.zero_crash.enabled", true);
     }
 
     public static void save() {
