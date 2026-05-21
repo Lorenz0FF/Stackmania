@@ -1,0 +1,81 @@
+# Stackmania Dependabot configuration.
+# Keeps GitHub Actions and Gradle dependencies fresh without flooding the repo
+# with PRs.
+
+version: 2
+updates:
+
+  # GitHub Actions — always pin to a specific version (we use major tags like
+  # @v4 already so this will mostly notice when a v5 lands).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+      include: scope
+    labels:
+      - dependencies
+      - github-actions
+
+  # Gradle — the root project plus the two custom sub-projects with their own
+  # build.gradle (stackmaniaplugins, stackmanialauncher) and the buildSrc
+  # convention scripts. ForgeGradle and srgutils versions are deliberately
+  # pinned in build.gradle (see PR #1), so Dependabot will surface upstream
+  # releases but we still review every bump by hand.
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:30"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: deps
+      include: scope
+    labels:
+      - dependencies
+      - gradle
+    # Ignore the ForgeGradle pin: we discovered the hard way that 6.0.48+
+    # bumps srgutils 0.5.10 -> 0.6.2 which breaks the :mcp evaluation
+    # ("1-snapshot-1" NumberFormatException). Manual review of any ForgeGradle
+    # bump is mandatory.
+    ignore:
+      - dependency-name: "net.minecraftforge.gradle.patcher"
+      - dependency-name: "net.minecraftforge.gradle.mcp"
+      - dependency-name: "net.minecraftforge:srgutils"
+
+  - package-ecosystem: gradle
+    directory: /stackmaniaplugins
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:30"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: deps
+      include: scope
+    labels:
+      - dependencies
+      - gradle
+
+  - package-ecosystem: gradle
+    directory: /stackmanialauncher
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:30"
+      timezone: Europe/Paris
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: deps
+      include: scope
+    labels:
+      - dependencies
+      - gradle

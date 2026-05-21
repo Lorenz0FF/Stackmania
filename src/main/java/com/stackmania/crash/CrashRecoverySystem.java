@@ -2,7 +2,7 @@
  * Stackmania - Valonia Games
  * Copyright (C) 2024-2025.
  *
- * Zero-Crash System - Target: 0.00% crash rate
+ * Crash detection, isolation and recovery for the server's Java side.
  */
 
 package com.stackmania.crash;
@@ -17,21 +17,24 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
 /**
- * Zero-Crash System
- * 
- * Provides comprehensive crash prevention, prediction, isolation, and recovery.
- * Target: 0.00% crash rate through proactive measures.
- * 
- * Key Features:
- * - Crash prediction BEFORE they occur
- * - Mod isolation in separate contexts
- * - Automatic recovery in real-time
- * - Watchdogs on all threads
- * - State snapshots for instant rollback
+ * Best-effort crash recovery for Java-level failures: watchdog threads, mod
+ * isolation contexts, state snapshots, and automatic recovery attempts on
+ * Throwables that surface to the watchers.
+ *
+ * Scope and limits — please read before relying on this:
+ *
+ * - Only Throwables raised inside the JVM and observed by one of the watchdogs
+ *   are candidates for recovery. JVM segfaults, kernel OOM-kill, host power
+ *   loss, and uncatchable native crashes bypass this entirely.
+ * - "Recovery" means rolling back to the most recent state snapshot or
+ *   quarantining the offending mod, not preventing every possible bad state.
+ * - The associated counters ({@code crashesPrevented},
+ *   {@code successfulRecoveries}) report what this system did, not a claim
+ *   about overall server stability.
  */
 public class CrashRecoverySystem {
-    
-    private static final Logger LOGGER = LogManager.getLogger("Stackmania/ZeroCrash");
+
+    private static final Logger LOGGER = LogManager.getLogger("Stackmania/CrashRecovery");
     
     private static CrashRecoverySystem instance;
     private static boolean initialized = false;

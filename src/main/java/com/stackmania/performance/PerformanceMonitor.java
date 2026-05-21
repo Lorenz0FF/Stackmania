@@ -2,7 +2,7 @@
  * Stackmania - Valonia Games
  * Copyright (C) 2024-2025.
  *
- * Performance Perfection Layer - Target: 100% of Forge pure performance
+ * Runtime TPS and GC monitor.
  */
 
 package com.stackmania.performance;
@@ -17,17 +17,15 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Performance Perfection Layer
- * 
- * Target: Match or exceed pure Forge 47.4.10 performance (100%)
- * 
- * Key Features:
- * - TPS = 20.0 stable at all times
- * - GC pauses < 5ms guaranteed
- * - Zero overhead from hybrid layer
- * - Optimal thread management
- * - Aggressive caching
- * - Async-first architecture
+ * Observes TPS, GC pause distribution, memory pressure and thread state, and
+ * exposes them via {@code PerformanceMetrics}. This class only *measures* —
+ * it does not "perfect" anything. The numbers it reports are inputs for the
+ * tick / memory / crash modules and for the bench harness; tuning the actual
+ * runtime behavior happens in those modules and in the JVM / server config.
+ *
+ * The constants {@code TARGET_TPS}, {@code TARGET_GC_PAUSE_MS} and the
+ * {@code RECOMMENDED_JVM_FLAGS} array document the design goals; they are
+ * targets, not guarantees, and not measurements of the current build.
  */
 public class PerformanceMonitor {
     

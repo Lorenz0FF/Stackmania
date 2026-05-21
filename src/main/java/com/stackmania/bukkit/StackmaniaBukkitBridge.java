@@ -2,7 +2,7 @@
  * Stackmania - Valonia Games
  * Copyright (C) 2024-2025.
  *
- * Perfect Bukkit API Implementation - Target: 100% API compliance
+ * Bridge layer between CraftBukkit and the Forge runtime.
  */
 
 package com.stackmania.bukkit;
@@ -16,15 +16,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Perfect Bukkit API Implementation
- * 
- * Target: 100% Bukkit/Spigot/Paper API compliance
- * 
- * Key Features:
- * - Material Enum PERFECT (single injection, no duplicates)
- * - Player Object PERFECT (persistent wrapper, never recreated)
- * - Event System PERFECT (correct priority, no double-firing)
- * - Paper API COMPLETE (all methods including getPluginMeta())
+ * Bridge layer between the Bukkit / Spigot / Paper plugin APIs and the Forge
+ * runtime. Wraps four concerns into a single registry so callers don't have to
+ * juggle separate managers:
+ *
+ * - Material registration (delegated to {@code MaterialCacheManager}).
+ * - Player object lifecycle (delegated to {@code PersistentPlayerManager}).
+ * - Event-bus routing across the two APIs.
+ * - Paper-extension surface exposed to plugins that depend on it.
+ *
+ * Coverage is partial and evolving: this class is a compatibility shim, not a
+ * full re-implementation of the Bukkit API. See per-plugin reports in the
+ * Stackmania issue tracker for missing methods.
  */
 public class StackmaniaBukkitBridge {
     

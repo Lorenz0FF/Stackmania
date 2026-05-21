@@ -22,21 +22,22 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 /**
- * Universal Compatibility Layer (UCL)
- * 
- * Core component that ensures 100% compatibility between Forge mods and Bukkit plugins.
- * 
- * Responsibilities:
- * - Analyze EVERY mod/plugin at load time (complete bytecode analysis)
- * - Detect conflicts BEFORE they occur
- * - Generate automatic adapters for ANY incompatibility
- * - Transparent real-time Forge ↔ Bukkit bridge
- * - Database of 10M+ tested combinations
- * - ML-based conflict prediction
+ * Mod-loader compatibility bridge between Forge mods and Bukkit plugins.
+ *
+ * Pipeline at mod/plugin load:
+ *
+ * - Bytecode analysis of incoming jars via {@code BytecodeAnalyzer}.
+ * - Lookup of known conflicts in the local {@code ConflictDatabase}
+ *   (no network calls, no "ML"; just a static table the project maintains).
+ * - Optional adapter generation for known conflict patterns via
+ *   {@code AdapterGenerator}.
+ *
+ * Coverage is bounded by the conflict database. The class is a shim, not a
+ * guarantee — unknown combinations may still misbehave at runtime.
  */
 public class ModLoaderBridge {
-    
-    private static final Logger LOGGER = LogManager.getLogger("Stackmania/UCL");
+
+    private static final Logger LOGGER = LogManager.getLogger("Stackmania/ModLoaderBridge");
     
     private static ModLoaderBridge instance;
     private static boolean initialized = false;
