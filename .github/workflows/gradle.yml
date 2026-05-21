@@ -42,6 +42,19 @@ jobs:
         chmod +x ./gradlew
         ./gradlew setup packageLibraries --stacktrace
 
+    - name: Run unit tests
+      run: ./gradlew :stackmania:test --stacktrace
+
+    - name: Upload test report
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: Stackmania-test-report
+        path: |
+          projects/stackmania/build/reports/tests/test
+          projects/stackmania/build/test-results/test
+        retention-days: 14
+
     - name: Build stackmaniaJar
       run: ./gradlew stackmaniaJar --stacktrace
 

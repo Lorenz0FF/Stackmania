@@ -418,6 +418,18 @@ project(':stackmania') {
                 ]
             }
         }
+        // Stackmania unit tests live at $rootDir/src/test/java alongside the
+        // production sources, not under projects/stackmania/src/test where the
+        // default sourceSet would look. Without this remap the test task
+        // reports NO-SOURCE and silently passes.
+        test {
+            java {
+                srcDirs = ["$rootDir/src/test/java"]
+            }
+            resources {
+                srcDirs = ["$rootDir/src/test/resources"]
+            }
+        }
     }
     //Eclipse adds the sourcesets twice, once where we tell it to, once in the projects folder. No idea why. So delete them
     eclipse.classpath.file.whenMerged { cls -> cls.entries.removeIf { e -> e instanceof SourceFolder && e.path.startsWith('src/') && !e.path.startsWith('src/main/') } }
@@ -459,8 +471,15 @@ project(':stackmania') {
     }
 
     dependencies {
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-        testImplementation 'org.junit.vintage:junit-vintage-engine:5.+'
+        // Single source of truth for all JUnit Platform versions. Without the
+        // BOM, jupiter-api / jupiter-engine / vintage-engine / platform-launcher
+        // get pulled at different (incompatible) Platform releases and the
+        // test runner dies with "OutputDirectoryCreator not available".
+        testImplementation platform('org.junit:junit-bom:5.10.2')
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testRuntimeOnly    'org.junit.jupiter:junit-jupiter-engine'
+        testRuntimeOnly    'org.junit.platform:junit-platform-launcher'
+        testImplementation 'org.junit.vintage:junit-vintage-engine'
         testImplementation 'org.opentest4j:opentest4j:1.2.0' // needed for junit 5
         testImplementation 'org.hamcrest:hamcrest-all:1.3' // needs advanced matching for list order
         implementation project(':fmlcore')
@@ -472,6 +491,17 @@ project(':stackmania') {
     }
     dependencies sharedDeps
     dependencies mohistDeps
+
+    // Stackmania unit tests run on JUnit 5 (Jupiter). Without this the default
+    // 'test' task picks JUnit 4 / Vintage and silently ignores @Test methods
+    // annotated with org.junit.jupiter.api.Test.
+    tasks.named('test') {
+        useJUnitPlatform()
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+            showStandardStreams = false
+        }
+    }
 
     patcher {
         excs.from file("$rootDir/src/main/resources/forge.exc")
