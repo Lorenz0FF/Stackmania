@@ -41,45 +41,98 @@ public class StackmaniaConfig {
     public static YamlConfiguration yml;
 
     // ==================== GENERAL ====================
+    /** YAML: general.show_logo. Print the Stackmania ASCII banner at boot. */
     public static boolean showLogo = true;
+    /** YAML: general.language. Locale used by i18n; defaults to the JVM's
+     *  {@link Locale#getDefault()}. Consumed by {@link com.mohistmc.i18n.i18n}. */
     public static String language = Locale.getDefault().toString();
+    /** YAML: general.check_updates. Currently unused — placeholder for a
+     *  future GitHub-Releases poller. Default {@code true}. */
     public static boolean checkUpdates = true;
+    /** YAML: general.server_mod_name. The string returned in the
+     *  ServerListPingEvent's mod-info handshake; Bukkit plugins that
+     *  fingerprint the server (e.g. ProtocolLib) see this value. */
     public static String serverModName = "stackmania";
 
     // ==================== SECURITY ====================
     // NOTE: Plugin hot-loading is REMOVED for security reasons
     // Use server restart to load/unload plugins
+    /** YAML: security.enable_logs. When true, StackmaniaSecurityManager
+     *  emits an audit line for each plugin load / suspicious classpath hit. */
     public static boolean enableSecurityLogs = true;
+    /** YAML: security.validate_plugin_sources. When true, plugin JARs are
+     *  checked against a sane source set before being loaded by
+     *  StackmaniaSecurityManager. */
     public static boolean validatePluginSources = true;
 
     // ==================== PERFORMANCE ====================
+    /** YAML: performance.server_thread_priority. {@link Thread#setPriority}
+     *  value applied to the main server thread (range 1..10, default 8). */
     public static int serverThreadPriority = 8;
+    /** YAML: performance.async_world_save. Reserved for a future world-save
+     *  offloading path; not yet wired to a save handler. Default false. */
     public static boolean asyncWorldSave = false;
+    /** YAML: performance.watchdog_enabled. Master switch for the vanilla
+     *  ServerWatchdogThread. Disable only for debugging stalls. */
     public static boolean watchdogEnabled = true;
 
     // ==================== REGISTRY ====================
+    /** YAML: registry.auto_cleanup. When true, PerfectRegistryManager prunes
+     *  entries left by removed mods at boot. Default false — safer. */
     public static boolean autoCleanupRegistries = false;
+    /** YAML: registry.safe_mode_on_corruption. When true and a registry
+     *  inconsistency is detected, Stackmania aborts boot instead of
+     *  continuing with a half-broken registry. */
     public static boolean safeModeOnCorruption = true;
+    /** YAML: registry.log_changes. Log every registry add/remove performed
+     *  by PerfectRegistryManager. Useful for tracing mod-conflict bugs. */
     public static boolean logRegistryChanges = true;
 
     // ==================== COMPATIBILITY ====================
+    /** YAML: velocity.enabled. Master switch for the Velocity modern-forwarding
+     *  handshake. When false, the server ignores velocitySecret. */
     public static boolean velocityEnabled = false;
+    /** YAML: velocity.online_mode. When true, Stackmania treats players as
+     *  online-mode even though the proxy terminates auth — read by
+     *  {@link #isProxyOnlineMode()}. */
     public static boolean velocityOnlineMode = false;
+    /** YAML: velocity.secret. Shared secret used by the modern-forwarding
+     *  handshake; must match {@code forwarding.secret} on the Velocity side. */
     public static String velocitySecret = "";
+    /** YAML: compatibility.bukkit_permissions_handler. When true, Stackmania
+     *  routes Forge permission queries through Bukkit so plugin permission
+     *  managers (LuckPerms etc.) win over Forge defaults. */
     public static boolean bukkitPermissionsHandler = true;
 
     // ==================== GAMEPLAY ====================
+    /** YAML: gameplay.anvil.maximum_repair_cost. Anvil cost cap, vanilla is
+     *  40. Setting higher lets players keep repairing high-level gear. */
     public static int maximumRepairCost = 40;
+    /** YAML: gameplay.anvil.enchantment_fix. When true, applies the legacy
+     *  Bukkit anvil-enchantment overflow patch. Default false. */
     public static boolean enchantmentFix = false;
+    /** YAML: gameplay.anvil.max_enchantment_level. Upper bound applied
+     *  alongside {@link #enchantmentFix}; defaults to {@code Short.MAX_VALUE}. */
     public static int maxEnchantmentLevel = 32767;
+    /** YAML: gameplay.max_bees_in_hive. Vanilla cap is 3 — exposed so packs
+     *  that buff bee farming can raise it. */
     public static int maxBeesInHive = 3;
 
     // ==================== ENTITY MANAGEMENT ====================
+    /** YAML: entity.clear.enabled. When true, a scheduled task purges
+     *  loose entities ground-items / non-tamed mobs every
+     *  {@link #entityClearInterval} seconds. Default false. */
     public static boolean entityClearEnabled = false;
+    /** YAML: entity.clear.interval_seconds. Period between entity-clear
+     *  passes; 1800 s = 30 minutes. Ignored when entityClearEnabled is false. */
     public static int entityClearInterval = 1800;
 
     // ==================== MESSAGES ====================
+    /** YAML: messages.motd.first_line. First MOTD line shown in the server
+     *  list. MiniMessage tags are supported. */
     public static String motdFirstLine = "<gradient:#00ff88:#0088ff>Stackmania Server</gradient>";
+    /** YAML: messages.motd.second_line. Second MOTD line shown in the server
+     *  list. MiniMessage tags are supported. */
     public static String motdSecondLine = "<gray>Forge + Bukkit Hybrid</gray>";
 
     // ==================== MOB CAP DISTRIBUTOR ====================

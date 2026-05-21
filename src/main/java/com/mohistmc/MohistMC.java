@@ -149,7 +149,8 @@ public class MohistMC {
         stackmaniaInitialized = true;
         LOGGER.info("All 12 Stackmania layers initialized in {}ms", System.currentTimeMillis() - startTime);
         LOGGER.info("═══════════════════════════════════════════════════════════");
-        LOGGER.info("Target: TPS=20.0 | GC<5ms | Crash=0% | RAM -45% | Compat=100%");
+        LOGGER.info("Stackmania ready. Toggle modules in stackmania-config/stackmania.yml");
+        LOGGER.info("Run /stackmania bench status to inspect module state at runtime");
         LOGGER.info("═══════════════════════════════════════════════════════════");
     }
     
