@@ -4,6 +4,7 @@ import com.mohistmc.eventhandler.EventDispatcherRegistry;
 import com.mohistmc.i18n.i18n;
 import com.mohistmc.plugins.MohistProxySelector;
 import com.mohistmc.util.VersionInfo;
+import com.stackmania.compatibility.ModernFixRaceSilencer;
 import com.stackmania.compatibility.UniversalCompatibilityLayer;
 import com.stackmania.crash.ZeroCrashSystem;
 import com.stackmania.performance.PerformancePerfection;
@@ -47,6 +48,15 @@ public class MohistMC {
     public static VersionInfo versionInfo;
 
     private static boolean stackmaniaInitialized = false;
+
+    static {
+        // Install the silencer for embeddedt/ModernFix#632 at class-load time,
+        // i.e. earlier than any @Mod constructor including ModernFix's. This
+        // gives us the best chance of catching the NightConfig FileWatcher
+        // daemon thread on its first iteration. Safe even when ModernFix is
+        // not installed — the silencer just stays armed and never fires.
+        ModernFixRaceSilencer.install();
+    }
 
     public MohistMC() {
 
