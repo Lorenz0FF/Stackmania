@@ -18,14 +18,7 @@
 
 package com.stackmania.core;
 
-import com.stackmania.material.MaterialCacheManager;
-import com.stackmania.player.PersistentPlayerManager;
-import com.stackmania.registry.SafeRegistryManager;
-import com.stackmania.security.StackmaniaSecurityManager;
 import com.mohistmc.i18n.i18n;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.versions.forge.ForgeVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,23 +29,22 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Stackmania Core - Main entry point for the Stackmania hybrid server.
- * 
- * Stackmania is an optimized fork of Mohist designed for stability,
- * security, and compatibility with both Forge mods and Bukkit plugins.
- * 
- * Key improvements over Mohist:
- * - No automatic plugin replacement (security)
- * - Fixed Material double-injection
- * - Persistent Player objects across respawns
- * - Safe Registry management with cleanup
- * - Paper API compatibility layer
- * 
+ * Stackmania Core — shared logger and version-info holder for the
+ * com.stackmania.* modules.
+ *
+ * NOT a Forge @Mod entry point. The active @Mod("stackmania") class is
+ * {@link com.mohistmc.MohistMC}, which drives the 12-layer init sequence
+ * (including the four sub-systems this class used to initialize). To
+ * avoid two classes claiming the same mod id, the @Mod and @OnlyIn
+ * annotations were removed from this class on 2026-05-21.
+ *
+ * Static fields exposed to the rest of com.stackmania.* (LOGGER in
+ * particular) remain available because they are initialized at class
+ * load time, not in the constructor.
+ *
  * @author Valonia Games
  * @version 1.0.0
  */
-@Mod("stackmania")
-@OnlyIn(Dist.DEDICATED_SERVER)
 public class StackmaniaCore {
     
     public static final String NAME = "Stackmania";
@@ -65,64 +57,18 @@ public class StackmaniaCore {
     public static i18n i18n;
     public static ClassLoader classLoader;
     public static StackmaniaVersion versionInfo;
-    
-    private static boolean initialized = false;
-    private static long startTime;
-    
-    public StackmaniaCore() {
-        startTime = System.currentTimeMillis();
-        classLoader = StackmaniaCore.class.getClassLoader();
-        
-        LOGGER.info("╔══════════════════════════════════════════════════════════╗");
-        LOGGER.info("║              STACKMANIA SERVER LOADING                    ║");
-        LOGGER.info("║          Optimized Forge + Bukkit Hybrid Server          ║");
-        LOGGER.info("║                   by Valonia Games                        ║");
-        LOGGER.info("╚══════════════════════════════════════════════════════════╝");
-        
-        // Initialize core systems in order
-        initializeSecurity();
-        initializeRegistryManager();
-        initializeMaterialCache();
-        initializePlayerManager();
-        
-        initialized = true;
-        LOGGER.info("{} core systems initialized in {}ms", NAME, System.currentTimeMillis() - startTime);
+
+    private StackmaniaCore() {
+        // Utility class; instantiation is suppressed.
+        // The original @Mod-driven init flow lived here but moved to
+        // com.mohistmc.MohistMC.initializeStackmaniaLayers() so that there is
+        // exactly one Forge @Mod("stackmania") entry point.
     }
-    
+
     /**
-     * Initialize security systems - MUST be first
-     */
-    private void initializeSecurity() {
-        LOGGER.info("Initializing security manager...");
-        StackmaniaSecurityManager.initialize();
-    }
-    
-    /**
-     * Initialize the safe registry manager for handling mod additions/removals
-     */
-    private void initializeRegistryManager() {
-        LOGGER.info("Initializing safe registry manager...");
-        SafeRegistryManager.initialize();
-    }
-    
-    /**
-     * Initialize the material cache to prevent double-injection issues
-     */
-    private void initializeMaterialCache() {
-        LOGGER.info("Initializing material cache manager...");
-        MaterialCacheManager.initialize();
-    }
-    
-    /**
-     * Initialize the persistent player manager
-     */
-    private void initializePlayerManager() {
-        LOGGER.info("Initializing persistent player manager...");
-        PersistentPlayerManager.initialize();
-    }
-    
-    /**
-     * Called when the server is fully started to initialize version info
+     * Called when the server is fully started to initialize version info.
+     * Currently unused — kept as a public hook in case a future entry-point
+     * cleanup wants to wire i18n + versionInfo here instead of in MohistMC.
      */
     public static void initVersion() {
         String lang = StackmaniaConfig.getLanguage();
@@ -153,32 +99,4 @@ public class StackmaniaCore {
         return implVersion != null ? implVersion : VERSION;
     }
     
-    /**
-     * Check if Stackmania core is fully initialized
-     */
-    public static boolean isInitialized() {
-        return initialized;
-    }
-    
-    /**
-     * Get the time taken to start in milliseconds
-     */
-    public static long getStartupTime() {
-        return System.currentTimeMillis() - startTime;
-    }
-    
-    /**
-     * Shutdown hook for cleanup
-     */
-    public static void shutdown() {
-        LOGGER.info("Stackmania shutting down...");
-        
-        // Cleanup in reverse order
-        PersistentPlayerManager.shutdown();
-        MaterialCacheManager.shutdown();
-        SafeRegistryManager.shutdown();
-        StackmaniaSecurityManager.shutdown();
-        
-        LOGGER.info("Stackmania shutdown complete.");
-    }
 }
