@@ -2,26 +2,20 @@
 
 # 🚀 STACKMANIA
 
-### The World's First Forge + Fabric + Bukkit Hybrid Server
+### A hybrid Minecraft server — Forge + Fabric + Bukkit on the same JVM
 
 **By Valonia Games**
 
 [![Minecraft](https://img.shields.io/badge/Minecraft-1.20.1-62B47A?style=for-the-badge&logo=minecraft&logoColor=white)](https://minecraft.net)
-[![Forge](https://img.shields.io/badge/Forge-47.4.10-blue?style=for-the-badge&logo=curseforge&logoColor=white)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
+[![Forge](https://img.shields.io/badge/Forge-47.4.13-blue?style=for-the-badge&logo=curseforge&logoColor=white)](https://files.minecraftforge.net/net/minecraftforge/forge/index_1.20.1.html)
 [![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green?style=for-the-badge)](LICENSE)
 
-[![Download](https://img.shields.io/badge/⬇_DOWNLOAD-Stackmania_1.1.0-FF6B6B?style=for-the-badge&logo=download&logoColor=white)](https://github.com/Lorenz0FF/Stackmania/releases/latest)
-
-[![RAM](https://img.shields.io/badge/RAM-−45%25_vs_Mohist-success?style=flat-square)](https://github.com/Lorenz0FF/Stackmania)
-[![TPS](https://img.shields.io/badge/TPS-20.0_Stable-success?style=flat-square)](https://github.com/Lorenz0FF/Stackmania)
-[![Crash](https://img.shields.io/badge/Crash_Rate-~0%25-success?style=flat-square)](https://github.com/Lorenz0FF/Stackmania)
+[![Download](https://img.shields.io/badge/⬇_DOWNLOAD-Latest_Release-FF6B6B?style=for-the-badge&logo=download&logoColor=white)](https://github.com/Lorenz0FF/Stackmania/releases/latest)
 
 ---
 
-**Run Forge mods, Fabric mods, AND Bukkit plugins on the SAME server.**
-
-*No one else does this.*
+**Run Forge mods, Fabric mods (via Sinytra Connector), AND Bukkit plugins on the same server.**
 
 </div>
 
@@ -29,299 +23,223 @@
 
 ## 🎯 What is Stackmania?
 
-**Stackmania** is an ultra-optimized Minecraft hybrid server based on Mohist, completely reengineered with a **12-layer architecture** for maximum performance and compatibility.
+**Stackmania** is a fork of [Mohist](https://github.com/MohistMC/Mohist) for Minecraft 1.20.1, with a set of experimental optimization and compatibility modules layered on top of upstream. Built and maintained for the [The Walking Craft](https://github.com/Lorenz0FF) post-apocalyptic server (target: 200–300 concurrent players).
 
-### The Problem with Current Solutions
+### Position vs other hybrid options
 
-| Server | Forge Mods | Fabric Mods | Bukkit Plugins | Issues |
-|--------|------------|-------------|----------------|--------|
-| Forge | ✅ | ❌ | ❌ | No plugins |
-| Fabric | ❌ | ✅ | ❌ | No Forge mods |
-| Paper | ❌ | ❌ | ✅ | No mods at all |
-| Mohist | ✅ | ❌ | ✅ | Crashes, RAM issues, no Fabric |
-| **Stackmania** | ✅ | ✅ | ✅ | **None** |
+| Server | Forge | Fabric | Bukkit |
+|---|---|---|---|
+| Forge (vanilla) | ✅ | ❌ | ❌ |
+| Fabric | ❌ | ✅ | ❌ |
+| Paper / Spigot | ❌ | ❌ | ✅ |
+| Mohist | ✅ | ❌ | ✅ |
+| Arclight | ✅ | ❌ | ✅ |
+| **Stackmania** | ✅ | ✅ (via [Sinytra Connector](https://github.com/Sinytra/Connector)) | ✅ |
 
----
-
-## 🏆 Why Stackmania?
-
-### vs Mohist
-
-| Metric | Mohist | **Stackmania** | Improvement |
-|--------|--------|----------------|-------------|
-| RAM Usage | 6-8 GB | 3.5-4.5 GB | **-45%** |
-| TPS (loaded) | 15-18 | 19.5-20 | **+25%** |
-| Crash Rate | ~5% | ~0% | **-97%** |
-| GC Pauses | 50-200ms | <5ms | **-97%** |
-| Fabric Support | ❌ | ✅ | **NEW** |
-| NeoForge Support | ❌ | ✅ | **NEW** |
-| Sponge Support | ❌ | ✅ | **NEW** |
-
-### vs Paladium/Other Commercial Servers
-
-| Feature | Commercial | **Stackmania** |
-|---------|------------|----------------|
-| Price | 💰 Paid | **FREE** |
-| Open Source | ❌ | ✅ |
-| Customizable | Limited | **100%** |
-| Multi-Platform | ❌ | ✅ |
-| Community | Closed | **Open** |
+Fabric support relies on Sinytra Connector + Forgified Fabric API, not a native Fabric loader.
 
 ---
 
 ## 🏗️ 12-Layer Architecture
 
-Stackmania uses a revolutionary **12-layer optimization architecture**:
+Stackmania initializes 12 optional modules on top of stock Mohist. Each one can be turned off individually via `stackmania-config/stackmania.yml` to benchmark its real impact.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                    STACKMANIA 12-LAYER                       │
 ├──────────────────────────────────────────────────────────────┤
-│  Layer 1  │ Security Manager        │ Exploit protection    │
-│  Layer 2  │ Universal Compatibility │ Conflict resolution   │
-│  Layer 3  │ Perfect Bukkit API      │ 100% Bukkit/Paper     │
-│  Layer 4  │ Perfect Registry        │ Snapshots & rollback  │
-│  Layer 5  │ Zero-Crash System       │ Crash prevention      │
-│  Layer 6  │ Performance Perfection  │ Real-time monitoring  │
-│  Layer 7  │ Memory Manager          │ Smart RAM management  │
-│  Layer 8  │ Aggressive Optimizer    │ -45% RAM reduction    │
-│  Layer 9  │ Tick Optimizer          │ TPS 20.0 stable       │
-│  Layer 10 │ Universal Platform      │ Multi-loader support  │
-│  Layer 11 │ Fabric Fallback         │ Basic Fabric compat   │
-│  Layer 12 │ Sinytra Connector       │ Full Fabric support   │
+│  Layer 1  │ Security Manager        │ Plugin hot-load lockdown │
+│  Layer 2  │ Universal Compatibility │ Conflict bookkeeping     │
+│  Layer 3  │ Perfect Bukkit API      │ Material + Player cache  │
+│  Layer 4  │ Perfect Registry        │ Snapshots & rollback     │
+│  Layer 5  │ Zero-Crash System       │ Watchdog + recovery      │
+│  Layer 6  │ Performance Perfection  │ TPS + GC monitor         │
+│  Layer 7  │ Memory Manager          │ Threshold-based cleanup  │
+│  Layer 8  │ Aggressive Optimizer    │ Soft caches + GC trigger │
+│  Layer 9  │ Tick Optimizer          │ Pre/post-tick hooks      │
+│  Layer 10 │ Universal Platform      │ Bridge layer             │
+│  Layer 11 │ Fabric Fallback         │ Minimal Fabric shims     │
+│  Layer 12 │ Sinytra Connector       │ Full Fabric integration  │
 └──────────────────────────────────────────────────────────────┘
 ```
+
+> ⚠️ **Status:** the 12 modules ship enabled by default. Their *real* effect on TPS, RAM and crash rate is currently being measured — see the bench harness on the `bench-stackmania-modules-*` branch. Treat any performance number you see in older docs as a **design target**, not a measurement.
 
 ---
 
 ## 🔌 Platform Compatibility
 
-### Supported Mod Loaders
+### Mod loaders
 
-| Platform | Support Level | Method |
-|----------|---------------|--------|
-| **Forge 1.20.1** | ✅ Native | Built-in |
-| **NeoForge** | ✅ Full | Compatibility Layer |
-| **Fabric** | ✅ Full | Sinytra Connector |
-| **Quilt** | ⚠️ Partial | Via Fabric bridge |
+| Platform | Status | Method |
+|---|---|---|
+| Forge 1.20.1 | ✅ Native | Mohist base |
+| NeoForge | ⚠️ Experimental | Compatibility shims |
+| Fabric | ⚠️ Experimental | Sinytra Connector + Forgified Fabric API |
+| Quilt | ⚠️ Experimental | Via Fabric bridge |
 
-### Supported Plugin APIs
+### Plugin APIs
 
-| Platform | Support Level | Method |
-|----------|---------------|--------|
-| **Bukkit** | ✅ Native | CraftBukkit |
-| **Spigot** | ✅ Native | Spigot patches |
-| **Paper** | ✅ Full | Paper API bridge |
-| **Sponge** | ✅ Full | API translation |
+| Platform | Status | Method |
+|---|---|---|
+| Bukkit | ✅ Native | CraftBukkit |
+| Spigot | ✅ Native | Spigot patches |
+| Paper | ⚠️ Partial | Subset of Paper API exposed |
+| Sponge | ⚠️ Experimental | API translation layer |
 
-### Example Setup
+"Experimental" = ships, builds, loads typical plugins/mods of that platform in dev testing, but **not** validated against a large public test corpus yet. Report breakages in [issues](https://github.com/Lorenz0FF/Stackmania/issues).
+
+### Example mods folder
 
 ```
 /mods/
-  ├── Connector-1.0.0-beta.46+1.20.1.jar    # Required for Fabric
-  ├── ForgifiedFabricAPI-0.92.2+1.20.1.jar  # Required for Fabric
-  ├── Create-1.20.1.jar                      # FORGE MOD ✅
-  ├── Applied-Energistics-2.jar              # FORGE MOD ✅
-  ├── Sodium-fabric-1.20.1.jar               # FABRIC MOD ✅
-  └── Lithium-fabric-1.20.1.jar              # FABRIC MOD ✅
+  ├── Connector-1.0.0-beta.46+1.20.1.jar    # required for Fabric
+  ├── ForgifiedFabricAPI-0.92.2+1.20.1.jar  # required for Fabric
+  ├── Create-1.20.1.jar                     # Forge mod
+  ├── Sodium-fabric-1.20.1.jar              # Fabric mod
+  └── ...
 
 /plugins/
-  ├── EssentialsX.jar                        # BUKKIT ✅
-  ├── LuckPerms.jar                          # BUKKIT ✅
-  ├── WorldEdit.jar                          # BUKKIT ✅
-  └── Nucleus.jar                            # SPONGE ✅
+  ├── EssentialsX.jar                       # Bukkit
+  ├── LuckPerms.jar                         # Bukkit
+  └── ...
 ```
 
 ---
 
 ## 📦 Installation
 
-### Quick Start
-
-1. **Download** the latest Stackmania JAR from [Releases](https://github.com/ValoniGames/Stackmania/releases)
-2. **Place** it in your server directory
-3. **Run**:
+1. Download the latest Stackmania JAR from [Releases](https://github.com/Lorenz0FF/Stackmania/releases/latest).
+2. Place it in your server directory.
+3. Run:
    ```bash
    java -Xms4G -Xmx6G -jar stackmania-1.20.1-server.jar
    ```
-4. **Configure** `stackmania-config/stackmania.yml`
+4. Optionally edit `stackmania-config/stackmania.yml` after first boot.
 
-### For Fabric Mod Support
+### For Fabric mod support
 
-Add these mods to `/mods/`:
-- [Sinytra Connector](https://github.com/Sinytra/Connector/releases) 
-- [Forgified Fabric API](https://github.com/Sinytra/ForgifiedFabricAPI/releases)
+Drop [Sinytra Connector](https://github.com/Sinytra/Connector/releases) and [Forgified Fabric API](https://github.com/Sinytra/ForgifiedFabricAPI/releases) into `/mods/`.
 
-### Recommended JVM Flags
+### Suggested JVM flags
+
+Conservative G1GC baseline, adjust to taste:
 
 ```bash
 java -Xms4G -Xmx6G \
   -XX:+UseG1GC \
-  -XX:MaxGCPauseMillis=50 \
   -XX:+ParallelRefProcEnabled \
   -XX:+AlwaysPreTouch \
   -XX:G1HeapRegionSize=16M \
-  -XX:+UnlockExperimentalVMOptions \
   -XX:+DisableExplicitGC \
   -jar stackmania-1.20.1-server.jar
 ```
 
 ---
 
-## 🔧 Building from Source
+## 🔧 Building from source
 
 ### Requirements
 
-- **JDK 17+** (Adoptium recommended)
-- **Gradle 8.12+** (included via wrapper)
-- **8GB+ RAM** for building
+- JDK 17+ (Adoptium / Temurin)
+- Gradle 8.12+ (included via `gradlew`)
+- 8 GB+ RAM for the build (the Minecraft decompile step alone uses 4 GB)
 
-### Build Commands
+### Build
 
 ```bash
-# Clone the repository
-git clone https://github.com/ValoniGames/Stackmania.git
+git clone https://github.com/Lorenz0FF/Stackmania.git
 cd Stackmania
 
-# Setup (first time only)
+# First time: set up the MCP pipeline + download libraries
 ./gradlew setup packageLibraries
 
-# Build the server JAR
+# Build the server jar
 ./gradlew stackmaniaJar
 
-# Output: projects/stackmania/build/libs/stackmania-1.20.1-server.jar
+# Output:
+# projects/stackmania/build/libs/stackmania-1.20.1-<commit>-server.jar
 ```
 
-### Windows
-
-```powershell
-.\gradlew.bat setup packageLibraries
-.\gradlew.bat stackmaniaJar
-```
+On Windows: `.\gradlew.bat` instead of `./gradlew`.
 
 ---
 
 ## ⚙️ Configuration
 
-### Main Config: `stackmania-config/stackmania.yml`
+Main config: `stackmania-config/stackmania.yml` (created on first boot).
+
+Highlights:
 
 ```yaml
-stackmania:
-  # Performance
-  memory_optimization: true
-  aggressive_gc: true
-  tick_optimization: true
-  
-  # Compatibility
-  fabric_support: true
-  sponge_support: true
-  
-  # Security
-  block_dangerous_plugins: true
-  validate_mods: true
-  
-  # Debug
-  debug_mode: false
-  performance_logging: false
+modules:
+  # Each Stackmania module can be turned off here to benchmark its impact.
+  tick_optimizer:         { enabled: true }
+  aggressive_memory:      { enabled: true }
+  zero_crash:             { enabled: true }
+  fabric_compatibility:   { enabled: true }
+  sinytra_bridge:         { enabled: true }
+  # ... see stackmania.yml for the full list
+
+security:
+  enable_logs: true
+  validate_plugin_sources: true
+
+performance:
+  watchdog_enabled: true
 ```
 
----
-
-## 📊 Benchmarks
-
-### Test Environment
-- **CPU**: Ryzen 7 5800X
-- **RAM**: 32GB DDR4
-- **Mods**: 200 Forge + 20 Fabric
-- **Plugins**: 50 Bukkit
-- **Players**: 15 concurrent
-
-### Results
-
-| Metric | Mohist | Stackmania | Delta |
-|--------|--------|------------|-------|
-| Startup Time | 65s | 42s | -35% |
-| Idle RAM | 5.8GB | 3.2GB | -45% |
-| Loaded RAM | 7.4GB | 4.1GB | -45% |
-| Avg TPS | 16.3 | 19.8 | +21% |
-| Min TPS | 12.1 | 18.5 | +53% |
-| Chunks/sec | 45 | 67 | +49% |
-| GC Pause (max) | 180ms | 4ms | -98% |
+Toggling a module requires a restart. The boot log records each module's state with a `[Bench] ... DISABLED via stackmania.yml` line, which makes benchmark comparisons explicit.
 
 ---
 
-## ✅ 100% Universal Compatibility
+## 📊 Performance — current state
 
-Stackmania is designed for **complete compatibility** with all mod and plugin platforms.
+There is no published benchmark suite yet. The 12 modules ship with explicit **design targets**:
 
-### Mods Support
+| Module | Design target |
+|---|---|
+| Tick Optimizer | Hold 20 TPS under typical load |
+| Aggressive Memory Optimizer | Reduce RSS under sustained load |
+| Zero-Crash System | Lower crash rate vs stock Mohist |
+| Performance Perfection | GC pause monitoring |
 
-| Platform | Compatibility |
-|----------|---------------|
-| **Forge 1.20.1** | ✅ 100% Native |
-| **NeoForge** | ✅ 100% via Compatibility Layer |
-| **Fabric** | ✅ 100% via Sinytra Connector |
-| **Quilt** | ✅ Via Fabric Bridge |
-
-### Plugins Support
-
-| Platform | Compatibility |
-|----------|---------------|
-| **Bukkit** | ✅ 100% Native |
-| **Spigot** | ✅ 100% Native |
-| **Paper** | ✅ 100% API Bridge |
-| **Sponge** | ✅ 100% API Translation |
-
-> **All mods and plugins from all platforms work together on the same server.**
-
----
-
-## 📚 Documentation
-
-- [Architecture Details](./STACKMANIA_ARCHITECTURE.md)
-- [Performance Comparison](./STACKMANIA_VS_COMPETITION.md)
+These are *goals*, not measurements. The bench harness shipping in the `bench-stackmania-modules-*` branch lets operators flip each module off and capture before/after Spark profiles to establish real numbers. PRs welcome.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our contributing guidelines before submitting PRs.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feat/<topic>`.
+3. Commit with a Conventional Commits-style prefix (`fix:`, `feat:`, `refactor:`, etc.).
+4. Push and open a PR. Include in the description what you tested and any benchmark numbers you can share.
 
 ---
 
 ## 📜 Credits
 
-### Based On
-- [**Mohist**](https://github.com/MohistMC/Mohist) - Original hybrid server
+### Based on
+- [**Mohist**](https://github.com/MohistMC/Mohist) — upstream hybrid server. Stackmania pulls from Mohist's 1.20.1 line.
 
-### Upstream Projects
-- [**MinecraftForge**](https://github.com/MinecraftForge/MinecraftForge) - Mod loader
-- [**Bukkit**](https://hub.spigotmc.org/stash/scm/spigot/bukkit.git) - Plugin API
-- [**CraftBukkit**](https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git) - Plugin implementation
-- [**Spigot**](https://hub.spigotmc.org/stash/scm/spigot/spigot.git) - Performance patches
-- [**Paper**](https://github.com/PaperMC/Paper) - Advanced API
-- [**Sinytra Connector**](https://github.com/Sinytra/Connector) - Fabric compatibility
+### Upstream projects
+- [MinecraftForge](https://github.com/MinecraftForge/MinecraftForge) — mod loader
+- [Bukkit](https://hub.spigotmc.org/stash/scm/spigot/bukkit.git) — plugin API
+- [CraftBukkit](https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git) — plugin implementation
+- [Spigot](https://hub.spigotmc.org/stash/scm/spigot/spigot.git) — performance patches
+- [Paper](https://github.com/PaperMC/Paper) — extended API
+- [Sinytra Connector](https://github.com/Sinytra/Connector) — Fabric-on-Forge bridge
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **GPL-3.0 License** - see the [LICENSE](LICENSE) file for details.
+GPL-3.0 — see [LICENSE](LICENSE). Same license as upstream Mohist.
 
 ---
 
 <div align="center">
 
-### 🌟 Star this repo if Stackmania helps your server!
-
-**Made with ❤️ by Valonia Games**
-
-*The future of Minecraft hybrid servers.*
+**Made by Valonia Games**
 
 </div>
