@@ -7,6 +7,7 @@
 
 package com.stackmania.bukkit;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -52,7 +53,12 @@ public class PerfectBukkitAPI {
             LOGGER.warn("PerfectBukkitAPI already initialized");
             return;
         }
-        
+        if (!StackmaniaConfig.modulePerfectBukkitApiEnabled) {
+            LOGGER.info("[Bench] PerfectBukkitAPI DISABLED via stackmania.yml (modules.perfect_bukkit_api.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new PerfectBukkitAPI();
         initialized = true;
         LOGGER.info("Perfect Bukkit API initialized - Target: 100% compliance");

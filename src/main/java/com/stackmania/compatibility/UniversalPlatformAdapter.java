@@ -15,6 +15,7 @@
 
 package com.stackmania.compatibility;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,11 +85,16 @@ public class UniversalPlatformAdapter {
     
     public static void initialize() {
         if (initialized) return;
-        
+        if (!StackmaniaConfig.moduleUniversalPlatformAdapterEnabled) {
+            LOGGER.info("[Bench] UniversalPlatformAdapter DISABLED via stackmania.yml (modules.universal_platform_adapter.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new UniversalPlatformAdapter();
         instance.detectActivePlatforms();
         instance.initializeBridges();
-        
+
         initialized = true;
         LOGGER.info("Universal Platform Adapter initialized");
         LOGGER.info("Active platforms: {}", instance.activePlatforms);

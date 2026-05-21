@@ -7,6 +7,7 @@
 
 package com.stackmania.performance;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,13 +92,18 @@ public class PerformancePerfection {
             LOGGER.warn("PerformancePerfection already initialized");
             return;
         }
-        
+        if (!StackmaniaConfig.modulePerformancePerfectionEnabled) {
+            LOGGER.info("[Bench] PerformancePerfection DISABLED via stackmania.yml (modules.performance_perfection.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new PerformancePerfection();
         instance.startMonitoring();
         instance.optimizeJVM();
-        
+
         initialized = true;
-        LOGGER.info("Performance Perfection Layer initialized - Target: {}% of Forge", 
+        LOGGER.info("Performance Perfection Layer initialized - Target: {}% of Forge",
             (int)(TARGET_PERFORMANCE_RATIO * 100));
     }
     

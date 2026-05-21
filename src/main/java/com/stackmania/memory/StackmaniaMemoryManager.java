@@ -8,6 +8,7 @@
 
 package com.stackmania.memory;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,11 +73,16 @@ public class StackmaniaMemoryManager {
             LOGGER.warn("StackmaniaMemoryManager already initialized");
             return;
         }
-        
+        if (!StackmaniaConfig.moduleStackmaniaMemoryEnabled) {
+            LOGGER.info("[Bench] StackmaniaMemoryManager DISABLED via stackmania.yml (modules.stackmania_memory.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new StackmaniaMemoryManager();
         instance.startMemoryMonitoring();
         instance.startRoutineCleanup();
-        
+
         initialized = true;
         LOGGER.info("Stackmania Memory Manager initialized");
         LOGGER.info("Memory thresholds: Warning={}%, Critical={}%, Emergency={}%",

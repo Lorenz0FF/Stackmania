@@ -17,6 +17,7 @@
 
 package com.stackmania.compatibility;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,11 +70,16 @@ public class SinytraConnectorBridge {
     
     public static void initialize() {
         if (initialized) return;
-        
+        if (!StackmaniaConfig.moduleSinytraBridgeEnabled) {
+            LOGGER.info("[Bench] SinytraConnectorBridge DISABLED via stackmania.yml (modules.sinytra_bridge.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new SinytraConnectorBridge();
         instance.checkConnectorPresence();
         instance.setupConnectorIntegration();
-        
+
         initialized = true;
         LOGGER.info("Sinytra Connector Bridge initialized");
         LOGGER.info("Connector available: {}", instance.connectorAvailable);

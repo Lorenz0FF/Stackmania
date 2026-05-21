@@ -7,6 +7,7 @@
 
 package com.stackmania.registry;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,11 +64,16 @@ public class PerfectRegistryManager {
             LOGGER.warn("PerfectRegistryManager already initialized");
             return;
         }
-        
+        if (!StackmaniaConfig.modulePerfectRegistryEnabled) {
+            LOGGER.info("[Bench] PerfectRegistryManager DISABLED via stackmania.yml (modules.perfect_registry.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new PerfectRegistryManager();
         instance.startSnapshotScheduler();
         instance.startIntegrityChecker();
-        
+
         initialized = true;
         LOGGER.info("Perfect Registry Manager initialized - Snapshot interval: {}ms", SNAPSHOT_INTERVAL_MS);
     }

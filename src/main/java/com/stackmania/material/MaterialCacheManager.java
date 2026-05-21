@@ -5,6 +5,7 @@
 
 package com.stackmania.material;
 
+import com.stackmania.core.StackmaniaConfig;
 import com.stackmania.core.StackmaniaCore;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.Logger;
@@ -43,7 +44,12 @@ public class MaterialCacheManager {
      */
     public static void initialize() {
         if (initialized) return;
-        
+        if (!StackmaniaConfig.moduleMaterialCacheEnabled) {
+            LOGGER.info("[Bench] MaterialCacheManager DISABLED via stackmania.yml (modules.material_cache.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         LOGGER.info("[MaterialCache] Initializing material cache manager...");
         materialCache.clear();
         resourceCache.clear();

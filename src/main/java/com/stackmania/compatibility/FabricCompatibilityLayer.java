@@ -14,6 +14,7 @@
 
 package com.stackmania.compatibility;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,9 +73,14 @@ public class FabricCompatibilityLayer {
     
     public static void initialize() {
         if (initialized) return;
-        
+        if (!StackmaniaConfig.moduleFabricCompatibilityEnabled) {
+            LOGGER.info("[Bench] FabricCompatibilityLayer DISABLED via stackmania.yml (modules.fabric_compatibility.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new FabricCompatibilityLayer();
-        
+
         initialized = true;
         LOGGER.info("Fabric Compatibility Layer initialized");
         LOGGER.info("Class transformations: {}", instance.classTransformations.size());

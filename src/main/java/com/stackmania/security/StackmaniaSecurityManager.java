@@ -46,11 +46,16 @@ public class StackmaniaSecurityManager {
      */
     public static void initialize() {
         if (initialized) return;
-        
+        if (!StackmaniaConfig.moduleSecurityEnabled) {
+            LOGGER.info("[Bench] StackmaniaSecurityManager DISABLED via stackmania.yml (modules.security.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         LOGGER.info("[Security] Initializing Stackmania Security Manager...");
         LOGGER.info("[Security] Plugin hot-loading is DISABLED for security");
         LOGGER.info("[Security] Use server restart to add/remove plugins");
-        
+
         initialized = true;
     }
     

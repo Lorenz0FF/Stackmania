@@ -10,6 +10,7 @@
 
 package com.stackmania.compatibility;
 
+import com.stackmania.core.StackmaniaConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -61,7 +62,12 @@ public class UniversalCompatibilityLayer {
             LOGGER.warn("UCL already initialized");
             return;
         }
-        
+        if (!StackmaniaConfig.moduleUniversalCompatibilityEnabled) {
+            LOGGER.info("[Bench] UniversalCompatibilityLayer DISABLED via stackmania.yml (modules.universal_compatibility.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         instance = new UniversalCompatibilityLayer();
         initialized = true;
         LOGGER.info("Universal Compatibility Layer initialized");

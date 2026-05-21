@@ -5,6 +5,7 @@
 
 package com.stackmania.player;
 
+import com.stackmania.core.StackmaniaConfig;
 import com.stackmania.core.StackmaniaCore;
 import net.minecraft.server.level.ServerPlayer;
 import org.apache.logging.log4j.Logger;
@@ -45,7 +46,12 @@ public class PersistentPlayerManager {
      */
     public static void initialize() {
         if (initialized) return;
-        
+        if (!StackmaniaConfig.modulePersistentPlayerEnabled) {
+            LOGGER.info("[Bench] PersistentPlayerManager DISABLED via stackmania.yml (modules.persistent_player.enabled=false)");
+            initialized = true;
+            return;
+        }
+
         LOGGER.info("[Player] Initializing persistent player manager...");
         playerCache.clear();
         persistedCount = 0;
