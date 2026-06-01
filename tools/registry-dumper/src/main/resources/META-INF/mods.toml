@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="GPL-3.0"
+
+[[mods]]
+modId="registrydumper"
+version="1.0.0"
+displayName="Registry Dumper"
+authors="Lorenz0FF"
+description='''
+Diagnostics-only mod. Dumps Block.BLOCK_STATE_REGISTRY and ForgeRegistries.BLOCKS
+to TSV files in ./registry-dumps/ at three points: client-pre (load complete),
+server-pre + server-post-startup (server side), and client-post (after the
+client logs in to a server). Used to compare server vs client tables and locate
+blockstate ID desync.
+
+Side-effect-free: only opens FileChannel writes in its own subfolder.
+'''
+
+[[dependencies.registrydumper]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47.4.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.registrydumper]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"

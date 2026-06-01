@@ -395,8 +395,20 @@ public class ForgeRegistry<V> implements IForgeRegistryInternal<V>, IForgeRegist
             throw new IllegalArgumentException(String.format(Locale.ENGLISH, "The object %s{%x} has been registered twice, using the names %s and %s. (Other object at this id is %s{%x})", value, System.identityHashCode(value), getKey(value), key, otherThing, System.identityHashCode(otherThing)));
         }
 
-        if (isLocked())
+        if (isLocked()) {
+            // Stackmania: log the stack trace before throwing so the operator can
+            // identify *which* mod or plugin attempted a post-freeze register. The
+            // throw stays — silently allowing the write would desync server and
+            // client registry id maps and render modded blocks incorrectly on the
+            // client. See docs/REGISTRY_SYNC_FIX.md.
+            LOGGER.error(REGISTRIES,
+                "[registry-sync] POST-FREEZE WRITE BLOCKED in registry {} for {} (name {}). "
+                    + "This would have desynced the server vs. client registry id table. "
+                    + "Stack trace follows so the offending mod/plugin can be identified.",
+                this.name, value, key,
+                new Throwable("post-freeze register call site"));
             throw new IllegalStateException(String.format(Locale.ENGLISH, "The object %s (name %s) is being added too late.", value, key));
+        }
 
         if (defaultKey != null && defaultKey.equals(key)) {
             if (this.defaultValue != null)
