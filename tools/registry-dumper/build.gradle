@@ -1,0 +1,74 @@
+// Stackmania Registry Dumper — minimal Forge MDK 1.20.1 mod for client/server registry diagnostics.
+//
+// ForgeGradle is pinned to 6.0.47 because the parent fork (Stackmania) verified end-to-end that
+// 6.0.48+ broke its build (srgify task registration changed, srgutils 0.5.10 -> 0.6.2 hop).
+// See docs/CONTRIBUTING.md in the parent repo. DO NOT bump without re-benching the parent.
+
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '6.0.47'
+}
+
+version = '1.0.0'
+group   = 'com.stackmania'
+archivesBaseName = 'registry-dumper'
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+}
+
+minecraft {
+    // Official Mojang mappings, MC 1.20.1.
+    mappings channel: 'official', version: '1.20.1'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers',       'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                registrydumper {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run-server')
+            property 'forge.logging.markers',       'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                registrydumper {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    // ForgeGradle handles maven.minecraftforge.net itself, but we keep these for IDE introspection.
+    maven { url 'https://maven.minecraftforge.net/' }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.4.13'
+}
+
+jar {
+    manifest {
+        attributes([
+                'Specification-Title'     : 'registrydumper',
+                'Specification-Vendor'    : 'Stackmania',
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'Implementation-Vendor'   : 'Stackmania',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+// Forge userdev reobf — produces the SRG-mapped runtime jar in build/libs/.
+jar.finalizedBy('reobfJar')
